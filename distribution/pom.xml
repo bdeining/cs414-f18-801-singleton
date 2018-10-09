@@ -11,30 +11,35 @@
     <packaging>karaf-assembly</packaging>
     <name>Minimal Distribution</name>
 
+    <properties>
+        <karaf.version>4.2.0</karaf.version>
+        <pax-jdbc.version>1.3.1</pax-jdbc.version>
+    </properties>
+
     <dependencies>
         <dependency>
-            <!-- scope is compile so all features (there is only one) are installed into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg file -->
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
-            <version>4.2.0</version>
+            <version>${karaf.version}</version>
             <type>kar</type>
         </dependency>
+
         <dependency>
-            <!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg file, and features will installed into the system directory -->
             <groupId>org.apache.karaf.features</groupId>
-            <artifactId>standard</artifactId>
+            <artifactId>enterprise</artifactId>
+            <version>${karaf.version}</version>
             <classifier>features</classifier>
-            <version>4.2.0</version>
             <type>xml</type>
             <scope>runtime</scope>
         </dependency>
+
         <dependency>
             <groupId>org.ops4j.pax.jdbc</groupId>
             <artifactId>pax-jdbc-features</artifactId>
-            <version>1.3.1</version>
-            <scope>runtime</scope>
-            <type>xml</type>
             <classifier>features</classifier>
+            <version>${pax-jdbc.version}</version>
+            <type>xml</type>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.bdeining</groupId>
@@ -44,6 +49,7 @@
             <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -54,17 +60,36 @@
                 <version>4.2.1</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <!-- no startupFeatures -->
                     <bootFeatures>
-                        <feature>standard</feature>
-                    </bootFeatures>
-                    <startupFeatures>
-                        <feature>transaction</feature>
+                        <feature>wrapper</feature>
+                        <feature>wrap</feature>
+                        <feature>aries-blueprint</feature>
+                        <feature>shell</feature>
+                        <feature>shell-compat</feature>
+                        <feature>feature</feature>
+                        <feature>jaas</feature>
+                        <feature>ssh</feature>
+                        <feature>management</feature>
+                        <feature>bundle</feature>
+                        <feature>config</feature>
+                        <feature>deployer</feature>
+                        <feature>diagnostic</feature>
+                        <feature>instance</feature>
+                        <feature>kar</feature>
+                        <feature>log</feature>
+                        <feature>package</feature>
+                        <feature>service</feature>
+                        <feature>system</feature>
+                        <feature>eventadmin</feature>
+                        <feature>scr</feature>
+                        <feature>jdbc</feature>
                         <feature>jndi</feature>
-                        <feature>pax-jdbc-h2</feature>
-                        <feature>pax-jdbc-pool-dbcp2</feature>
+                        <feature>transaction</feature>
+                        <feature>pax-jdbc</feature>
                         <feature>pax-jdbc-config</feature>
                         <feature>pax-jdbc-mysql</feature>
+                    </bootFeatures>
+                    <startupFeatures>
                         <feature>data-management</feature>
                     </startupFeatures>
                     <!-- no installedFeatures -->

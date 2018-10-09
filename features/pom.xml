@@ -50,6 +50,11 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
+                                    <file>src/main/resources/etc/org.ops4j.datasource-tasklist.cfg</file>
+                                    <type>properties</type>
+                                    <classifier>datasource</classifier>
+                                </artifact>
+                                <artifact>
                                     <file>target/classes/features.xml</file>
                                     <type>xml</type>
                                     <classifier>features</classifier>
