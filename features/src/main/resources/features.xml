@@ -3,13 +3,8 @@
           name="data-management-${project.version}">
 
     <feature name="data-management" version="${project.version}">
-
-        <configfile finalname="/etc/org.ops4j.datasource-tasklist.cfg" override="true">
-            mvn:org.bdeining/features/${project.version}/properties/datasource
-        </configfile>
-
+        <bundle>mvn:org.bdeining/api/${project.version}</bundle>
+        <bundle>mvn:org.bdeining/database-handler/${project.version}</bundle>
     </feature>
-
-
 
 </features>

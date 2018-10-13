@@ -53,6 +53,15 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
@@ -83,11 +92,10 @@
                         <feature>eventadmin</feature>
                         <feature>scr</feature>
                         <feature>jdbc</feature>
-                        <feature>jndi</feature>
                         <feature>transaction</feature>
-                        <feature>pax-jdbc</feature>
+                        <feature>jndi</feature>
+                        <feature>pax-jdbc-h2</feature>
                         <feature>pax-jdbc-config</feature>
-                        <feature>pax-jdbc-mysql</feature>
                     </bootFeatures>
                     <startupFeatures>
                         <feature>data-management</feature>
