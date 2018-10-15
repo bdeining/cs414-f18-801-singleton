@@ -95,6 +95,7 @@ public class MySqlHandlerImpl implements MySqlHandler {
         List<Trainer> trainers = getTrainers();
         for (Trainer trainer : trainers) {
             LOGGER.trace("{}", trainer);
+            removeTrainer(trainer.getId());
         }
     }
 
@@ -183,7 +184,7 @@ public class MySqlHandlerImpl implements MySqlHandler {
     public boolean removeTrainer(String trainerId) {
         try (Connection con = dataSource.getConnection(); Statement stmt = con.createStatement()) {
             LOGGER.trace("Removing trainer : {}", trainerId);
-            stmt.execute(String.format("DELETE FROM %s WHERE ID = %s;",TRAINER_TABLE_NAME, trainerId));
+            stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';",TRAINER_TABLE_NAME, trainerId));
             removeById(trainerId, QUALIFICATION_TABLE_NAME);
         } catch (SQLException e) {
             LOGGER.error("Could not remove trainer {}", trainerId, e);
@@ -207,14 +208,13 @@ public class MySqlHandlerImpl implements MySqlHandler {
             }
             return trainers;
         } catch (SQLException e) {
-            LOGGER.error("Could not remove trainer {}", e);
+            LOGGER.error("Could not get trainer {}", e);
         }
         return new ArrayList<>();
     }
 
     private Trainer getTrainer(ResultSet resultSet) {
         try {
-        // (first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), work_hours integer);
         String firstName = resultSet.getString("first_name");
         String lastName = resultSet.getString("last_name");
         String address = resultSet.getString("address");
@@ -223,18 +223,40 @@ public class MySqlHandlerImpl implements MySqlHandler {
         String id = resultSet.getString("id");
         String healthInsuranceProvider = resultSet.getString("health_insurance_provider");
         int workHours = resultSet.getInt("work_hours");
-        return new TrainerImpl(address, firstName, lastName, phone, email, healthInsuranceProvider, workHours, new ArrayList<>());
+        List<String> qualifications = getQualificationsForTrainer(id);
+        Trainer trainer = new TrainerImpl(address, firstName, lastName, phone, email, healthInsuranceProvider, workHours, qualifications);
+        LOGGER.trace("Got trainer {}", trainer);
+        return trainer;
         } catch (SQLException e) {
             LOGGER.error("No data", e);
             return null;
         }
+    }
 
+    private List<String> getQualificationsForTrainer(String id) {
+        try (Connection con = dataSource.getConnection(); Statement stmt = con.createStatement()) {
+            //LOGGER.trace(, tableName, id);
+            ResultSet resultSet = stmt.executeQuery(String.format("SELECT * from %s WHERE ID = '%s';",QUALIFICATION_TABLE_NAME, id));
+
+            List<String> qualifications = new ArrayList<>();
+            while (resultSet.next()) {
+                String qualificaiton = resultSet.getString("qualification");
+                if (qualificaiton != null || !qualificaiton.isEmpty()) {
+                    qualifications.add(qualificaiton);
+                }
+            }
+            return qualifications;
+        } catch (SQLException e) {
+            LOGGER.error("Could not remove trainer {}", id, e);
+        }
+
+        return new ArrayList<>();
     }
 
     private void removeById(String id, String tableName) {
         try (Connection con = dataSource.getConnection(); Statement stmt = con.createStatement()) {
             LOGGER.trace("Removing from table {} : {}", tableName, id);
-            stmt.execute(String.format("DELETE FROM %s WHERE ID = %s;",tableName, id));
+            stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';",tableName, id));
         } catch (SQLException e) {
             LOGGER.error("Could not remove trainer {}", id, e);
         }
