@@ -1,11 +1,11 @@
-package com.bdeining.impl;
+package edu.colostate.cs.cs414.p3.bdeining.impl;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.bdeining.api.Activity;
-import com.bdeining.api.Customer;
-import com.bdeining.api.WorkoutRoutine;
+import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
+import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
+import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 
 public class CustomerImpl implements Customer {
 

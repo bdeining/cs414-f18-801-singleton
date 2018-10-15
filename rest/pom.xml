@@ -14,24 +14,20 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>edu.colostate.cs.cs414.p3.bdeining</groupId>
-            <artifactId>impl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>3.2.5</version>
+        </dependency>
     </dependencies>
 
-    <artifactId>database-handler</artifactId>
+    <artifactId>rest</artifactId>
     <packaging>bundle</packaging>
-    <name>Gym System :: SQL Handler</name>
+    <name>Gym System :: Rest Endpoint</name>
     <build>
         <plugins>
             <plugin>
@@ -42,14 +38,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Embed-Dependency>
-                            impl
-                        </Embed-Dependency>
-                        <Import-Package>
-                            net.roboconf.*;version="${project.version}",
-                            javax.sql.*,
-                            *
-                        </Import-Package>
+                        <Embed-Dependency/>
                     </instructions>
                 </configuration>
             </plugin>

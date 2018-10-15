@@ -3,8 +3,8 @@
           name="data-management-${project.version}">
 
     <feature name="data-management" version="${project.version}">
-        <bundle>mvn:org.bdeining/api/${project.version}</bundle>
-        <bundle>mvn:org.bdeining/database-handler/${project.version}</bundle>
+        <bundle>mvn:edu.colostate.cs.cs414.p3.bdeining/api/${project.version}</bundle>
+        <bundle>mvn:edu.colostate.cs.cs414.p3.bdeining/database-handler/${project.version}</bundle>
     </feature>
-
+    
 </features>

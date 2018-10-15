@@ -1,9 +1,9 @@
-package com.bdeining.impl;
+package edu.colostate.cs.cs414.p3.bdeining.impl;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.bdeining.api.Trainer;
+import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
 
 //TODO Hashcode
 public class TrainerImpl implements Trainer {

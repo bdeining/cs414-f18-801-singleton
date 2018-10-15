@@ -1,4 +1,4 @@
-package com.bdeining.api;
+package edu.colostate.cs.cs414.p3.bdeining.api;
 
 import java.util.List;
 

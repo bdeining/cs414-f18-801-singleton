@@ -1,4 +1,4 @@
-package com.bdeining.sql;
+package edu.colostate.cs.cs414.p3.bdeining.sql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -11,18 +11,18 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import com.bdeining.api.Customer;
-import com.bdeining.api.Exercise;
-import com.bdeining.api.Machine;
-import com.bdeining.api.MySqlHandler;
-import com.bdeining.api.Trainer;
-import com.bdeining.api.WorkoutRoutine;
-import com.bdeining.impl.TrainerImpl;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
+import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
+import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
+import edu.colostate.cs.cs414.p3.bdeining.api.MySqlHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
+import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
+import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
 
 @Component(immediate = true, //
         name = "MySqlHandlerImpl", //

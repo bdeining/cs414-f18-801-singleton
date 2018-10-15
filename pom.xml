@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.bdeining</groupId>
+    <groupId>edu.colostate.cs.cs414.p3.bdeining</groupId>
     <artifactId>gym-system</artifactId>
     <version>0.1-SNAPSHOT</version>
 
@@ -63,6 +63,7 @@
         <module>api</module>
         <module>impl</module>
         <module>database-handler</module>
+        <module>rest</module>
         <module>features</module>
         <module>distribution</module>
     </modules>
