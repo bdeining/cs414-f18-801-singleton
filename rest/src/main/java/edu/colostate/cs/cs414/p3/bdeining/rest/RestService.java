@@ -6,10 +6,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import edu.colostate.cs.cs414.p3.bdeining.sql.MySqlHandler;
-import edu.colostate.cs.cs414.p3.bdeining.sql.Trainer;
+
+import edu.colostate.cs.cs414.p3.bdeining.api.MySqlHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
 
 @Path("/")
 public class RestService {
