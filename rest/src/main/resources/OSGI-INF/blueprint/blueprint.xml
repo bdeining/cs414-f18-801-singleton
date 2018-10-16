@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright (c) Connexta, LLC
+ *
+ * Unlimited Government Rights (FAR Subpart 27.4) Government right to use, disclose, reproduce,
+ * prepare derivative works, distribute copies to the public, and perform and display publicly, in
+ * any manner and for any purpose, and to have or permit others to do so.
+ */
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs">
+
+    <reference id="mySqlHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.MySqlHandler"/>
+
+    <bean id="dataHandlerEndpoint"
+          class="edu.colostate.cs.cs414.p3.bdeining.rest.RestService">
+        <argument ref="mySqlHandler"/>
+    </bean>
+
+    <jaxrs:server id="resourceOrderingService" address="/rest">
+        <jaxrs:serviceBeans>
+            <ref component-id="dataHandlerEndpoint"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+</blueprint>

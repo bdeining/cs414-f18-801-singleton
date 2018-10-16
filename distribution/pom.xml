@@ -50,6 +50,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.cxf.karaf</groupId>
+            <artifactId>apache-cxf</artifactId>
+            <version>3.2.5</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -96,6 +104,8 @@
                         <feature>jndi</feature>
                         <feature>pax-jdbc-h2</feature>
                         <feature>pax-jdbc-config</feature>
+                        <feature>cxf</feature>
+                        <feature>cxf-commands</feature>
                     </bootFeatures>
                     <startupFeatures>
                         <feature>data-management</feature>
