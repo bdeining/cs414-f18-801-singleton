@@ -4,8 +4,7 @@ import java.util.List;
 
 public interface Trainer extends Person {
 
-    int getWorkHours();
+  int getWorkHours();
 
-    List<String> getQualifications();
-
+  List<String> getQualifications();
 }

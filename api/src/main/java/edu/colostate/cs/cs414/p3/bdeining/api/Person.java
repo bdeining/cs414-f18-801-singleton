@@ -2,17 +2,17 @@ package edu.colostate.cs.cs414.p3.bdeining.api;
 
 public interface Person {
 
-    String getAddress();
+  String getAddress();
 
-    String getFirstName();
+  String getFirstName();
 
-    String getLastName();
+  String getLastName();
 
-    String getPhone();
+  String getPhone();
 
-    String getEmail();
+  String getEmail();
 
-    String getId();
+  String getId();
 
-    String getHealthInsuranceProvider();
+  String getHealthInsuranceProvider();
 }
