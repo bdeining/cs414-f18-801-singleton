@@ -102,6 +102,7 @@
                         <feature>jdbc</feature>
                         <feature>transaction</feature>
                         <feature>jndi</feature>
+                        <feature>http</feature>
                         <feature>pax-jdbc-h2</feature>
                         <feature>pax-jdbc-config</feature>
                         <feature>cxf</feature>

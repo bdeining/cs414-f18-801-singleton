@@ -45,6 +45,27 @@ public class TrainerImpl implements Trainer {
     this.qualifications = qualifications;
   }
 
+  public TrainerImpl(
+      String id,
+      String address,
+      String firstName,
+      String lastName,
+      String phone,
+      String email,
+      String healthInsuranceProvider,
+      int workHours,
+      List<String> qualifications) {
+    this.address = address;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phone = phone;
+    this.email = email;
+    this.id = id;
+    this.healthInsuranceProvider = healthInsuranceProvider;
+    this.workHours = workHours;
+    this.qualifications = qualifications;
+  }
+
   @Override
   public String getAddress() {
     return address;
