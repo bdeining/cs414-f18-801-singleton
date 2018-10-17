@@ -7,4 +7,8 @@ public interface Trainer extends Person {
   int getWorkHours();
 
   List<String> getQualifications();
+
+  void setWorkHours(int workHours);
+
+  void setQualifications(List<String> qualifications);
 }

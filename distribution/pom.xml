@@ -78,25 +78,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <bootFeatures>
-                        <feature>wrapper</feature>
-                        <feature>wrap</feature>
-                        <feature>aries-blueprint</feature>
-                        <feature>shell</feature>
-                        <feature>shell-compat</feature>
-                        <feature>feature</feature>
-                        <feature>jaas</feature>
-                        <feature>ssh</feature>
-                        <feature>management</feature>
-                        <feature>bundle</feature>
-                        <feature>config</feature>
-                        <feature>deployer</feature>
-                        <feature>diagnostic</feature>
-                        <feature>instance</feature>
-                        <feature>kar</feature>
-                        <feature>log</feature>
-                        <feature>package</feature>
-                        <feature>service</feature>
-                        <feature>system</feature>
+                        <feature>standard</feature>
                         <feature>eventadmin</feature>
                         <feature>scr</feature>
                         <feature>jdbc</feature>

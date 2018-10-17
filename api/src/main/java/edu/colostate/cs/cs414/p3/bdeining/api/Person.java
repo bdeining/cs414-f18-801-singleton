@@ -15,4 +15,16 @@ public interface Person {
   String getId();
 
   String getHealthInsuranceProvider();
+
+  void setAddress(String address);
+
+  void setFirstName(String firstName);
+
+  void setLastName(String lastName);
+
+  void setPhone(String phone);
+
+  void setEmail(String email);
+
+  void setHealthInsuranceProvider(String healthInsuranceProvider);
 }

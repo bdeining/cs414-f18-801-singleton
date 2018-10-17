@@ -6,6 +6,7 @@ import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import java.util.List;
 import java.util.UUID;
 
+// TODO Hashcode, Equals, toString
 public class CustomerImpl implements Customer {
 
   private String address;
@@ -18,7 +19,7 @@ public class CustomerImpl implements Customer {
 
   private String email;
 
-  private String id;
+  private transient String id;
 
   private String healthInsuranceProvider;
 
@@ -27,6 +28,7 @@ public class CustomerImpl implements Customer {
   private List<WorkoutRoutine> workoutRoutines;
 
   public CustomerImpl(
+      String id,
       String address,
       String firstName,
       String lastName,
@@ -40,7 +42,7 @@ public class CustomerImpl implements Customer {
     this.lastName = lastName;
     this.phone = phone;
     this.email = email;
-    this.id = UUID.randomUUID().toString();
+    this.id = id;
     this.healthInsuranceProvider = healthInsuranceProvider;
     this.activity = activity;
     this.workoutRoutines = workoutRoutines;
@@ -73,6 +75,9 @@ public class CustomerImpl implements Customer {
 
   @Override
   public String getId() {
+    if (id == null) {
+      id = UUID.randomUUID().toString();
+    }
     return id;
   }
 
@@ -87,7 +92,47 @@ public class CustomerImpl implements Customer {
   }
 
   @Override
+  public void setWorkoutRoutines(List<WorkoutRoutine> workoutRoutines) {
+    this.workoutRoutines = workoutRoutines;
+  }
+
+  @Override
+  public void setActivity(Activity activity) {
+    this.activity = activity;
+  }
+
+  @Override
   public List<WorkoutRoutine> getWorkoutRoutines() {
     return workoutRoutines;
+  }
+
+  @Override
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  @Override
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  @Override
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  @Override
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  @Override
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
+  public void setHealthInsuranceProvider(String healthInsuranceProvider) {
+    this.healthInsuranceProvider = healthInsuranceProvider;
   }
 }

@@ -7,4 +7,8 @@ public interface Customer extends Person {
   List<WorkoutRoutine> getWorkoutRoutines();
 
   Activity getActivity();
+
+  void setWorkoutRoutines(List<WorkoutRoutine> workoutRoutines);
+
+  void setActivity(Activity activity);
 }
