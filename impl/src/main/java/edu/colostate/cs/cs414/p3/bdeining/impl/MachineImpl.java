@@ -23,7 +23,7 @@ public class MachineImpl implements Machine {
   @Override
   public String getId() {
     if (id == null) {
-        id = UUID.randomUUID().toString();
+      id = UUID.randomUUID().toString();
     }
 
     return id;
@@ -60,7 +60,7 @@ public class MachineImpl implements Machine {
   }
 
   @Override
-    public String toString() {
-      return String.format("Name : %s, ID : %s, Quantity : %d", name, id, quantity);
+  public String toString() {
+    return String.format("Name : %s, ID : %s, Quantity : %d", name, id, quantity);
   }
 }

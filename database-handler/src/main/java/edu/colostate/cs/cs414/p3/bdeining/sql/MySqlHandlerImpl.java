@@ -58,10 +58,10 @@ public class MySqlHandlerImpl implements MySqlHandler {
   private static final String MACHINE_TABLE_DEF =
       "(name varchar(100), id varchar(100), picture varchar(1024), quantity integer)";
 
-  private static final String CUSTOMER_TABLE_DEF = "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), activity varchar(100))";
+  private static final String CUSTOMER_TABLE_DEF =
+      "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), activity varchar(100))";
 
-  private static final String WORKOUT_ROUTINE_TABLE_DEF =
-          "(id varchar(100), name varchar(100))";
+  private static final String WORKOUT_ROUTINE_TABLE_DEF = "(id varchar(100), name varchar(100))";
 
   private static final String QUALIFICATION_TABLE_DEF =
       "(id varchar(100), qualification varchar(100))";
@@ -174,9 +174,9 @@ public class MySqlHandlerImpl implements MySqlHandler {
   @Override
   public List<Exercise> getExercies() throws SQLException {
     try (Connection con = dataSource.getConnection();
-            Statement stmt = con.createStatement()) {
+        Statement stmt = con.createStatement()) {
       ResultSet resultSet =
-              stmt.executeQuery(String.format("SELECT * FROM %s;", EXERCISE_TABLE_NAME));
+          stmt.executeQuery(String.format("SELECT * FROM %s;", EXERCISE_TABLE_NAME));
 
       List<Exercise> exerciseList = new ArrayList<>();
       while (resultSet.next()) {
@@ -230,8 +230,10 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
   private Machine getMachineById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection();
-            Statement stmt = con.createStatement()) {
-      ResultSet resultSet = stmt.executeQuery(String.format("SELECT FROM %s WHERE ID = '%s';", MACHINE_TABLE_NAME, id));
+        Statement stmt = con.createStatement()) {
+      ResultSet resultSet =
+          stmt.executeQuery(
+              String.format("SELECT FROM %s WHERE ID = '%s';", MACHINE_TABLE_NAME, id));
       return getMachine(resultSet);
     }
   }
@@ -272,14 +274,17 @@ public class MySqlHandlerImpl implements MySqlHandler {
     try (Connection con = dataSource.getConnection()) {
       LOGGER.trace("Adding machine : {}", machine);
 
-      PreparedStatement insert = con.prepareStatement("INSERT INTO " + MACHINE_TABLE_NAME +" (name, id, picture, quantity) VALUES (?,?,?,?)");
+      PreparedStatement insert =
+          con.prepareStatement(
+              "INSERT INTO "
+                  + MACHINE_TABLE_NAME
+                  + " (name, id, picture, quantity) VALUES (?,?,?,?)");
       insert.setString(1, id);
       insert.setString(2, name);
       insert.setString(3, picture);
       insert.setInt(4, quantity);
       insert.execute();
       insert.close();
-
     }
 
     return true;
@@ -352,26 +357,26 @@ public class MySqlHandlerImpl implements MySqlHandler {
   @Override
   public boolean addExercise(Exercise exercise) throws SQLException {
     /*String id = exercise.getId();
-    String name = exercise.getCommonName();
-    int duration = exercise.getDurationPerSet();
-    int sets = exercise.getSets();
-    Machine machine = exercise.getMachine();
+        String name = exercise.getCommonName();
+        int duration = exercise.getDurationPerSet();
+        int sets = exercise.getSets();
+        Machine machine = exercise.getMachine();
 
 
 
-    try (Connection con = dataSource.getConnection()) {
-      LOGGER.trace("Adding machine : {}", machine);
-//      "(name varchar(100), id varchar(100), machineId varchar(100), sets integer, duration integer, workoutRoutineId varchar(100))";
+        try (Connection con = dataSource.getConnection()) {
+          LOGGER.trace("Adding machine : {}", machine);
+    //      "(name varchar(100), id varchar(100), machineId varchar(100), sets integer, duration integer, workoutRoutineId varchar(100))";
 
-      PreparedStatement insert = con.prepareStatement("INSERT INTO " + EXERCISE_TABLE_NAME +" (name, id, picture, quantity) VALUES (?,?,?,?)");
-      insert.setString(1, id);
-      insert.setString(2, name);
-      insert.setString(3, picture);
-      insert.setInt(4, quantity);
-      insert.execute();
-      insert.close();
+          PreparedStatement insert = con.prepareStatement("INSERT INTO " + EXERCISE_TABLE_NAME +" (name, id, picture, quantity) VALUES (?,?,?,?)");
+          insert.setString(1, id);
+          insert.setString(2, name);
+          insert.setString(3, picture);
+          insert.setInt(4, quantity);
+          insert.execute();
+          insert.close();
 
-    }*/
+        }*/
 
     return true;
   }

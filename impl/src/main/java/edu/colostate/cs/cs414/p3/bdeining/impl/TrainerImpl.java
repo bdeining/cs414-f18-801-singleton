@@ -78,6 +78,7 @@ public class TrainerImpl implements Trainer {
     }
     return id;
   }
+
   @Override
   public String getHealthInsuranceProvider() {
     return healthInsuranceProvider;

@@ -3,7 +3,6 @@ package edu.colostate.cs.cs414.p3.bdeining.rest;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
@@ -15,7 +14,6 @@ import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
@@ -194,7 +192,8 @@ public class RestService {
   @Consumes(MediaType.APPLICATION_JSON)
   public Response createWorkoutRoutine(InputStream requestBody) {
     try {
-      WorkoutRoutine workoutRoutine = gson.fromJson(new InputStreamReader(requestBody), WorkoutRoutineImpl.class);
+      WorkoutRoutine workoutRoutine =
+          gson.fromJson(new InputStreamReader(requestBody), WorkoutRoutineImpl.class);
       mySqlHandler.addWorkoutRoutine(workoutRoutine);
       return Response.ok().build();
     } catch (JsonSyntaxException | JsonIOException e) {

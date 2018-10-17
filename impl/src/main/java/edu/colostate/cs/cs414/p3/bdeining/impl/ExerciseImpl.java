@@ -26,10 +26,10 @@ public class ExerciseImpl implements Exercise {
 
   @Override
   public String getId() {
-      if (id == null) {
-          id = UUID.randomUUID().toString();
-      }
-      return id;
+    if (id == null) {
+      id = UUID.randomUUID().toString();
+    }
+    return id;
   }
 
   @Override
