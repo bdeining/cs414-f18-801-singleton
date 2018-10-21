@@ -1,21 +1,21 @@
 package edu.colostate.cs.cs414.p3.bdeining.impl;
 
-import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
+import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import java.util.List;
 import java.util.UUID;
 
-public class WorkoutRoutineImpl implements edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine {
+public class WorkoutRoutineImpl implements WorkoutRoutine {
 
   private transient String id;
 
   private String name;
 
-  private List<Exercise> exercises;
+  private List<String> exerciseIds;
 
-  public WorkoutRoutineImpl(String id, String name, List<Exercise> exercises) {
+  public WorkoutRoutineImpl(String id, String name, List<String> exerciseIds) {
     this.id = id;
     this.name = name;
-    this.exercises = exercises;
+    this.exerciseIds = exerciseIds;
   }
 
   @Override
@@ -37,12 +37,12 @@ public class WorkoutRoutineImpl implements edu.colostate.cs.cs414.p3.bdeining.ap
   }
 
   @Override
-  public void setExcercises(List<Exercise> exercises) {
-    this.exercises = exercises;
+  public void setExcerciseIds(List<String> exerciseIds) {
+    this.exerciseIds = exerciseIds;
   }
 
   @Override
-  public List<Exercise> getExercises() {
-    return exercises;
+  public List<String> getExerciseIds() {
+    return exerciseIds;
   }
 }

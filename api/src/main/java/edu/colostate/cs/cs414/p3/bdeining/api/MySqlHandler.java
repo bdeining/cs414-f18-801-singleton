@@ -13,7 +13,7 @@ public interface MySqlHandler {
 
   boolean addExercise(Exercise exercise) throws SQLException;
 
-  List<Exercise> getExercies() throws SQLException;
+  List<Exercise> getExercises() throws SQLException;
 
   boolean removeExercise(String id) throws SQLException;
 

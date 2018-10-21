@@ -11,6 +11,7 @@ import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
+import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -52,11 +53,21 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
   private static final String QUALIFICATION_TABLE_NAME = "QUALIFICATIONS";
 
+  private static final String EXERCISE_WORKOUT_ROUTINE_TABLE_NAME = "EXERCISE_WOR";
+
+  private static final String CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME = "CUSTOMER_WOR";
+
   private static final String EXERCISE_TABLE_DEF =
       "(name varchar(100), id varchar(100), machineId varchar(100), sets integer, duration integer, workoutRoutineId varchar(100))";
 
   private static final String MACHINE_TABLE_DEF =
       "(name varchar(100), id varchar(100), picture varchar(1024), quantity integer)";
+
+  private static final String EXERCISE_WORKOUT_ROUTINE_TABLE_DEF =
+      "(workoutRoutineId varchar(100), exerciseId varchar(100))";
+
+  private static final String CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF =
+      "(workoutRoutineId varchar(100), customerId varchar(100))";
 
   private static final String CUSTOMER_TABLE_DEF =
       "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), activity varchar(100))";
@@ -84,8 +95,16 @@ public class MySqlHandlerImpl implements MySqlHandler {
       createTable(CUSTOMER_TABLE_NAME, CUSTOMER_TABLE_DEF);
     }
 
+    if (!tables.contains(CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME)) {
+      createTable(CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME, CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF);
+    }
+
     if (!tables.contains(EXERCISE_TABLE_NAME)) {
       createTable(EXERCISE_TABLE_NAME, EXERCISE_TABLE_DEF);
+    }
+
+    if (!tables.contains(EXERCISE_WORKOUT_ROUTINE_TABLE_NAME)) {
+      createTable(EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, EXERCISE_WORKOUT_ROUTINE_TABLE_DEF);
     }
 
     if (!tables.contains(MACHINE_TABLE_NAME)) {
@@ -139,8 +158,52 @@ public class MySqlHandlerImpl implements MySqlHandler {
   }
 
   @Override
-  public boolean addCustomer(Customer customer) {
-    return false;
+  public boolean addCustomer(Customer customer) throws SQLException {
+    String address = customer.getAddress();
+    String firstName = customer.getFirstName();
+    String lastName = customer.getLastName();
+    String phone = customer.getPhone();
+    String healthInsuranceProvider = customer.getHealthInsuranceProvider();
+    String email = customer.getEmail();
+    String id = customer.getId();
+    String activity = customer.getActivity().toString();
+    List<String> routines = customer.getWorkoutRoutineIds();
+
+    try (Connection con = dataSource.getConnection()) {
+      LOGGER.trace("Adding customer : {}", customer);
+      PreparedStatement insert =
+          con.prepareStatement(
+              "INSERT INTO "
+                  + CUSTOMER_TABLE_NAME
+                  + " (first_name, last_name, address, phone, email, id, health_insurance_provider, activity) VALUES (?,?,?,?,?,?,?,?)");
+      insert.setString(1, firstName);
+      insert.setString(2, lastName);
+      insert.setString(3, address);
+      insert.setString(4, phone);
+      insert.setString(5, email);
+      insert.setString(6, id);
+      insert.setString(7, healthInsuranceProvider);
+      insert.setString(8, activity);
+      insert.execute();
+      insert.close();
+    }
+
+    for (String routineId : routines) {
+      try (Connection con = dataSource.getConnection()) {
+        LOGGER.trace("Adding customer : {}", customer);
+        PreparedStatement insert =
+            con.prepareStatement(
+                "INSERT INTO "
+                    + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME
+                    + " (workoutRoutineId, customerId) VALUES (?,?)");
+        insert.setString(1, routineId);
+        insert.setString(2, id);
+        insert.execute();
+        insert.close();
+      }
+    }
+
+    return true;
   }
 
   @Override
@@ -152,27 +215,54 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
       List<WorkoutRoutine> workoutRoutineList = new ArrayList<>();
       while (resultSet.next()) {
-        WorkoutRoutine trainer = getWorkoutRoutine(resultSet);
-        if (trainer != null) {
-          workoutRoutineList.add(trainer);
+        WorkoutRoutine workoutRoutine = getWorkoutRoutine(resultSet);
+        if (workoutRoutine != null) {
+          workoutRoutineList.add(workoutRoutine);
         }
       }
       return workoutRoutineList;
     }
   }
 
-  private WorkoutRoutine getWorkoutRoutine(ResultSet resultSet) {
+  private WorkoutRoutine getWorkoutRoutine(ResultSet resultSet) throws SQLException {
 
-    return null;
+    String id = resultSet.getString("id");
+    String name = resultSet.getString("name");
+
+    try (Connection con = dataSource.getConnection();
+        Statement stmt = con.createStatement()) {
+
+      ResultSet exerciseResultSet =
+          stmt.executeQuery(
+              String.format(
+                  "SELECT * FROM %s WHERE workoutRoutineId = '%s';",
+                  EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id));
+
+      List<String> exerciseIds = new ArrayList<>();
+      while (exerciseResultSet.next()) {
+        exerciseIds.add(exerciseResultSet.getString("exerciseId"));
+      }
+
+      return new WorkoutRoutineImpl(id, name, exerciseIds);
+    }
   }
 
   @Override
   public boolean removeWorkoutRoutine(String id) throws SQLException {
-    return false;
+    removeById(id, WORKOUT_ROUTINE_TABLE_NAME);
+    try (Connection con = dataSource.getConnection();
+        Statement stmt = con.createStatement()) {
+      LOGGER.trace("Removing from table {} : {}", EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id);
+      stmt.execute(
+          String.format(
+              "DELETE FROM %s WHERE workoutId = '%s';", EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id));
+    }
+
+    return true;
   }
 
   @Override
-  public List<Exercise> getExercies() throws SQLException {
+  public List<Exercise> getExercises() throws SQLException {
     try (Connection con = dataSource.getConnection();
         Statement stmt = con.createStatement()) {
       ResultSet resultSet =
@@ -197,8 +287,7 @@ public class MySqlHandlerImpl implements MySqlHandler {
       int sets = resultSet.getInt("sets");
       int duration = resultSet.getInt("duration");
 
-      Machine machine = getMachineById(machineId);
-      return new ExerciseImpl(id, name, machine, sets, duration);
+      return new ExerciseImpl(id, name, machineId, sets, duration);
     } catch (SQLException e) {
       LOGGER.error("No data", e);
       return null;
@@ -207,7 +296,8 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
   @Override
   public boolean removeExercise(String id) throws SQLException {
-    return false;
+    removeById(id, EXERCISE_TABLE_NAME);
+    return true;
   }
 
   @Override
@@ -225,16 +315,6 @@ public class MySqlHandlerImpl implements MySqlHandler {
         }
       }
       return machineList;
-    }
-  }
-
-  private Machine getMachineById(String id) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(
-              String.format("SELECT FROM %s WHERE ID = '%s';", MACHINE_TABLE_NAME, id));
-      return getMachine(resultSet);
     }
   }
 
@@ -256,12 +336,15 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
   @Override
   public boolean removeMachine(String id) throws SQLException {
-    return false;
+    removeById(id, MACHINE_TABLE_NAME);
+    return true;
   }
 
   @Override
   public boolean removeCustomer(String id) throws SQLException {
-    return false;
+    removeById(id, CUSTOMER_TABLE_NAME);
+    removeById("customerId", id, CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME);
+    return true;
   }
 
   @Override
@@ -269,7 +352,7 @@ public class MySqlHandlerImpl implements MySqlHandler {
     String id = machine.getId();
     String name = machine.getName();
     String picture = machine.getPicture();
-    int quantity = machine.quantitiy();
+    int quantity = machine.getQuantity();
 
     try (Connection con = dataSource.getConnection()) {
       LOGGER.trace("Adding machine : {}", machine);
@@ -279,8 +362,8 @@ public class MySqlHandlerImpl implements MySqlHandler {
               "INSERT INTO "
                   + MACHINE_TABLE_NAME
                   + " (name, id, picture, quantity) VALUES (?,?,?,?)");
-      insert.setString(1, id);
-      insert.setString(2, name);
+      insert.setString(1, name);
+      insert.setString(2, id);
       insert.setString(3, picture);
       insert.setInt(4, quantity);
       insert.execute();
@@ -319,20 +402,18 @@ public class MySqlHandlerImpl implements MySqlHandler {
       String healthInsuranceProvider = resultSet.getString("health_insurance_provider");
       Activity activity = Activity.valueOf(resultSet.getString("activity"));
 
-      /* TODO : Workout Routine Get
-            List<String> qualifications = getQualificationsForTrainer(id);
-            Trainer trainer =
-                    new TrainerImpl(
-                            id,
-                            address,
-                            firstName,
-                            lastName,
-                            phone,
-                            email,
-                            healthInsuranceProvider,
-                            workHours,
-                            qualifications);
-      */
+      List<String> workoutRoutines = new ArrayList<>();
+      try (Connection con = dataSource.getConnection()) {
+        PreparedStatement insert =
+            con.prepareCall(
+                "SELECT * FROM " + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME + " WHERE CUSTOMERID = ?");
+        insert.setString(1, id);
+        ResultSet resultSetWorkouts = insert.executeQuery();
+        while (resultSetWorkouts.next()) {
+          workoutRoutines.add(resultSetWorkouts.getString("WORKOUTROUTINEID"));
+        }
+        insert.close();
+      }
 
       Customer customer =
           new CustomerImpl(
@@ -343,7 +424,7 @@ public class MySqlHandlerImpl implements MySqlHandler {
               phone,
               email,
               healthInsuranceProvider,
-              new ArrayList<>(),
+              workoutRoutines,
               activity);
 
       LOGGER.trace("Got customer {}", customer);
@@ -356,27 +437,27 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
   @Override
   public boolean addExercise(Exercise exercise) throws SQLException {
-    /*String id = exercise.getId();
-        String name = exercise.getCommonName();
-        int duration = exercise.getDurationPerSet();
-        int sets = exercise.getSets();
-        Machine machine = exercise.getMachine();
+    String id = exercise.getId();
+    String name = exercise.getCommonName();
+    int duration = exercise.getDurationPerSet();
+    int sets = exercise.getSets();
+    String machineId = exercise.getMachineId();
 
-
-
-        try (Connection con = dataSource.getConnection()) {
-          LOGGER.trace("Adding machine : {}", machine);
-    //      "(name varchar(100), id varchar(100), machineId varchar(100), sets integer, duration integer, workoutRoutineId varchar(100))";
-
-          PreparedStatement insert = con.prepareStatement("INSERT INTO " + EXERCISE_TABLE_NAME +" (name, id, picture, quantity) VALUES (?,?,?,?)");
-          insert.setString(1, id);
-          insert.setString(2, name);
-          insert.setString(3, picture);
-          insert.setInt(4, quantity);
-          insert.execute();
-          insert.close();
-
-        }*/
+    try (Connection con = dataSource.getConnection()) {
+      LOGGER.trace("Adding Exercise : {}", exercise);
+      PreparedStatement insert =
+          con.prepareStatement(
+              "INSERT INTO "
+                  + EXERCISE_TABLE_NAME
+                  + " (name, id, machineId, sets, duration) VALUES (?,?,?,?,?)");
+      insert.setString(1, name);
+      insert.setString(2, id);
+      insert.setString(3, machineId);
+      insert.setInt(4, sets);
+      insert.setInt(5, duration);
+      insert.execute();
+      insert.close();
+    }
 
     return true;
   }
@@ -419,12 +500,8 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
   @Override
   public boolean removeTrainer(String trainerId) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing trainer : {}", trainerId);
-      stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';", TRAINER_TABLE_NAME, trainerId));
-      removeById(trainerId, QUALIFICATION_TABLE_NAME);
-    }
+    removeById(trainerId, TRAINER_TABLE_NAME);
+    removeById(trainerId, QUALIFICATION_TABLE_NAME);
     return true;
   }
 
@@ -499,30 +576,61 @@ public class MySqlHandlerImpl implements MySqlHandler {
     return new ArrayList<>();
   }
 
-  private void removeById(String id, String tableName) {
+  private void removeById(String id, String tableName) throws SQLException {
     try (Connection con = dataSource.getConnection();
         Statement stmt = con.createStatement()) {
       LOGGER.trace("Removing from table {} : {}", tableName, id);
       stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';", tableName, id));
-    } catch (SQLException e) {
-      LOGGER.error("Could not remove trainer {}", id, e);
     }
   }
 
-  private void addQualification(Statement statement, String qualification, String trainerId) {
-    try {
-      LOGGER.trace("Adding qualification {} to trainer with id {}", qualification, trainerId);
-      statement.execute(
-          String.format(
-              "INSERT INTO %s (id, qualification) VALUES ('%s', '%s');",
-              QUALIFICATION_TABLE_NAME, trainerId, qualification));
-    } catch (SQLException e) {
-      LOGGER.error("Could not add qualification {} to {}", qualification, trainerId, e);
+  private void removeById(String idFieldName, String id, String tableName) throws SQLException {
+    try (Connection con = dataSource.getConnection();
+        Statement stmt = con.createStatement()) {
+      LOGGER.trace("Removing from table {} : {}", tableName, id);
+      stmt.execute(String.format("DELETE FROM %s WHERE %s = '%s';", tableName, idFieldName, id));
     }
+  }
+
+  private void addQualification(Statement statement, String qualification, String trainerId)
+      throws SQLException {
+    LOGGER.trace("Adding qualification {} to trainer with id {}", qualification, trainerId);
+    statement.execute(
+        String.format(
+            "INSERT INTO %s (id, qualification) VALUES ('%s', '%s');",
+            QUALIFICATION_TABLE_NAME, trainerId, qualification));
   }
 
   @Override
-  public boolean addWorkoutRoutine(WorkoutRoutine workoutRoutine) {
-    return false;
+  public boolean addWorkoutRoutine(WorkoutRoutine workoutRoutine) throws SQLException {
+    String name = workoutRoutine.getName();
+    String id = workoutRoutine.getId();
+    List<String> workoutRoutineExerciseIds = workoutRoutine.getExerciseIds();
+
+    try (Connection con = dataSource.getConnection()) {
+      LOGGER.trace("Adding workoutRoutine : {}", workoutRoutine);
+
+      PreparedStatement insert =
+          con.prepareStatement(
+              "INSERT INTO " + WORKOUT_ROUTINE_TABLE_NAME + " (name, id) VALUES (?,?)");
+      insert.setString(1, name);
+      insert.setString(2, id);
+      insert.execute();
+      insert.close();
+
+      for (String exerciseId : workoutRoutineExerciseIds) {
+        insert =
+            con.prepareStatement(
+                "INSERT INTO "
+                    + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
+                    + " (workoutRoutineId, exerciseId) VALUES (?,?)");
+        insert.setString(1, id);
+        insert.setString(2, exerciseId);
+        insert.execute();
+        insert.close();
+      }
+    }
+
+    return true;
   }
 }

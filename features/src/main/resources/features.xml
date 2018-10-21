@@ -3,6 +3,9 @@
           name="data-management-${project.version}">
 
     <feature name="data-management" version="${project.version}">
+
+
+
         <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.9.6</bundle>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.9.6</bundle>
         <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.9.6</bundle>

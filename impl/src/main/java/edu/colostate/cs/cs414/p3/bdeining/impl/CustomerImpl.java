@@ -2,7 +2,6 @@ package edu.colostate.cs.cs414.p3.bdeining.impl;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
-import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +24,7 @@ public class CustomerImpl implements Customer {
 
   private Activity activity;
 
-  private List<WorkoutRoutine> workoutRoutines;
+  private List<String> workoutRoutineIds;
 
   public CustomerImpl(
       String id,
@@ -35,7 +34,7 @@ public class CustomerImpl implements Customer {
       String phone,
       String email,
       String healthInsuranceProvider,
-      List<WorkoutRoutine> workoutRoutines,
+      List<String> workoutRoutineIds,
       Activity activity) {
     this.address = address;
     this.firstName = firstName;
@@ -45,7 +44,7 @@ public class CustomerImpl implements Customer {
     this.id = id;
     this.healthInsuranceProvider = healthInsuranceProvider;
     this.activity = activity;
-    this.workoutRoutines = workoutRoutines;
+    this.workoutRoutineIds = workoutRoutineIds;
   }
 
   @Override
@@ -92,8 +91,8 @@ public class CustomerImpl implements Customer {
   }
 
   @Override
-  public void setWorkoutRoutines(List<WorkoutRoutine> workoutRoutines) {
-    this.workoutRoutines = workoutRoutines;
+  public void setWorkoutRoutineIds(List<String> workoutRoutines) {
+    this.workoutRoutineIds = workoutRoutines;
   }
 
   @Override
@@ -102,8 +101,8 @@ public class CustomerImpl implements Customer {
   }
 
   @Override
-  public List<WorkoutRoutine> getWorkoutRoutines() {
-    return workoutRoutines;
+  public List<String> getWorkoutRoutineIds() {
+    return workoutRoutineIds;
   }
 
   @Override

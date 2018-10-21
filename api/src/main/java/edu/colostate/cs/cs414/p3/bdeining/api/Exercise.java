@@ -8,9 +8,9 @@ public interface Exercise {
 
   void setCommonName(String commonName);
 
-  Machine getMachine();
+  String getMachineId();
 
-  void setMachine(Machine machine);
+  void setMachineId(String machineId);
 
   int getSets();
 

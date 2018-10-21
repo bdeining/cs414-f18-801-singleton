@@ -1,7 +1,6 @@
 package edu.colostate.cs.cs414.p3.bdeining.impl;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
-import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
 import java.util.UUID;
 
 public class ExerciseImpl implements Exercise {
@@ -10,15 +9,16 @@ public class ExerciseImpl implements Exercise {
 
   private transient String id;
 
-  private Machine machine;
+  private String machineId;
 
   private int sets;
 
   private int durationPerSet;
 
-  public ExerciseImpl(String id, String commonName, Machine machine, int sets, int durationPerSet) {
+  public ExerciseImpl(
+      String id, String commonName, String machineId, int sets, int durationPerSet) {
     this.commonName = commonName;
-    this.machine = machine;
+    this.machineId = machineId;
     this.sets = sets;
     this.id = id;
     this.durationPerSet = durationPerSet;
@@ -43,13 +43,13 @@ public class ExerciseImpl implements Exercise {
   }
 
   @Override
-  public Machine getMachine() {
-    return machine;
+  public String getMachineId() {
+    return machineId;
   }
 
   @Override
-  public void setMachine(Machine machine) {
-    this.machine = machine;
+  public void setMachineId(String machineId) {
+    this.machineId = machineId;
   }
 
   @Override
@@ -70,5 +70,12 @@ public class ExerciseImpl implements Exercise {
   @Override
   public void setDurationPerSet(int durationPerSet) {
     this.durationPerSet = durationPerSet;
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "Name : %s, Machine ID : %s, Set : %s, Duration %s",
+        commonName, machineId, sets, durationPerSet);
   }
 }

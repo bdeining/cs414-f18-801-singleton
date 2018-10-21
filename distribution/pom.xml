@@ -84,11 +84,11 @@
                         <feature>jdbc</feature>
                         <feature>transaction</feature>
                         <feature>jndi</feature>
-                        <feature>http</feature>
                         <feature>pax-jdbc-h2</feature>
                         <feature>pax-jdbc-config</feature>
                         <feature>cxf</feature>
                         <feature>cxf-commands</feature>
+                        <feature>http</feature>
                     </bootFeatures>
                     <startupFeatures>
                         <feature>data-management</feature>

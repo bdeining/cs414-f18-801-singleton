@@ -12,7 +12,7 @@ public interface Machine {
 
   void setPicture(String bytes);
 
-  int quantitiy();
+  int getQuantity();
 
   void setQuantity(int quantity);
 }

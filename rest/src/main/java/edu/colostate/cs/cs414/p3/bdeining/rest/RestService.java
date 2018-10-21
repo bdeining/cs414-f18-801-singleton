@@ -40,6 +40,7 @@ public class RestService {
   private MySqlHandler mySqlHandler;
 
   private Gson gson = new Gson();
+  // new GsonBuilder().registerTypeAdapter(Machine.class, new MachineDeserializer()).create();
 
   public RestService(MySqlHandler mySqlHandler) {
     this.mySqlHandler = mySqlHandler;
@@ -136,7 +137,7 @@ public class RestService {
   @Path("/exercise")
   public Response getExercise() {
     try {
-      List<Exercise> machineList = mySqlHandler.getExercies();
+      List<Exercise> machineList = mySqlHandler.getExercises();
       return Response.ok().entity(machineList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get exercise list", e);
@@ -260,4 +261,20 @@ public class RestService {
       return Response.serverError().build();
     }
   }
+
+  /*  private class MachineDeserializer implements JsonDeserializer<Machine> {
+
+      @Override
+      public Machine deserialize(JsonElement jsonElement, Type type,
+              JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+
+          JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+          return new MachineImpl(
+                  jsonObject.get("name").getAsString(),
+                  jsonObject.get("picture").getAsString(),
+                  jsonObject.get("quantity").getAsInt()
+          );
+      }
+  }*/
 }

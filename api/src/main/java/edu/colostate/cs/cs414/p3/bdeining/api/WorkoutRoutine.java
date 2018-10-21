@@ -10,7 +10,7 @@ public interface WorkoutRoutine {
 
   String getName();
 
-  void setExcercises(List<Exercise> exercises);
+  void setExcerciseIds(List<String> exerciseIds);
 
-  List<Exercise> getExercises();
+  List<String> getExerciseIds();
 }

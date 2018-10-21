@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface Customer extends Person {
 
-  List<WorkoutRoutine> getWorkoutRoutines();
+  List<String> getWorkoutRoutineIds();
 
   Activity getActivity();
 
-  void setWorkoutRoutines(List<WorkoutRoutine> workoutRoutines);
+  void setWorkoutRoutineIds(List<String> workoutRoutineIds);
 
   void setActivity(Activity activity);
 }

@@ -50,7 +50,7 @@ public class MachineImpl implements Machine {
   }
 
   @Override
-  public int quantitiy() {
+  public int getQuantity() {
     return quantity;
   }
 
