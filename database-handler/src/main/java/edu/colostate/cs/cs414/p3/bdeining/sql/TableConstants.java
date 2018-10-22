@@ -1,5 +1,8 @@
 package edu.colostate.cs.cs414.p3.bdeining.sql;
 
+import java.util.Arrays;
+import java.util.List;
+
 public final class TableConstants {
 
   public static final String CUSTOMER_TABLE_NAME = "CUSTOMER";
@@ -17,6 +20,17 @@ public final class TableConstants {
   public static final String EXERCISE_WORKOUT_ROUTINE_TABLE_NAME = "EXERCISE_WOR";
 
   public static final String CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME = "CUSTOMER_WOR";
+
+  public static final List<String> TABLES =
+      Arrays.asList(
+          CUSTOMER_TABLE_NAME,
+          EXERCISE_TABLE_NAME,
+          MACHINE_TABLE_NAME,
+          TRAINER_TABLE_NAME,
+          WORKOUT_ROUTINE_TABLE_NAME,
+          QUALIFICATION_TABLE_NAME,
+          EXERCISE_WORKOUT_ROUTINE_TABLE_NAME,
+          CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME);
 
   public static final String EXERCISE_TABLE_DEF =
       "(name varchar(100), id varchar(100), machineId varchar(100), sets integer, duration integer, workoutRoutineId varchar(100))";
@@ -40,6 +54,17 @@ public final class TableConstants {
 
   public static final String TRAINER_TABLE_DEF =
       "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), work_hours integer)";
+
+  public static final List<String> TABLES_DEF =
+      Arrays.asList(
+          CUSTOMER_TABLE_DEF,
+          EXERCISE_TABLE_DEF,
+          MACHINE_TABLE_DEF,
+          TRAINER_TABLE_DEF,
+          WORKOUT_ROUTINE_TABLE_DEF,
+          QUALIFICATION_TABLE_DEF,
+          EXERCISE_WORKOUT_ROUTINE_TABLE_DEF,
+          CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF);
 
   private TableConstants() {}
 }

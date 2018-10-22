@@ -1,20 +1,14 @@
 package edu.colostate.cs.cs414.p3.bdeining.sql;
 
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_WORKOUT_ROUTINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_WORKOUT_ROUTINE_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.QUALIFICATION_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.QUALIFICATION_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TRAINER_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TABLES;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TABLES_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TRAINER_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.WORKOUT_ROUTINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.WORKOUT_ROUTINE_TABLE_NAME;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
@@ -69,36 +63,12 @@ public class MySqlHandlerImpl implements MySqlHandler {
     List<String> tables = getExistingTables();
     LOGGER.trace("Existing tables : {}", tables);
 
-    if (!tables.contains(CUSTOMER_TABLE_NAME)) {
-      createTable(CUSTOMER_TABLE_NAME, CUSTOMER_TABLE_DEF);
-    }
-
-    if (!tables.contains(CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME)) {
-      createTable(CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME, CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF);
-    }
-
-    if (!tables.contains(EXERCISE_TABLE_NAME)) {
-      createTable(EXERCISE_TABLE_NAME, EXERCISE_TABLE_DEF);
-    }
-
-    if (!tables.contains(EXERCISE_WORKOUT_ROUTINE_TABLE_NAME)) {
-      createTable(EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, EXERCISE_WORKOUT_ROUTINE_TABLE_DEF);
-    }
-
-    if (!tables.contains(MACHINE_TABLE_NAME)) {
-      createTable(MACHINE_TABLE_NAME, MACHINE_TABLE_DEF);
-    }
-
-    if (!tables.contains(TRAINER_TABLE_NAME)) {
-      createTable(TRAINER_TABLE_NAME, TRAINER_TABLE_DEF);
-    }
-
-    if (!tables.contains(WORKOUT_ROUTINE_TABLE_NAME)) {
-      createTable(WORKOUT_ROUTINE_TABLE_NAME, WORKOUT_ROUTINE_TABLE_DEF);
-    }
-
-    if (!tables.contains(QUALIFICATION_TABLE_NAME)) {
-      createTable(QUALIFICATION_TABLE_NAME, QUALIFICATION_TABLE_DEF);
+    for (int i = 0; i < TABLES.size(); i++) {
+      String tableName = TABLES.get(i);
+      String tableDef = TABLES_DEF.get(i);
+      if (!tables.contains(tableName)) {
+        createTable(tableName, tableDef);
+      }
     }
   }
 
@@ -185,6 +155,128 @@ public class MySqlHandlerImpl implements MySqlHandler {
   }
 
   @Override
+  public boolean addMachine(Machine machine) throws SQLException {
+    String id = machine.getId();
+    String name = machine.getName();
+    String picture = machine.getPicture();
+    int quantity = machine.getQuantity();
+
+    try (Connection con = dataSource.getConnection()) {
+      LOGGER.trace("Adding machine : {}", machine);
+
+      PreparedStatement insert =
+          con.prepareStatement(
+              "INSERT INTO "
+                  + MACHINE_TABLE_NAME
+                  + " (name, id, picture, quantity) VALUES (?,?,?,?)");
+      insert.setString(1, name);
+      insert.setString(2, id);
+      insert.setString(3, picture);
+      insert.setInt(4, quantity);
+      insert.execute();
+      insert.close();
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean addExercise(Exercise exercise) throws SQLException {
+    String id = exercise.getId();
+    String name = exercise.getCommonName();
+    int duration = exercise.getDurationPerSet();
+    int sets = exercise.getSets();
+    String machineId = exercise.getMachineId();
+
+    try (Connection con = dataSource.getConnection()) {
+      LOGGER.trace("Adding Exercise : {}", exercise);
+      PreparedStatement insert =
+          con.prepareStatement(
+              "INSERT INTO "
+                  + EXERCISE_TABLE_NAME
+                  + " (name, id, machineId, sets, duration) VALUES (?,?,?,?,?)");
+      insert.setString(1, name);
+      insert.setString(2, id);
+      insert.setString(3, machineId);
+      insert.setInt(4, sets);
+      insert.setInt(5, duration);
+      insert.execute();
+      insert.close();
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean addTrainer(Trainer trainer) throws SQLException {
+    String address = trainer.getAddress();
+    String firstName = trainer.getFirstName();
+    String lastName = trainer.getLastName();
+    String phone = trainer.getPhone();
+    String healthInsuranceProvider = trainer.getHealthInsuranceProvider();
+    String email = trainer.getEmail();
+    String id = trainer.getId();
+    int workHours = trainer.getWorkHours();
+    List<String> qualifications = trainer.getQualifications();
+
+    try (Connection con = dataSource.getConnection();
+        Statement stmt = con.createStatement()) {
+      LOGGER.trace("Adding trainer : {}", trainer);
+      stmt.execute(
+          String.format(
+              "INSERT INTO %s (first_name, last_name, address, phone, email, id, health_insurance_provider, work_hours) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+              TRAINER_TABLE_NAME,
+              firstName,
+              lastName,
+              address,
+              phone,
+              email,
+              id,
+              healthInsuranceProvider,
+              workHours));
+
+      for (String qualification : qualifications) {
+        addQualification(stmt, qualification, id);
+      }
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean addWorkoutRoutine(WorkoutRoutine workoutRoutine) throws SQLException {
+    String name = workoutRoutine.getName();
+    String id = workoutRoutine.getId();
+    List<String> workoutRoutineExerciseIds = workoutRoutine.getExerciseIds();
+
+    try (Connection con = dataSource.getConnection()) {
+      LOGGER.trace("Adding workoutRoutine : {}", workoutRoutine);
+
+      PreparedStatement insert =
+          con.prepareStatement(
+              "INSERT INTO " + WORKOUT_ROUTINE_TABLE_NAME + " (name, id) VALUES (?,?)");
+      insert.setString(1, name);
+      insert.setString(2, id);
+      insert.execute();
+      insert.close();
+
+      for (String exerciseId : workoutRoutineExerciseIds) {
+        insert =
+            con.prepareStatement(
+                "INSERT INTO "
+                    + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
+                    + " (workoutRoutineId, exerciseId) VALUES (?,?)");
+        insert.setString(1, id);
+        insert.setString(2, exerciseId);
+        insert.execute();
+        insert.close();
+      }
+    }
+
+    return true;
+  }
+
+  @Override
   public List<WorkoutRoutine> getWorkoutRoutines() throws SQLException {
     try (Connection con = dataSource.getConnection();
         Statement stmt = con.createStatement()) {
@@ -202,13 +294,11 @@ public class MySqlHandlerImpl implements MySqlHandler {
     }
   }
 
-  private WorkoutRoutine getWorkoutRoutine(ResultSet resultSet) throws SQLException {
-
-    String id = resultSet.getString("id");
-    String name = resultSet.getString("name");
-
+  private WorkoutRoutine getWorkoutRoutine(ResultSet resultSet) {
     try (Connection con = dataSource.getConnection();
         Statement stmt = con.createStatement()) {
+      String id = resultSet.getString("id");
+      String name = resultSet.getString("name");
 
       ResultSet exerciseResultSet =
           stmt.executeQuery(
@@ -222,6 +312,9 @@ public class MySqlHandlerImpl implements MySqlHandler {
       }
 
       return new WorkoutRoutineImpl(id, name, exerciseIds);
+    } catch (SQLException e) {
+      LOGGER.debug("Could not get routine", e);
+      return null;
     }
   }
 
@@ -326,32 +419,6 @@ public class MySqlHandlerImpl implements MySqlHandler {
   }
 
   @Override
-  public boolean addMachine(Machine machine) throws SQLException {
-    String id = machine.getId();
-    String name = machine.getName();
-    String picture = machine.getPicture();
-    int quantity = machine.getQuantity();
-
-    try (Connection con = dataSource.getConnection()) {
-      LOGGER.trace("Adding machine : {}", machine);
-
-      PreparedStatement insert =
-          con.prepareStatement(
-              "INSERT INTO "
-                  + MACHINE_TABLE_NAME
-                  + " (name, id, picture, quantity) VALUES (?,?,?,?)");
-      insert.setString(1, name);
-      insert.setString(2, id);
-      insert.setString(3, picture);
-      insert.setInt(4, quantity);
-      insert.execute();
-      insert.close();
-    }
-
-    return true;
-  }
-
-  @Override
   public List<Customer> getCustomers() throws SQLException {
     try (Connection con = dataSource.getConnection();
         Statement stmt = con.createStatement()) {
@@ -411,69 +478,6 @@ public class MySqlHandlerImpl implements MySqlHandler {
       LOGGER.error("No data", e);
       return null;
     }
-  }
-
-  @Override
-  public boolean addExercise(Exercise exercise) throws SQLException {
-    String id = exercise.getId();
-    String name = exercise.getCommonName();
-    int duration = exercise.getDurationPerSet();
-    int sets = exercise.getSets();
-    String machineId = exercise.getMachineId();
-
-    try (Connection con = dataSource.getConnection()) {
-      LOGGER.trace("Adding Exercise : {}", exercise);
-      PreparedStatement insert =
-          con.prepareStatement(
-              "INSERT INTO "
-                  + EXERCISE_TABLE_NAME
-                  + " (name, id, machineId, sets, duration) VALUES (?,?,?,?,?)");
-      insert.setString(1, name);
-      insert.setString(2, id);
-      insert.setString(3, machineId);
-      insert.setInt(4, sets);
-      insert.setInt(5, duration);
-      insert.execute();
-      insert.close();
-    }
-
-    return true;
-  }
-
-  @Override
-  public boolean addTrainer(Trainer trainer) throws SQLException {
-    String address = trainer.getAddress();
-    String firstName = trainer.getFirstName();
-    String lastName = trainer.getLastName();
-    String phone = trainer.getPhone();
-    String healthInsuranceProvider = trainer.getHealthInsuranceProvider();
-    String email = trainer.getEmail();
-    String id = trainer.getId();
-    int workHours = trainer.getWorkHours();
-    List<String> qualifications = trainer.getQualifications();
-
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Adding trainer : {}", trainer);
-      stmt.execute(
-          String.format(
-              "INSERT INTO %s (first_name, last_name, address, phone, email, id, health_insurance_provider, work_hours) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
-              TRAINER_TABLE_NAME,
-              firstName,
-              lastName,
-              address,
-              phone,
-              email,
-              id,
-              healthInsuranceProvider,
-              workHours));
-
-      for (String qualification : qualifications) {
-        addQualification(stmt, qualification, id);
-      }
-    }
-
-    return true;
   }
 
   @Override
@@ -542,9 +546,7 @@ public class MySqlHandlerImpl implements MySqlHandler {
       List<String> qualifications = new ArrayList<>();
       while (resultSet.next()) {
         String qualificaiton = resultSet.getString("qualification");
-        if (qualificaiton != null && !qualificaiton.isEmpty()) {
-          qualifications.add(qualificaiton);
-        }
+        qualifications.add(qualificaiton);
       }
       return qualifications;
     } catch (SQLException e) {
@@ -577,38 +579,5 @@ public class MySqlHandlerImpl implements MySqlHandler {
         String.format(
             "INSERT INTO %s (id, qualification) VALUES ('%s', '%s');",
             QUALIFICATION_TABLE_NAME, trainerId, qualification));
-  }
-
-  @Override
-  public boolean addWorkoutRoutine(WorkoutRoutine workoutRoutine) throws SQLException {
-    String name = workoutRoutine.getName();
-    String id = workoutRoutine.getId();
-    List<String> workoutRoutineExerciseIds = workoutRoutine.getExerciseIds();
-
-    try (Connection con = dataSource.getConnection()) {
-      LOGGER.trace("Adding workoutRoutine : {}", workoutRoutine);
-
-      PreparedStatement insert =
-          con.prepareStatement(
-              "INSERT INTO " + WORKOUT_ROUTINE_TABLE_NAME + " (name, id) VALUES (?,?)");
-      insert.setString(1, name);
-      insert.setString(2, id);
-      insert.execute();
-      insert.close();
-
-      for (String exerciseId : workoutRoutineExerciseIds) {
-        insert =
-            con.prepareStatement(
-                "INSERT INTO "
-                    + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
-                    + " (workoutRoutineId, exerciseId) VALUES (?,?)");
-        insert.setString(1, id);
-        insert.setString(2, exerciseId);
-        insert.execute();
-        insert.close();
-      }
-    }
-
-    return true;
   }
 }
