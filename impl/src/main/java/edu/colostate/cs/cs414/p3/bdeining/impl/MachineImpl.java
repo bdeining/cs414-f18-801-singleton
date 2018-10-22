@@ -64,7 +64,6 @@ public class MachineImpl implements Machine {
     return String.format("Name : %s, ID : %s, Quantity : %d", name, id, quantity);
   }
 
-
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof MachineImpl)) {

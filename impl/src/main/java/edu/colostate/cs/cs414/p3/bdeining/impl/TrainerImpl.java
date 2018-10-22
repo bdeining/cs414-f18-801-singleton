@@ -163,5 +163,4 @@ public class TrainerImpl implements Trainer {
     hash = 31 * hash + qualifications.hashCode();
     return hash;
   }
-
 }

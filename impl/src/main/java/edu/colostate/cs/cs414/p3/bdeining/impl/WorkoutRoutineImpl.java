@@ -46,12 +46,10 @@ public class WorkoutRoutineImpl implements WorkoutRoutine {
     return exerciseIds;
   }
 
-
   @Override
   public String toString() {
     return String.format("Name : %s, ID : %s", name, id);
   }
-
 
   @Override
   public boolean equals(Object obj) {
