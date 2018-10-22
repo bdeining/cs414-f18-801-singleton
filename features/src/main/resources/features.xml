@@ -3,15 +3,12 @@
           name="data-management-${project.version}">
 
     <feature name="data-management" version="${project.version}">
-
-
-
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.9.6</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.9.6</bundle>
-        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.9.6</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/2.9.6</bundle>
-        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.9.6</bundle>
-        <bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.9.6</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>
 
         <bundle>mvn:edu.colostate.cs.cs414.p3.bdeining/api/${project.version}</bundle>
         <bundle>mvn:edu.colostate.cs.cs414.p3.bdeining/database-handler/${project.version}</bundle>
