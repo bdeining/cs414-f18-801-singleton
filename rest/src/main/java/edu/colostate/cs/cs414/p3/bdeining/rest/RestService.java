@@ -30,8 +30,6 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Check logs and variable names
-
 @Path("/")
 public class RestService {
 
@@ -40,7 +38,6 @@ public class RestService {
   private MySqlHandler mySqlHandler;
 
   private Gson gson = new Gson();
-  // new GsonBuilder().registerTypeAdapter(Machine.class, new MachineDeserializer()).create();
 
   public RestService(MySqlHandler mySqlHandler) {
     this.mySqlHandler = mySqlHandler;
@@ -111,10 +108,10 @@ public class RestService {
       mySqlHandler.addMachine(machine);
       return Response.ok().build();
     } catch (JsonSyntaxException | JsonIOException e) {
-      LOGGER.warn("Could not parse trainer", e);
+      LOGGER.warn("Could not parse machine", e);
       return Response.serverError().build();
     } catch (SQLException e) {
-      LOGGER.warn("Could not add trainer", e);
+      LOGGER.warn("Could not add machine", e);
       return Response.serverError().build();
     }
   }
@@ -127,7 +124,7 @@ public class RestService {
       mySqlHandler.removeMachine(id);
       return Response.ok().build();
     } catch (SQLException e) {
-      LOGGER.warn("Could not delete trainer {}", id, e);
+      LOGGER.warn("Could not delete machine {}", id, e);
       return Response.serverError().build();
     }
   }
@@ -137,8 +134,8 @@ public class RestService {
   @Path("/exercise")
   public Response getExercise() {
     try {
-      List<Exercise> machineList = mySqlHandler.getExercises();
-      return Response.ok().entity(machineList).build();
+      List<Exercise> exerciseList = mySqlHandler.getExercises();
+      return Response.ok().entity(exerciseList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get exercise list", e);
       return Response.serverError().build();
@@ -170,7 +167,7 @@ public class RestService {
       mySqlHandler.removeExercise(id);
       return Response.ok().build();
     } catch (SQLException e) {
-      LOGGER.warn("Could not delete trainer {}", id, e);
+      LOGGER.warn("Could not delete exercise {}", id, e);
       return Response.serverError().build();
     }
   }
@@ -214,7 +211,7 @@ public class RestService {
       mySqlHandler.removeWorkoutRoutine(id);
       return Response.ok().build();
     } catch (SQLException e) {
-      LOGGER.warn("Could not delete trainer {}", id, e);
+      LOGGER.warn("Could not delete routine {}", id, e);
       return Response.serverError().build();
     }
   }
@@ -261,20 +258,4 @@ public class RestService {
       return Response.serverError().build();
     }
   }
-
-  /*  private class MachineDeserializer implements JsonDeserializer<Machine> {
-
-      @Override
-      public Machine deserialize(JsonElement jsonElement, Type type,
-              JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-
-          JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-          return new MachineImpl(
-                  jsonObject.get("name").getAsString(),
-                  jsonObject.get("picture").getAsString(),
-                  jsonObject.get("quantity").getAsInt()
-          );
-      }
-  }*/
 }

@@ -1,0 +1,10 @@
+{
+  "address" : "2516 S Scap",
+  "firstName" : "Ben",
+  "lastName" : "Deininger",
+  "phone" : "520-123-1234",
+  "email" : "test@example.com",
+  "healthInsuranceProvider" : "health insurance",
+  "workHours" : 2,
+  "qualifications" : ["one", "two"]
+}

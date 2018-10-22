@@ -1,0 +1,10 @@
+{
+  "address" : "2516 S Scap",
+  "firstName" : "Ben",
+  "lastName" : "Deininger",
+  "phone" : "520-123-1234",
+  "email" : "test@example.com",
+  "healthInsuranceProvider" : "health insurance",
+  "activity" : "ACTIVE",
+  "workoutRoutineIds" : ["7a3d4681-0640-4741-bc94-d4d445a0c6ee"]
+}
