@@ -14,7 +14,7 @@ import org.osgi.service.component.annotations.Component;
 
 @Component(
   service = {Servlet.class},
-  property = {"alias=" + ApplicationConstants.APPLICATION_PATH}
+  property = {"alias=/search"}
 )
 public class ReactServlet extends HttpServlet {
   private static final long serialVersionUID = 250817058831319271L;
@@ -26,7 +26,6 @@ public class ReactServlet extends HttpServlet {
     String pathInfo = request.getPathInfo();
     try {
       if (pathInfo == null) {
-        // Browsers won't redirect to bundle.js if the servlet path doesn't end with a "/"
         addSlashToServletPath(request, response);
         return;
       }
