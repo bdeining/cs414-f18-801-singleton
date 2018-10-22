@@ -13,12 +13,16 @@ import static org.mockito.Mockito.when;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
+import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
 import edu.colostate.cs.cs414.p3.bdeining.api.MySqlHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
+import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
+import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
+import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -40,6 +44,10 @@ public class RestServiceTest {
 
   private static final String MACHINE_NAME = "aMachine";
 
+  private static final String ROUTINE_NAME = "routineName";
+
+  private static final String EXERCISE_NAME = "exerciseName";
+
   private static final int QUANTITY = 1;
 
   private static final String FIRST_NAME = "Bob";
@@ -52,7 +60,7 @@ public class RestServiceTest {
 
   private static final String HEALTH_INSURANCE_PROVIDER = "Kaiser";
 
-  private static final List<String> WORKOUT_ROUTINE = Arrays.asList("id1", "id2");
+  private static final List<String> ID_LIST = Arrays.asList("id1", "id2");
 
   private static final Activity ACTIVITY = Activity.ACTIVE;
 
@@ -65,6 +73,11 @@ public class RestServiceTest {
   private ArgumentCaptor<Machine> machineArgumentCaptor = ArgumentCaptor.forClass(Machine.class);
 
   private ArgumentCaptor<Trainer> trainerArgumentCaptor = ArgumentCaptor.forClass(Trainer.class);
+
+  private ArgumentCaptor<WorkoutRoutine> workoutRoutineArgumentCaptor =
+      ArgumentCaptor.forClass(WorkoutRoutine.class);
+
+  private ArgumentCaptor<Exercise> exerciseArgumentCaptor = ArgumentCaptor.forClass(Exercise.class);
 
   @Before
   public void setUp() throws Exception {
@@ -270,18 +283,156 @@ public class RestServiceTest {
     assertThat(response.getStatus(), is(500));
   }
 
+  @Test
+  public void testGetExercise() {
+    Response response = restService.getExercise();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(200));
+    List<Exercise> exerciseList = (List<Exercise>) response.getEntity();
+    assertThat(exerciseList, hasSize(1));
+    Exercise exercise = exerciseList.get(0);
+    assertThat(exercise.getCommonName(), is(EXERCISE_NAME));
+    assertThat(exercise.getSets(), is(12));
+  }
+
+  @Test
+  public void testGetExerciseSqlException() throws Exception {
+    when(mySqlHandler.getExercises()).thenThrow(SQLException.class);
+    Response response = restService.getExercise();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testCreateExercise() {
+    InputStream inputStream =
+        RestServiceTest.class.getClassLoader().getResourceAsStream("createExercise.json");
+    Response response = restService.createExercise(inputStream);
+
+    Exercise exercise = exerciseArgumentCaptor.getValue();
+    assertThat(response.getStatus(), is(200));
+    assertThat(exercise.getCommonName(), is("Leg Row"));
+    assertThat(exercise.getSets(), is(2));
+    assertThat(exercise.getDurationPerSet(), is(2));
+  }
+
+  @Test
+  public void testCreateExerciseSqlException() throws Exception {
+    InputStream inputStream =
+        RestServiceTest.class.getClassLoader().getResourceAsStream("createExercise.json");
+    when(mySqlHandler.addExercise(any(Exercise.class))).thenThrow(SQLException.class);
+    Response response = restService.createExercise(inputStream);
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testCreateExerciseBadJson() {
+    InputStream inputStream =
+        RestServiceTest.class.getClassLoader().getResourceAsStream("bad.json");
+    Response response = restService.createExercise(inputStream);
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testDeleteExercise() throws Exception {
+    Response response = restService.deleteExercise("anId");
+    assertThat(response.getStatus(), is(200));
+    verify(mySqlHandler, times(1)).removeExercise(anyString());
+  }
+
+  @Test
+  public void testDeleteExerciseSqlException() throws Exception {
+    when(mySqlHandler.removeExercise(anyString())).thenThrow(SQLException.class);
+    Response response = restService.deleteExercise("anId");
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testGetWorkoutRoutine() {
+    Response response = restService.getRoutine();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(200));
+    List<WorkoutRoutine> workoutRoutineList = (List<WorkoutRoutine>) response.getEntity();
+    assertThat(workoutRoutineList, hasSize(1));
+    WorkoutRoutine workoutRoutine = workoutRoutineList.get(0);
+    assertThat(workoutRoutine.getName(), is(ROUTINE_NAME));
+  }
+
+  @Test
+  public void testGetWorkoutRoutineSqlException() throws Exception {
+    when(mySqlHandler.getWorkoutRoutines()).thenThrow(SQLException.class);
+    Response response = restService.getRoutine();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testCreateWorkoutRoutine() {
+    InputStream inputStream =
+        RestServiceTest.class.getClassLoader().getResourceAsStream("createWorkoutRoutine.json");
+    Response response = restService.createWorkoutRoutine(inputStream);
+
+    WorkoutRoutine workoutRoutine = workoutRoutineArgumentCaptor.getValue();
+    assertThat(response.getStatus(), is(200));
+    assertThat(workoutRoutine.getName(), is("Leg Row"));
+    assertThat(
+        workoutRoutine.getExerciseIds(),
+        is(
+            Arrays.asList(
+                "dd863f12-a283-4bbe-9afa-41103615d61a", "e188d22b-40f3-4f61-ab1b-680da3cba778")));
+  }
+
+  @Test
+  public void testCreateWorkoutRoutineSqlException() throws Exception {
+    InputStream inputStream =
+        RestServiceTest.class.getClassLoader().getResourceAsStream("createWorkoutRoutine.json");
+    when(mySqlHandler.addWorkoutRoutine(any(WorkoutRoutine.class))).thenThrow(SQLException.class);
+    Response response = restService.createWorkoutRoutine(inputStream);
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testCreateWorkoutRoutineBadJson() {
+    InputStream inputStream =
+        RestServiceTest.class.getClassLoader().getResourceAsStream("bad.json");
+    Response response = restService.createWorkoutRoutine(inputStream);
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testDeleteWorkoutRoutine() throws Exception {
+    Response response = restService.deleteRoutine("anId");
+    assertThat(response.getStatus(), is(200));
+    verify(mySqlHandler, times(1)).removeWorkoutRoutine(anyString());
+  }
+
+  @Test
+  public void testDeleteWorkoutRoutineSqlException() throws Exception {
+    when(mySqlHandler.removeWorkoutRoutine(anyString())).thenThrow(SQLException.class);
+    Response response = restService.deleteRoutine("anId");
+    assertThat(response.getStatus(), is(500));
+  }
+
   private MySqlHandler setUpMocks() throws Exception {
     mySqlHandler = mock(MySqlHandler.class);
     when(mySqlHandler.getCustomers()).thenReturn(Collections.singletonList(generateCustomer()));
     when(mySqlHandler.getTrainers()).thenReturn(Collections.singletonList(generateTrainer()));
     when(mySqlHandler.getMachines()).thenReturn(Collections.singletonList(generateMachine()));
+    when(mySqlHandler.getWorkoutRoutines())
+        .thenReturn(Collections.singletonList(generateWorkoutRoutine()));
+    when(mySqlHandler.getExercises()).thenReturn(Collections.singletonList(generateExercise()));
+
     when(mySqlHandler.removeCustomer(anyString())).thenReturn(true);
     when(mySqlHandler.removeMachine(anyString())).thenReturn(true);
     when(mySqlHandler.removeTrainer(anyString())).thenReturn(true);
     when(mySqlHandler.removeExercise(anyString())).thenReturn(true);
+    when(mySqlHandler.removeWorkoutRoutine(anyString())).thenReturn(true);
+
     when(mySqlHandler.addTrainer(trainerArgumentCaptor.capture())).thenReturn(true);
     when(mySqlHandler.addMachine(machineArgumentCaptor.capture())).thenReturn(true);
     when(mySqlHandler.addCustomer(customerArgumentCaptor.capture())).thenReturn(true);
+    when(mySqlHandler.addExercise(exerciseArgumentCaptor.capture())).thenReturn(true);
+    when(mySqlHandler.addWorkoutRoutine(workoutRoutineArgumentCaptor.capture())).thenReturn(true);
     return mySqlHandler;
   }
 
@@ -298,7 +449,7 @@ public class RestServiceTest {
         PHONE,
         EMAIL,
         HEALTH_INSURANCE_PROVIDER,
-        WORKOUT_ROUTINE,
+        ID_LIST,
         ACTIVITY);
   }
 
@@ -313,5 +464,14 @@ public class RestServiceTest {
         HEALTH_INSURANCE_PROVIDER,
         WORK_HOURS,
         QUALIFICATIONS);
+  }
+
+  private WorkoutRoutine generateWorkoutRoutine() {
+    return new WorkoutRoutineImpl(UUID.randomUUID().toString(), ROUTINE_NAME, ID_LIST);
+  }
+
+  private Exercise generateExercise() {
+    return new ExerciseImpl(
+        UUID.randomUUID().toString(), EXERCISE_NAME, UUID.randomUUID().toString(), 12, 12);
   }
 }
