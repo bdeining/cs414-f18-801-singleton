@@ -16,6 +16,7 @@
         <bundle>mvn:edu.colostate.cs.cs414.p3.bdeining/api/${project.version}</bundle>
         <bundle>mvn:edu.colostate.cs.cs414.p3.bdeining/database-handler/${project.version}</bundle>
         <bundle>mvn:edu.colostate.cs.cs414.p3.bdeining/rest/${project.version}</bundle>
+        <bundle>mvn:edu.colostate.cs.cs414.p3.bdeining/web/${project.version}</bundle>
     </feature>
 
 </features>
