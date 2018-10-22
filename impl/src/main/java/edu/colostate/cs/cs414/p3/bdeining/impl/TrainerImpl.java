@@ -4,7 +4,6 @@ import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
 import java.util.List;
 import java.util.UUID;
 
-// TODO Hashcode, Equals
 public class TrainerImpl implements Trainer {
 
   private String address;
@@ -95,11 +94,6 @@ public class TrainerImpl implements Trainer {
   }
 
   @Override
-  public String toString() {
-    return String.format("Name : %s %s, Id : %s", firstName, lastName, id);
-  }
-
-  @Override
   public void setWorkHours(int workHours) {
     this.workHours = workHours;
   }
@@ -138,4 +132,36 @@ public class TrainerImpl implements Trainer {
   public void setHealthInsuranceProvider(String healthInsuranceProvider) {
     this.healthInsuranceProvider = healthInsuranceProvider;
   }
+
+  @Override
+  public String toString() {
+    return String.format("Name : %s %s, Id : %s", firstName, lastName, id);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof TrainerImpl)) {
+      return false;
+    }
+
+    TrainerImpl trainer = (TrainerImpl) obj;
+
+    return trainer.getId().equals(getId());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 31 * hash + id.hashCode();
+    hash = 31 * hash + firstName.hashCode();
+    hash = 31 * hash + lastName.hashCode();
+    hash = 31 * hash + phone.hashCode();
+    hash = 31 * hash + email.hashCode();
+    hash = 31 * hash + address.hashCode();
+    hash = 31 * hash + healthInsuranceProvider.hashCode();
+    hash = 31 * hash + workHours;
+    hash = 31 * hash + qualifications.hashCode();
+    return hash;
+  }
+
 }

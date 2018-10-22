@@ -45,4 +45,31 @@ public class WorkoutRoutineImpl implements WorkoutRoutine {
   public List<String> getExerciseIds() {
     return exerciseIds;
   }
+
+
+  @Override
+  public String toString() {
+    return String.format("Name : %s, ID : %s", name, id);
+  }
+
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof WorkoutRoutineImpl)) {
+      return false;
+    }
+
+    WorkoutRoutineImpl workoutRoutine = (WorkoutRoutineImpl) obj;
+
+    return workoutRoutine.getId().equals(getId());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 31 * hash + id.hashCode();
+    hash = 31 * hash + name.hashCode();
+    hash = 31 * hash + exerciseIds.hashCode();
+    return hash;
+  }
 }

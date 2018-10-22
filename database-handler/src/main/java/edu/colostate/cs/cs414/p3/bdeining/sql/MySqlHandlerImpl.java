@@ -1,5 +1,22 @@
 package edu.colostate.cs.cs414.p3.bdeining.sql;
 
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TABLE_NAME;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_TABLE_NAME;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_WORKOUT_ROUTINE_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_WORKOUT_ROUTINE_TABLE_NAME;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABLE_NAME;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.QUALIFICATION_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.QUALIFICATION_TABLE_NAME;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TRAINER_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TRAINER_TABLE_NAME;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.WORKOUT_ROUTINE_TABLE_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.WORKOUT_ROUTINE_TABLE_NAME;
+
 import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
@@ -40,45 +57,6 @@ import org.slf4j.LoggerFactory;
 public class MySqlHandlerImpl implements MySqlHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MySqlHandlerImpl.class);
-
-  private static final String CUSTOMER_TABLE_NAME = "CUSTOMER";
-
-  private static final String EXERCISE_TABLE_NAME = "EXERCISE";
-
-  private static final String MACHINE_TABLE_NAME = "MACHINE";
-
-  private static final String TRAINER_TABLE_NAME = "TRAINER";
-
-  private static final String WORKOUT_ROUTINE_TABLE_NAME = "WORKOUT";
-
-  private static final String QUALIFICATION_TABLE_NAME = "QUALIFICATIONS";
-
-  private static final String EXERCISE_WORKOUT_ROUTINE_TABLE_NAME = "EXERCISE_WOR";
-
-  private static final String CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME = "CUSTOMER_WOR";
-
-  private static final String EXERCISE_TABLE_DEF =
-      "(name varchar(100), id varchar(100), machineId varchar(100), sets integer, duration integer, workoutRoutineId varchar(100))";
-
-  private static final String MACHINE_TABLE_DEF =
-      "(name varchar(100), id varchar(100), picture varchar(1024), quantity integer)";
-
-  private static final String EXERCISE_WORKOUT_ROUTINE_TABLE_DEF =
-      "(workoutRoutineId varchar(100), exerciseId varchar(100))";
-
-  private static final String CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF =
-      "(workoutRoutineId varchar(100), customerId varchar(100))";
-
-  private static final String CUSTOMER_TABLE_DEF =
-      "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), activity varchar(100))";
-
-  private static final String WORKOUT_ROUTINE_TABLE_DEF = "(id varchar(100), name varchar(100))";
-
-  private static final String QUALIFICATION_TABLE_DEF =
-      "(id varchar(100), qualification varchar(100))";
-
-  private static final String TRAINER_TABLE_DEF =
-      "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), work_hours integer)";
 
   private DataSource dataSource;
 

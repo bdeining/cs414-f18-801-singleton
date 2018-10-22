@@ -86,6 +86,7 @@
                         <feature>jndi</feature>
                         <feature>pax-jdbc-h2</feature>
                         <feature>pax-jdbc-config</feature>
+                        <feature>pax-http-whiteboard</feature>
                         <feature>cxf</feature>
                         <feature>cxf-commands</feature>
                         <feature>http</feature>

@@ -78,4 +78,26 @@ public class ExerciseImpl implements Exercise {
         "Name : %s, Machine ID : %s, Set : %s, Duration %s",
         commonName, machineId, sets, durationPerSet);
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof ExerciseImpl)) {
+      return false;
+    }
+
+    ExerciseImpl exercise = (ExerciseImpl) obj;
+
+    return exercise.getId().equals(getId());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 31 * hash + id.hashCode();
+    hash = 31 * hash + commonName.hashCode();
+    hash = 31 * hash + machineId.hashCode();
+    hash = 31 * hash + sets;
+    hash = 31 * hash + durationPerSet;
+    return hash;
+  }
 }

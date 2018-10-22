@@ -63,4 +63,26 @@ public class MachineImpl implements Machine {
   public String toString() {
     return String.format("Name : %s, ID : %s, Quantity : %d", name, id, quantity);
   }
+
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof MachineImpl)) {
+      return false;
+    }
+
+    MachineImpl machine = (MachineImpl) obj;
+
+    return machine.getId().equals(getId());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 31 * hash + id.hashCode();
+    hash = 31 * hash + name.hashCode();
+    hash = 31 * hash + picture.hashCode();
+    hash = 31 * hash + quantity;
+    return hash;
+  }
 }

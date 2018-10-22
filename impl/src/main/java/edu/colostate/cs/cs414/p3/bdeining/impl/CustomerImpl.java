@@ -5,7 +5,6 @@ import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
 import java.util.List;
 import java.util.UUID;
 
-// TODO Hashcode, Equals, toString
 public class CustomerImpl implements Customer {
 
   private String address;
@@ -133,5 +132,36 @@ public class CustomerImpl implements Customer {
   @Override
   public void setHealthInsuranceProvider(String healthInsuranceProvider) {
     this.healthInsuranceProvider = healthInsuranceProvider;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Name : %s %s, ID : %s", firstName, lastName, id);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof CustomerImpl)) {
+      return false;
+    }
+
+    CustomerImpl customer = (CustomerImpl) obj;
+
+    return customer.getId().equals(getId());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 31 * hash + id.hashCode();
+    hash = 31 * hash + firstName.hashCode();
+    hash = 31 * hash + lastName.hashCode();
+    hash = 31 * hash + phone.hashCode();
+    hash = 31 * hash + email.hashCode();
+    hash = 31 * hash + address.hashCode();
+    hash = 31 * hash + healthInsuranceProvider.hashCode();
+    hash = 31 * hash + activity.hashCode();
+    hash = 31 * hash + workoutRoutineIds.hashCode();
+    return hash;
   }
 }
