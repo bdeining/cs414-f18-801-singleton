@@ -22,17 +22,17 @@ render(
         <Router>
             <div className="App">
                 <div className="container">
-                    <LinkContainer to="/frontend-karaf-demo/"><Button>Customers</Button></LinkContainer>
-                    <LinkContainer to="/frontend-karaf-demo/counter"><Button>Trainers</Button></LinkContainer>
-                    <LinkContainer to="/frontend-karaf-demo/about"><Button>Workout Routine</Button></LinkContainer>
-                    <LinkContainer to="/frontend-karaf-demo/about"><Button>Exercises</Button></LinkContainer>
-                    <LinkContainer to="/frontend-karaf-demo/about"><Button>Machines</Button></LinkContainer>
+                    <LinkContainer to="/search/"><Button>Customers</Button></LinkContainer>
+                    <LinkContainer to="/search/counter"><Button>Trainers</Button></LinkContainer>
+                    <LinkContainer to="/search/about"><Button>Workout Routine</Button></LinkContainer>
+                    <LinkContainer to="/search/about"><Button>Exercises</Button></LinkContainer>
+                    <LinkContainer to="/search/about"><Button>Machines</Button></LinkContainer>
                     <hr/>
                 </div>
                 <Switch>
-                    <Route exact path="/frontend-karaf-demo/" component={Home} />
-                    <Route path="/frontend-karaf-demo/counter" component={Counter} />
-                    <Route path="/frontend-karaf-demo/about" component={About} />
+                    <Route exact path="/search/" component={Home} />
+                    <Route path="/search/counter" component={Counter} />
+                    <Route path="/search/about" component={About} />
                 </Switch>
             </div>
         </Router>
