@@ -8,7 +8,7 @@ import { applyMiddleware, createStore, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { connect, Provider } from 'react-redux';
 import { counterReducer } from './reducers';
-import Home from './components/Home';
+import Home from './components/Customers';
 import About from './components/About';
 import Counter from './components/Counter';
 import { rootSaga } from './sagas';
