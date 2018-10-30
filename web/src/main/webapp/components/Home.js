@@ -10,54 +10,96 @@ class Home extends React.Component {
     super();
             this.state ={
                 data: [],
-                show: false
+                show: false,
+                id: '',
+                selected: null
               };
   }
 
     showModal = () => {
-      this.setState({ show: true });
+      this.setState({
+      show: true,
+
+        });
     }
 
     hideModal = () => {
       this.setState({ show: false });
     }
 
+    deleteCustomer = () => {
+      axios({
+                  method: 'delete',
+                  url: '/services/rest/customer?id=' + this.state.id,
+                             success() {
+                               this.getCustomerData()
+                             }
+                          }).then(res => {
+                                                   this.getCustomerData()
+                                                   this.setState({ show: false })
+                                              });
+
+    }
+
     saveModal = () => {
-/*        axios.put('/services/rest/customer', {
-            data: '{"address" : "2516 S Scap", "firstName" : "Ben", "lastName" : "Deininger", "phone" : "520-123-1234", "email" : "test@example.com", "healthInsuranceProvider" : "health insurance", "activity" : "ACTIVE", "workoutRoutineIds" : ["7a3d4681-0640-4741-bc94-d4d445a0c6ee"] }'
-        })
-            .then(function (response) {
-                console.log(response);
-            }.bind(this))
-            .catch(function (error) {
-                console.log(error)
-            });*/
-console.log(this.state);
-axios({
-  method: 'put',
-  url: '/services/rest/customer',
-  data: {
-		"address" : "2516 S Scap",
-    	"firstName" : "Ben",
-    	"lastName" : "Deininger",
-    	"phone" : "520-123-1234",
-    	"email" : "test@example.com",
-    	"healthInsuranceProvider" : "health insurance",
-    	"activity" : "ACTIVE",
-        "workoutRoutineIds" : ["7a3d4681-0640-4741-bc94-d4d445a0c6ee"]
-  }
-});
+        console.log(this.state);
+        if (this.state.id) {
+          axios({
+            method: 'put',
+            url: '/services/rest/customer',
+            data: {
+                  "address" : this.state.address,
+                  "firstName" : this.state.firstName,
+                  "lastName" : this.state.lastName,
+                  "phone" : this.state.phone,
+                  "email" : this.state.email,
+                  "healthInsuranceProvider" : this.state.healthInsuranceProvider,
+                  "activity" : this.state.activity,
+                  "id" : this.state.id,
+                  "workoutRoutineIds" : []
+            }}).then(res => {
+                         this.getCustomerData()
+                    });
+        } else {
+
+        axios({
+          method: 'put',
+          url: '/services/rest/customer',
+          data: {
+                "address" : this.state.address,
+                "firstName" : this.state.firstName,
+                "lastName" : this.state.lastName,
+                "phone" : this.state.phone,
+                "email" : this.state.email,
+                "healthInsuranceProvider" : this.state.healthInsuranceProvider,
+                "activity" : this.state.activity,
+                "workoutRoutineIds" : []
+          }
+
+        }).then(res => {
+                                 this.getCustomerData()
+                            });
+        }
       this.setState({ show: false });
     }
 
+  getCustomerData() {
+      axios.get('/services/rest/customer')
+        .then(res => {
+                this.setState({
+                  data: [ ...this.state.data ]
+                })
+
+                this.setState({
+                  data: res.data,
+                  id: '',
+                  show: this.state.show
+                });
+        });
+  }
+
   componentDidMount() {
-    axios.get('/services/rest/customer')
-      .then(res => {
-              this.setState({
-                data: res.data,
-                show: this.state.show
-              });
-      });
+    this.getCustomerData()
   }
 
   updateInputValue = (evt) => {
@@ -69,22 +111,23 @@ axios({
   }
 
   render() {
-      const { data } = this.state;
+      //const { data } = this.state;
       return (
         <div>
-        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal}>
+        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
           <p>Customer</p>
           <p>First Name <input name='firstName' value={this.state.firstName} onChange={this.updateInputValue}/></p>
           <p>Last Name <input name='lastName' value={this.state.lastName} onChange={this.updateInputValue}/></p>
-          <p>Address <input name='address' value={this.state.phone} onChange={this.updateInputValue}/></p>
-          <p>Phone <input name='phone' value={this.state.email} onChange={this.updateInputValue}/></p>
-          <p>Email <input name='email' value={this.state.lastName} onChange={this.updateInputValue}/></p>
+          <p>Address <input name='address' value={this.state.address} onChange={this.updateInputValue}/></p>
+          <p>Phone <input name='phone' value={this.state.phone} onChange={this.updateInputValue}/></p>
+          <p>Email <input name='email' value={this.state.email} onChange={this.updateInputValue}/></p>
           <p>Health Insurance Provider <input name='healthInsuranceProvider' value={this.state.healthInsuranceProvider} onChange={this.updateInputValue}/></p>
           <p>Activity <input name='activity' value={this.state.activity} onChange={this.updateInputValue}/></p>
+          <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
         <button type='button' onClick={this.showModal}>Open</button>
           <ReactTable
-            data={data}
+            data={this.state.data}
             columns={[
               {
                 Header: "Name",
@@ -117,11 +160,45 @@ axios({
                     Header: "Health Insurance Provider",
                     accessor: "healthInsuranceProvider"
                   },
+                  {
+                    Header: "ID",
+                    accessor: "id"
+                  }
                 ]
               }
             ]}
             defaultPageSize={10}
             className="-striped -highlight"
+            getTrProps={(state, rowInfo) => {
+                          if (rowInfo && rowInfo.row) {
+                            return {
+                              onClick: (e) => {
+                                console.log(e);
+                                console.log(rowInfo);
+                                console.log(this.state);
+                                this.setState({
+                                  firstName: rowInfo.row.firstName,
+                                  lastName: rowInfo.row.lastName,
+                                  address: rowInfo.row.address,
+                                  email: rowInfo.row.email,
+                                  phone: rowInfo.row.phone,
+                                  healthInsuranceProvider: rowInfo.row.healthInsuranceProvider,
+                                  activity: rowInfo.row.activity,
+                                  id: rowInfo.row.id,
+                                  selected: rowInfo.index
+                                })
+                                this.showModal()
+                              },
+                              style: {
+                                background: rowInfo.index === this.state.selected ? '#00afec' : 'white',
+                                color: rowInfo.index === this.state.selected ? 'white' : 'black'
+                              }
+                            }
+                          }else{
+                            return {}
+                          }
+                        }
+                        }
           />
         </div>
       );
@@ -129,7 +206,7 @@ axios({
 }
 
 
-const Modal = ({ handleClose, handleSave, show, children }) => {
+const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
   const showHideClassName = show ? 'modal display-block' : 'modal display-none';
 
   return (
@@ -138,6 +215,9 @@ const Modal = ({ handleClose, handleSave, show, children }) => {
         {children}
         <button onClick={handleClose}>
           Close
+        </button>
+        <button onClick={handleDelete}>
+          Delete
         </button>
         <button onClick={handleSave}>
           Save
