@@ -117,42 +117,107 @@ public class MySqlHandlerImpl implements MySqlHandler {
     String activity = customer.getActivity().toString();
     List<String> routines = customer.getWorkoutRoutineIds();
 
-    try (Connection con = dataSource.getConnection()) {
-      LOGGER.trace("Adding customer : {}", customer);
-      PreparedStatement insert =
-          con.prepareStatement(
-              "INSERT INTO "
-                  + CUSTOMER_TABLE_NAME
-                  + " (first_name, last_name, address, phone, email, id, health_insurance_provider, activity) VALUES (?,?,?,?,?,?,?,?)");
-      insert.setString(1, firstName);
-      insert.setString(2, lastName);
-      insert.setString(3, address);
-      insert.setString(4, phone);
-      insert.setString(5, email);
-      insert.setString(6, id);
-      insert.setString(7, healthInsuranceProvider);
-      insert.setString(8, activity);
-      insert.execute();
-      insert.close();
-    }
+    Customer existingCustomer = getCustomerById(id);
+    if (existingCustomer != null) {
+      LOGGER.trace("Updating Customer : ID {}", id);
 
-    for (String routineId : routines) {
       try (Connection con = dataSource.getConnection()) {
         LOGGER.trace("Adding customer : {}", customer);
+
+        PreparedStatement update =
+                con.prepareStatement(
+                        "update " + CUSTOMER_TABLE_NAME + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, activity=? WHERE id=?");
+
+        update.setString(1, firstName);
+        update.setString(2, lastName);
+        update.setString(3, address);
+        update.setString(4, phone);
+        update.setString(5, email);
+        update.setString(6, healthInsuranceProvider);
+        update.setString(7, activity);
+        update.setString(8, id);
+        update.execute();
+        update.close();
+      }
+
+      removeById("customerId", id, CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME);
+
+      for (String routineId : routines) {
+
+        try (Connection con = dataSource.getConnection()) {
+          LOGGER.trace("Adding customer : {}", customer);
+          PreparedStatement insert =
+                  con.prepareStatement(
+                          "INSERT INTO "
+                                  + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME
+                                  + " (workoutRoutineId, customerId) VALUES (?,?)");
+          insert.setString(1, routineId);
+          insert.setString(2, id);
+          insert.execute();
+          insert.close();
+        }
+      }
+
+    } else {
+
+      try (Connection con = dataSource.getConnection()) {
+        LOGGER.trace("Adding customer : {}", customer);
+
         PreparedStatement insert =
             con.prepareStatement(
                 "INSERT INTO "
-                    + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME
-                    + " (workoutRoutineId, customerId) VALUES (?,?)");
-        insert.setString(1, routineId);
-        insert.setString(2, id);
+                    + CUSTOMER_TABLE_NAME
+                    + " (first_name, last_name, address, phone, email, id, health_insurance_provider, activity) VALUES (?,?,?,?,?,?,?,?)");
+        insert.setString(1, firstName);
+        insert.setString(2, lastName);
+        insert.setString(3, address);
+        insert.setString(4, phone);
+        insert.setString(5, email);
+        insert.setString(6, id);
+        insert.setString(7, healthInsuranceProvider);
+        insert.setString(8, activity);
         insert.execute();
         insert.close();
       }
-    }
 
+      for (String routineId : routines) {
+        try (Connection con = dataSource.getConnection()) {
+          LOGGER.trace("Adding customer : {}", customer);
+          PreparedStatement insert =
+              con.prepareStatement(
+                  "INSERT INTO "
+                      + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME
+                      + " (workoutRoutineId, customerId) VALUES (?,?)");
+          insert.setString(1, routineId);
+          insert.setString(2, id);
+          insert.execute();
+          insert.close();
+        }
+      }
+    }
     return true;
   }
+
+  private Customer getCustomerById(String id) throws SQLException {
+    try (Connection con = dataSource.getConnection();
+            Statement stmt = con.createStatement()) {
+      ResultSet resultSet =
+              stmt.executeQuery(String.format("SELECT * FROM %s where id='%s'", CUSTOMER_TABLE_NAME, id));
+
+      if (resultSet == null) {
+        return null;
+      }
+
+      while (resultSet.next()) {
+        Customer workoutRoutine = getCustomer(resultSet);
+        if (workoutRoutine != null) {
+          return workoutRoutine;
+        }
+      }
+      return null;
+    }
+  }
+
 
   @Override
   public boolean addMachine(Machine machine) throws SQLException {

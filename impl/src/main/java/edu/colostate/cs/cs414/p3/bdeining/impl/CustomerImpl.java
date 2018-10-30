@@ -17,7 +17,7 @@ public class CustomerImpl implements Customer {
 
   private String email;
 
-  private transient String id;
+  private String id;
 
   private String healthInsuranceProvider;
 
