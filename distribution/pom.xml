@@ -90,14 +90,10 @@
                 <version>4.2.1</version>
                 <extensions>true</extensions>
                 <configuration>
-
                     <startupFeatures>
                         <feature>eventadmin</feature>
                         <feature>scr</feature>
                     </startupFeatures>
-
-<!--                    <installedFeatures>
-                    </installedFeatures>-->
                     <bootFeatures>
                         <feature>standard</feature>
                         <feature>jdbc</feature>
@@ -111,21 +107,6 @@
                         <feature>http</feature>
                         <feature>data-management</feature>
                     </bootFeatures>
-
-
-
-<!--
-                    <bootFeatures>
-                        <feature>standard</feature>
-                        <feature>eventadmin</feature>
-                        <feature>scr</feature>
-
-                    </bootFeatures>
--->
-<!--                    <installedFeatures>
-                        <feature>data-management</feature>
-                    </installedFeatures>-->
-                    <!-- no installedFeatures -->
                 </configuration>
             </plugin>
         </plugins>

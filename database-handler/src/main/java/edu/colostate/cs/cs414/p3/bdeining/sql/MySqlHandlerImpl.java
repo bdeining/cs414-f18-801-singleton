@@ -125,8 +125,10 @@ public class MySqlHandlerImpl implements MySqlHandler {
         LOGGER.trace("Adding customer : {}", customer);
 
         PreparedStatement update =
-                con.prepareStatement(
-                        "update " + CUSTOMER_TABLE_NAME + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, activity=? WHERE id=?");
+            con.prepareStatement(
+                "update "
+                    + CUSTOMER_TABLE_NAME
+                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, activity=? WHERE id=?");
 
         update.setString(1, firstName);
         update.setString(2, lastName);
@@ -147,10 +149,10 @@ public class MySqlHandlerImpl implements MySqlHandler {
         try (Connection con = dataSource.getConnection()) {
           LOGGER.trace("Adding customer : {}", customer);
           PreparedStatement insert =
-                  con.prepareStatement(
-                          "INSERT INTO "
-                                  + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME
-                                  + " (workoutRoutineId, customerId) VALUES (?,?)");
+              con.prepareStatement(
+                  "INSERT INTO "
+                      + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME
+                      + " (workoutRoutineId, customerId) VALUES (?,?)");
           insert.setString(1, routineId);
           insert.setString(2, id);
           insert.execute();
@@ -200,9 +202,10 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
   private Customer getCustomerById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection();
-            Statement stmt = con.createStatement()) {
+        Statement stmt = con.createStatement()) {
       ResultSet resultSet =
-              stmt.executeQuery(String.format("SELECT * FROM %s where id='%s'", CUSTOMER_TABLE_NAME, id));
+          stmt.executeQuery(
+              String.format("SELECT * FROM %s where id='%s'", CUSTOMER_TABLE_NAME, id));
 
       if (resultSet == null) {
         return null;
@@ -217,7 +220,6 @@ public class MySqlHandlerImpl implements MySqlHandler {
       return null;
     }
   }
-
 
   @Override
   public boolean addMachine(Machine machine) throws SQLException {
