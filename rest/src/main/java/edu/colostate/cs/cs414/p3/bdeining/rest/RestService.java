@@ -17,7 +17,10 @@ import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -41,6 +44,30 @@ public class RestService {
 
   public RestService(MySqlHandler mySqlHandler) {
     this.mySqlHandler = mySqlHandler;
+  }
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/machinenames")
+  public Response getMachineNames() {
+    try {
+      List<Machine> trainerList = mySqlHandler.getMachines();
+      List<Map<String, Object>> machineNames =
+          trainerList
+              .stream()
+              .map(
+                  machine -> {
+                    Map<String, Object> objectMap = new HashMap<>();
+                    objectMap.put("label", machine.getName());
+                    objectMap.put("value", machine.getId());
+                    return objectMap;
+                  })
+              .collect(Collectors.toList());
+      return Response.ok().entity(machineNames).build();
+    } catch (SQLException e) {
+      LOGGER.warn("Could not get trainer list", e);
+      return Response.serverError().build();
+    }
   }
 
   @GET

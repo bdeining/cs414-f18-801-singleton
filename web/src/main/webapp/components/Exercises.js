@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+import Select from 'react-select';
 import './styles.css';
 
 class Exercise extends React.Component {
@@ -10,6 +11,7 @@ class Exercise extends React.Component {
     super();
     this.state ={
         data: [],
+        machineNames: [],
         show: false,
         id: '',
         selected: null
@@ -20,6 +22,7 @@ class Exercise extends React.Component {
     this.setState({
         commonName: '',
         machineId: '',
+        machineNames: [],
         sets: '',
         durationPerSet: '',
         id: '',
@@ -28,8 +31,15 @@ class Exercise extends React.Component {
  }
 
  showModal = () => {
-    this.setState({
-        show: true
+    axios({
+        method: 'get',
+        url: '/services/rest/machinenames',
+    }).then(res => {
+        console.log(res);
+        this.setState({
+            show: true,
+            machineNames: res.data
+        });
     });
  }
 
@@ -91,6 +101,7 @@ class Exercise extends React.Component {
                 this.setState({
                   data: res.data,
                   id: '',
+                  machineNames: [],
                   show: this.state.show
                 });
         });
@@ -106,13 +117,17 @@ class Exercise extends React.Component {
     });
   }
 
+  handleChange = (selectedOption) => {
+    this.setState({ machineId: selectedOption.value });
+  }
+
   render() {
       return (
         <div>
         <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
           <p>Machine</p>
           <p>Common Name <input name='commonName' value={this.state.commonName} onChange={this.updateInputValue}/></p>
-          <p>Machine ID <input name='machineId' value={this.state.machineId} onChange={this.updateInputValue}/></p>
+          <Select value={this.state.selectedOption} onChange={this.handleChange} options={this.state.machineNames}/>
           <p>Sets <input name='sets' value={this.state.sets} onChange={this.updateInputValue}/></p>
           <p>Duration Per Set <input name='durationPerSet' value={this.state.durationPerSet} onChange={this.updateInputValue}/></p>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
