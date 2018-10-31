@@ -4,20 +4,17 @@ import { Switch, Route, BrowserRouter as Router, NavLink } from 'react-router-do
 import Bootstrap from 'bootstrap3/dist/css/bootstrap.css';
 import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { applyMiddleware, createStore, compose } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import { createStore } from 'redux';
 import { connect, Provider } from 'react-redux';
 import { counterReducer } from './reducers';
+
 import Customer from './components/Customers';
 import Machine from './components/Machines';
 import Exercise from './components/Exercises';
 import WorkoutRoutine from './components/WorkoutRoutines';
-import Counter from './components/Counter';
-import { rootSaga } from './sagas';
+import Trainer from './components/Trainers';
 
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(counterReducer, compose(applyMiddleware(sagaMiddleware), window.devToolsExtension ? window.devToolsExtension() : f => f));
-sagaMiddleware.run(rootSaga);
+const store = createStore(counterReducer);
 
 render(
     <Provider store={store}>
@@ -25,7 +22,7 @@ render(
             <div className="App">
                 <div className="container">
                     <LinkContainer to="/search/"><Button>Customers</Button></LinkContainer>
-                    <LinkContainer to="/search/counter"><Button>Trainers</Button></LinkContainer>
+                    <LinkContainer to="/search/trainer"><Button>Trainers</Button></LinkContainer>
                     <LinkContainer to="/search/workouts"><Button>Workout Routine</Button></LinkContainer>
                     <LinkContainer to="/search/exercise"><Button>Exercises</Button></LinkContainer>
                     <LinkContainer to="/search/machine"><Button>Machines</Button></LinkContainer>
@@ -35,7 +32,7 @@ render(
                     <Route exact path="/search/" component={Customer} />
                     <Route path="/search/machine" component={Machine} />
                     <Route path="/search/exercise" component={Exercise} />
-                    <Route path="/search/counter" component={Counter} />
+                    <Route path="/search/trainer" component={Trainer} />
                     <Route path="/search/workouts" component={WorkoutRoutine} />
                 </Switch>
             </div>

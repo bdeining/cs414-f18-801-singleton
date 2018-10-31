@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import Select from 'react-select';
 import './styles.css';
 
-class WorkoutRoutine extends React.Component {
+class Trainer extends React.Component {
 
  constructor() {
     super();
     this.state ={
         data: [],
-        exerciseNames: [],
         show: false,
         id: '',
         selected: null
@@ -20,23 +18,22 @@ class WorkoutRoutine extends React.Component {
 
  clearCustomerState = () => {
     this.setState({
-        name: '',
-        exerciseIds: [],
-        exerciseNames: [],
+        firstName: '',
+        lastName: '',
+        address: '',
+        phone: '',
+        email: '',
+        healthInsuranceProvider: '',
+        workHours: '',
         id: '',
+        qualifications: [],
         show: false
     });
  }
 
  showModal = () => {
-    axios({
-        method: 'get',
-        url: '/services/rest/exercisenames',
-    }).then(res => {
-        this.setState({
-            show: true,
-            exerciseNames: res.data
-        });
+    this.setState({
+        show: true
     });
  }
 
@@ -47,7 +44,7 @@ class WorkoutRoutine extends React.Component {
  deleteCustomer = () => {
     axios({
         method: 'delete',
-        url: '/services/rest/routine?id=' + this.state.id,
+        url: '/services/rest/trainer?id=' + this.state.id,
     }).then(res => {
         this.getCustomerData()
         this.clearCustomerState()
@@ -58,11 +55,17 @@ class WorkoutRoutine extends React.Component {
     if (this.state.id) {
         axios({
             method: 'put',
-            url: '/services/rest/routine',
+            url: '/services/rest/trainer',
             data: {
-                "name": this.state.name,
-                "id": this.state.id,
-                "exerciseIds": this.state.exerciseIds
+                  "address" : this.state.address,
+                  "firstName" : this.state.firstName,
+                  "lastName" : this.state.lastName,
+                  "phone" : this.state.phone,
+                  "email" : this.state.email,
+                  "healthInsuranceProvider" : this.state.healthInsuranceProvider,
+                  "workHours" : this.state.workHours,
+                  "id" : this.state.id,
+                  "qualifications" : []
             }
         }).then(res => {
             this.getCustomerData()
@@ -70,10 +73,16 @@ class WorkoutRoutine extends React.Component {
     } else {
         axios({
           method: 'put',
-          url: '/services/rest/routine',
+          url: '/services/rest/trainer',
           data: {
-                "name": this.state.name,
-                "exerciseIds": this.state.exerciseIds
+                "address" : this.state.address,
+                "firstName" : this.state.firstName,
+                "lastName" : this.state.lastName,
+                "phone" : this.state.phone,
+                "email" : this.state.email,
+                "healthInsuranceProvider" : this.state.healthInsuranceProvider,
+                "workHours" : this.state.workHours,
+                "qualifications" : []
           }
         }).then(res => {
             this.getCustomerData()
@@ -85,7 +94,7 @@ class WorkoutRoutine extends React.Component {
  }
 
  getCustomerData() {
-    axios.get('/services/rest/routine')
+    axios.get('/services/rest/trainer')
         .then(res => {
                 this.setState({
                   data: [ ...this.state.data ]
@@ -94,8 +103,6 @@ class WorkoutRoutine extends React.Component {
                 this.setState({
                   data: res.data,
                   id: '',
-                  exerciseIds: [],
-                  exerciseNames: [],
                   show: this.state.show
                 });
         });
@@ -111,20 +118,18 @@ class WorkoutRoutine extends React.Component {
     });
   }
 
-  handleChange = (selectedOption) => {
-    var names = selectedOption.map(function(item) {
-      return item['value'];
-    });
-    this.setState({ exerciseIds: names });
-  }
-
   render() {
       return (
         <div>
         <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
-          <p>Machine</p>
-          <p>Name <input name='name' value={this.state.name} onChange={this.updateInputValue}/></p>
-          <Select isMulti closeMenuOnSelect={false} value={this.state.selectedOption} onChange={this.handleChange} options={this.state.exerciseNames}/>
+          <p>Customer</p>
+          <p>First Name <input name='firstName' value={this.state.firstName} onChange={this.updateInputValue}/></p>
+          <p>Last Name <input name='lastName' value={this.state.lastName} onChange={this.updateInputValue}/></p>
+          <p>Address <input name='address' value={this.state.address} onChange={this.updateInputValue}/></p>
+          <p>Phone <input name='phone' value={this.state.phone} onChange={this.updateInputValue}/></p>
+          <p>Email <input name='email' value={this.state.email} onChange={this.updateInputValue}/></p>
+          <p>Health Insurance Provider <input name='healthInsuranceProvider' value={this.state.healthInsuranceProvider} onChange={this.updateInputValue}/></p>
+          <p>Work Hours <input name='workHours' value={this.state.workHours} onChange={this.updateInputValue}/></p>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
         <button type='button' onClick={this.showModal}>Open</button>
@@ -135,12 +140,32 @@ class WorkoutRoutine extends React.Component {
                 Header: "Name",
                 columns: [
                   {
-                    Header: "Name",
-                    accessor: "name"
+                    Header: "First Name",
+                    accessor: "firstName"
                   },
                   {
-                    Header: "Exercise IDs",
-                    accessor: "exerciseIds",
+                    Header: "Last Name",
+                    accessor: "lastName",
+                  },
+                  {
+                    Header: "Address",
+                    accessor: "address"
+                  },
+                  {
+                    Header: "Phone",
+                    accessor: "phone"
+                  },
+                  {
+                    Header: "Email",
+                    accessor: "email"
+                  },
+                  {
+                    Header: "Work Hours",
+                    accessor: "workHours"
+                  },
+                  {
+                    Header: "Health Insurance Provider",
+                    accessor: "healthInsuranceProvider"
                   },
                   {
                     Header: "ID",
@@ -156,8 +181,13 @@ class WorkoutRoutine extends React.Component {
                             return {
                               onClick: (e) => {
                                 this.setState({
-                                  name: rowInfo.row.name,
-                                  exerciseIds: rowInfo.row.exerciseIds,
+                                  firstName: rowInfo.row.firstName,
+                                  lastName: rowInfo.row.lastName,
+                                  address: rowInfo.row.address,
+                                  email: rowInfo.row.email,
+                                  phone: rowInfo.row.phone,
+                                  healthInsuranceProvider: rowInfo.row.healthInsuranceProvider,
+                                  workHours: rowInfo.row.workHours,
                                   id: rowInfo.row.id,
                                   selected: rowInfo.index
                                 })
@@ -201,4 +231,4 @@ const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
   );
 };
 
-export default WorkoutRoutine;
+export default Trainer;
