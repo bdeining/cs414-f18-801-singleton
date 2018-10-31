@@ -7,7 +7,7 @@ public class ExerciseImpl implements Exercise {
 
   private String commonName;
 
-  private transient String id;
+  private String id;
 
   private String machineId;
 

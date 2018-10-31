@@ -8,7 +8,8 @@ import { applyMiddleware, createStore, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { connect, Provider } from 'react-redux';
 import { counterReducer } from './reducers';
-import Home from './components/Customers';
+import Customer from './components/Customers';
+import Machine from './components/Machines';
 import About from './components/About';
 import Counter from './components/Counter';
 import { rootSaga } from './sagas';
@@ -26,11 +27,12 @@ render(
                     <LinkContainer to="/search/counter"><Button>Trainers</Button></LinkContainer>
                     <LinkContainer to="/search/about"><Button>Workout Routine</Button></LinkContainer>
                     <LinkContainer to="/search/about"><Button>Exercises</Button></LinkContainer>
-                    <LinkContainer to="/search/about"><Button>Machines</Button></LinkContainer>
+                    <LinkContainer to="/search/machine"><Button>Machines</Button></LinkContainer>
                     <hr/>
                 </div>
                 <Switch>
-                    <Route exact path="/search/" component={Home} />
+                    <Route exact path="/search/" component={Customer} />
+                    <Route path="/search/machine" component={Machine} />
                     <Route path="/search/counter" component={Counter} />
                     <Route path="/search/about" component={About} />
                 </Switch>

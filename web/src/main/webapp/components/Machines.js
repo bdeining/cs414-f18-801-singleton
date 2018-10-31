@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import './styles.css';
 
-class Home extends React.Component {
+class Machine extends React.Component {
 
  constructor() {
     super();
@@ -18,15 +18,10 @@ class Home extends React.Component {
 
  clearCustomerState = () => {
     this.setState({
-        firstName: '',
-        lastName: '',
-        address: '',
-        phone: '',
-        email: '',
-        healthInsuranceProvider: '',
-        activity: '',
+        quantity: '',
+        picture: '',
+        name: '',
         id: '',
-        workoutRoutineIds: [],
         show: false
     });
  }
@@ -44,7 +39,7 @@ class Home extends React.Component {
  deleteCustomer = () => {
     axios({
         method: 'delete',
-        url: '/services/rest/customer?id=' + this.state.id,
+        url: '/services/rest/machine?id=' + this.state.id,
     }).then(res => {
         this.getCustomerData()
         this.clearCustomerState()
@@ -55,17 +50,12 @@ class Home extends React.Component {
     if (this.state.id) {
         axios({
             method: 'put',
-            url: '/services/rest/customer',
+            url: '/services/rest/machine',
             data: {
-                  "address" : this.state.address,
-                  "firstName" : this.state.firstName,
-                  "lastName" : this.state.lastName,
-                  "phone" : this.state.phone,
-                  "email" : this.state.email,
-                  "healthInsuranceProvider" : this.state.healthInsuranceProvider,
-                  "activity" : this.state.activity,
-                  "id" : this.state.id,
-                  "workoutRoutineIds" : []
+                  "name" : this.state.name,
+                  "picture" : this.state.picture,
+                  "quantity" : this.state.quantity,
+                  "id" : this.state.id
             }
         }).then(res => {
             this.getCustomerData()
@@ -73,16 +63,11 @@ class Home extends React.Component {
     } else {
         axios({
           method: 'put',
-          url: '/services/rest/customer',
+          url: '/services/rest/machine',
           data: {
-                "address" : this.state.address,
-                "firstName" : this.state.firstName,
-                "lastName" : this.state.lastName,
-                "phone" : this.state.phone,
-                "email" : this.state.email,
-                "healthInsuranceProvider" : this.state.healthInsuranceProvider,
-                "activity" : this.state.activity,
-                "workoutRoutineIds" : []
+                  "name" : this.state.name,
+                  "picture" : this.state.picture,
+                  "quantity" : this.state.quantity
           }
         }).then(res => {
             this.getCustomerData()
@@ -94,7 +79,7 @@ class Home extends React.Component {
  }
 
  getCustomerData() {
-    axios.get('/services/rest/customer')
+    axios.get('/services/rest/machine')
         .then(res => {
                 this.setState({
                   data: [ ...this.state.data ]
@@ -122,14 +107,10 @@ class Home extends React.Component {
       return (
         <div>
         <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
-          <p>Customer</p>
-          <p>First Name <input name='firstName' value={this.state.firstName} onChange={this.updateInputValue}/></p>
-          <p>Last Name <input name='lastName' value={this.state.lastName} onChange={this.updateInputValue}/></p>
-          <p>Address <input name='address' value={this.state.address} onChange={this.updateInputValue}/></p>
-          <p>Phone <input name='phone' value={this.state.phone} onChange={this.updateInputValue}/></p>
-          <p>Email <input name='email' value={this.state.email} onChange={this.updateInputValue}/></p>
-          <p>Health Insurance Provider <input name='healthInsuranceProvider' value={this.state.healthInsuranceProvider} onChange={this.updateInputValue}/></p>
-          <p>Activity <input name='activity' value={this.state.activity} onChange={this.updateInputValue}/></p>
+          <p>Machine</p>
+          <p>Name <input name='name' value={this.state.name} onChange={this.updateInputValue}/></p>
+          <p>Quantity <input name='quantity' value={this.state.quantity} onChange={this.updateInputValue}/></p>
+          <p>Picture <input name='picture' value={this.state.picture} onChange={this.updateInputValue}/></p>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
         <button type='button' onClick={this.showModal}>Open</button>
@@ -140,32 +121,16 @@ class Home extends React.Component {
                 Header: "Name",
                 columns: [
                   {
-                    Header: "First Name",
-                    accessor: "firstName"
+                    Header: "Name",
+                    accessor: "name"
                   },
                   {
-                    Header: "Last Name",
-                    accessor: "lastName",
+                    Header: "Picture",
+                    accessor: "picture",
                   },
                   {
-                    Header: "Address",
-                    accessor: "address"
-                  },
-                  {
-                    Header: "Phone",
-                    accessor: "phone"
-                  },
-                  {
-                    Header: "Email",
-                    accessor: "email"
-                  },
-                  {
-                    Header: "Activity",
-                    accessor: "activity"
-                  },
-                  {
-                    Header: "Health Insurance Provider",
-                    accessor: "healthInsuranceProvider"
+                    Header: "Quantity",
+                    accessor: "quantity"
                   },
                   {
                     Header: "ID",
@@ -181,13 +146,9 @@ class Home extends React.Component {
                             return {
                               onClick: (e) => {
                                 this.setState({
-                                  firstName: rowInfo.row.firstName,
-                                  lastName: rowInfo.row.lastName,
-                                  address: rowInfo.row.address,
-                                  email: rowInfo.row.email,
-                                  phone: rowInfo.row.phone,
-                                  healthInsuranceProvider: rowInfo.row.healthInsuranceProvider,
-                                  activity: rowInfo.row.activity,
+                                  name: rowInfo.row.name,
+                                  picture: rowInfo.row.picture,
+                                  quantity: rowInfo.row.quantity,
                                   id: rowInfo.row.id,
                                   selected: rowInfo.index
                                 })
@@ -231,4 +192,4 @@ const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
   );
 };
 
-export default Home;
+export default Machine;

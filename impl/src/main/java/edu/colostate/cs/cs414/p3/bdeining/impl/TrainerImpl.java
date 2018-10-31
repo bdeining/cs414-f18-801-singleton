@@ -16,7 +16,7 @@ public class TrainerImpl implements Trainer {
 
   private String email;
 
-  private transient String id;
+  private String id;
 
   private String healthInsuranceProvider;
 

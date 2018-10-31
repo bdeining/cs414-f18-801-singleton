@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class WorkoutRoutineImpl implements WorkoutRoutine {
 
-  private transient String id;
+  private String id;
 
   private String name;
 

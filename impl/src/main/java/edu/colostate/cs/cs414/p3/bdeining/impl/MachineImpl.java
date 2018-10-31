@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class MachineImpl implements Machine {
 
-  private transient String id;
+  private String id;
 
   private String name;
 

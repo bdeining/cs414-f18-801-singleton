@@ -200,6 +200,28 @@ public class MySqlHandlerImpl implements MySqlHandler {
     return true;
   }
 
+
+  private Machine getMachineById(String id) throws SQLException {
+    try (Connection con = dataSource.getConnection();
+            Statement stmt = con.createStatement()) {
+      ResultSet resultSet =
+              stmt.executeQuery(
+                      String.format("SELECT * FROM %s where id='%s'", MACHINE_TABLE_NAME, id));
+
+      if (resultSet == null) {
+        return null;
+      }
+
+      while (resultSet.next()) {
+        Machine workoutRoutine = getMachine(resultSet);
+        if (workoutRoutine != null) {
+          return workoutRoutine;
+        }
+      }
+      return null;
+    }
+  }
+
   private Customer getCustomerById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection();
         Statement stmt = con.createStatement()) {
@@ -228,20 +250,45 @@ public class MySqlHandlerImpl implements MySqlHandler {
     String picture = machine.getPicture();
     int quantity = machine.getQuantity();
 
-    try (Connection con = dataSource.getConnection()) {
-      LOGGER.trace("Adding machine : {}", machine);
 
-      PreparedStatement insert =
-          con.prepareStatement(
-              "INSERT INTO "
-                  + MACHINE_TABLE_NAME
-                  + " (name, id, picture, quantity) VALUES (?,?,?,?)");
-      insert.setString(1, name);
-      insert.setString(2, id);
-      insert.setString(3, picture);
-      insert.setInt(4, quantity);
-      insert.execute();
-      insert.close();
+    Machine existingCustomer = getMachineById(id);
+    if (existingCustomer != null) {
+      LOGGER.trace("Updating Customer : ID {}", id);
+
+      try (Connection con = dataSource.getConnection()) {
+        LOGGER.trace("Adding customer : {}", existingCustomer);
+
+        PreparedStatement update =
+            con.prepareStatement(
+                "update "
+                    + MACHINE_TABLE_NAME
+                    + " SET name=?, picture=?, quantity=? WHERE id=?");
+
+        update.setString(1, name);
+        update.setString(2, picture);
+        update.setInt(3, quantity);
+        update.setString(4, id);
+        update.execute();
+        update.close();
+      }
+
+    } else {
+
+      try (Connection con = dataSource.getConnection()) {
+        LOGGER.trace("Adding machine : {}", machine);
+
+        PreparedStatement insert =
+            con.prepareStatement(
+                "INSERT INTO "
+                    + MACHINE_TABLE_NAME
+                    + " (name, id, picture, quantity) VALUES (?,?,?,?)");
+        insert.setString(1, name);
+        insert.setString(2, id);
+        insert.setString(3, picture);
+        insert.setInt(4, quantity);
+        insert.execute();
+        insert.close();
+      }
     }
 
     return true;
