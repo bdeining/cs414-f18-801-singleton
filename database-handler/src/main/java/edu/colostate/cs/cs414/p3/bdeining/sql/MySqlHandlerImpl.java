@@ -200,13 +200,33 @@ public class MySqlHandlerImpl implements MySqlHandler {
     return true;
   }
 
+  private Exercise getExerciseById(String id) throws SQLException {
+    try (Connection con = dataSource.getConnection();
+        Statement stmt = con.createStatement()) {
+      ResultSet resultSet =
+          stmt.executeQuery(
+              String.format("SELECT * FROM %s where id='%s'", EXERCISE_TABLE_NAME, id));
+
+      if (resultSet == null) {
+        return null;
+      }
+
+      while (resultSet.next()) {
+        Exercise workoutRoutine = getExercise(resultSet);
+        if (workoutRoutine != null) {
+          return workoutRoutine;
+        }
+      }
+      return null;
+    }
+  }
 
   private Machine getMachineById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection();
-            Statement stmt = con.createStatement()) {
+        Statement stmt = con.createStatement()) {
       ResultSet resultSet =
-              stmt.executeQuery(
-                      String.format("SELECT * FROM %s where id='%s'", MACHINE_TABLE_NAME, id));
+          stmt.executeQuery(
+              String.format("SELECT * FROM %s where id='%s'", MACHINE_TABLE_NAME, id));
 
       if (resultSet == null) {
         return null;
@@ -250,7 +270,6 @@ public class MySqlHandlerImpl implements MySqlHandler {
     String picture = machine.getPicture();
     int quantity = machine.getQuantity();
 
-
     Machine existingCustomer = getMachineById(id);
     if (existingCustomer != null) {
       LOGGER.trace("Updating Customer : ID {}", id);
@@ -260,9 +279,7 @@ public class MySqlHandlerImpl implements MySqlHandler {
 
         PreparedStatement update =
             con.prepareStatement(
-                "update "
-                    + MACHINE_TABLE_NAME
-                    + " SET name=?, picture=?, quantity=? WHERE id=?");
+                "update " + MACHINE_TABLE_NAME + " SET name=?, picture=?, quantity=? WHERE id=?");
 
         update.setString(1, name);
         update.setString(2, picture);
@@ -302,22 +319,46 @@ public class MySqlHandlerImpl implements MySqlHandler {
     int sets = exercise.getSets();
     String machineId = exercise.getMachineId();
 
-    try (Connection con = dataSource.getConnection()) {
-      LOGGER.trace("Adding Exercise : {}", exercise);
-      PreparedStatement insert =
-          con.prepareStatement(
-              "INSERT INTO "
-                  + EXERCISE_TABLE_NAME
-                  + " (name, id, machineId, sets, duration) VALUES (?,?,?,?,?)");
-      insert.setString(1, name);
-      insert.setString(2, id);
-      insert.setString(3, machineId);
-      insert.setInt(4, sets);
-      insert.setInt(5, duration);
-      insert.execute();
-      insert.close();
-    }
+    Exercise existingCustomer = getExerciseById(id);
+    if (existingCustomer != null) {
+      LOGGER.trace("Updating Customer : ID {}", id);
 
+      try (Connection con = dataSource.getConnection()) {
+        LOGGER.trace("Adding exercise : {}", existingCustomer);
+
+        PreparedStatement update =
+            con.prepareStatement(
+                "update "
+                    + EXERCISE_TABLE_NAME
+                    + " SET name=?, duration=?, sets=?, machineId=? WHERE id=?");
+
+        update.setString(1, name);
+        update.setInt(2, duration);
+        update.setInt(3, sets);
+        update.setString(4, machineId);
+        update.setString(5, id);
+        update.execute();
+        update.close();
+      }
+
+    } else {
+
+      try (Connection con = dataSource.getConnection()) {
+        LOGGER.trace("Adding Exercise : {}", exercise);
+        PreparedStatement insert =
+            con.prepareStatement(
+                "INSERT INTO "
+                    + EXERCISE_TABLE_NAME
+                    + " (name, id, machineId, sets, duration) VALUES (?,?,?,?,?)");
+        insert.setString(1, name);
+        insert.setString(2, id);
+        insert.setString(3, machineId);
+        insert.setInt(4, sets);
+        insert.setInt(5, duration);
+        insert.execute();
+        insert.close();
+      }
+    }
     return true;
   }
 

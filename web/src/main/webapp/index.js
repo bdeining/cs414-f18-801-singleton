@@ -10,6 +10,7 @@ import { connect, Provider } from 'react-redux';
 import { counterReducer } from './reducers';
 import Customer from './components/Customers';
 import Machine from './components/Machines';
+import Exercise from './components/Exercises';
 import About from './components/About';
 import Counter from './components/Counter';
 import { rootSaga } from './sagas';
@@ -26,13 +27,14 @@ render(
                     <LinkContainer to="/search/"><Button>Customers</Button></LinkContainer>
                     <LinkContainer to="/search/counter"><Button>Trainers</Button></LinkContainer>
                     <LinkContainer to="/search/about"><Button>Workout Routine</Button></LinkContainer>
-                    <LinkContainer to="/search/about"><Button>Exercises</Button></LinkContainer>
+                    <LinkContainer to="/search/exercise"><Button>Exercises</Button></LinkContainer>
                     <LinkContainer to="/search/machine"><Button>Machines</Button></LinkContainer>
                     <hr/>
                 </div>
                 <Switch>
                     <Route exact path="/search/" component={Customer} />
                     <Route path="/search/machine" component={Machine} />
+                    <Route path="/search/exercise" component={Exercise} />
                     <Route path="/search/counter" component={Counter} />
                     <Route path="/search/about" component={About} />
                 </Switch>

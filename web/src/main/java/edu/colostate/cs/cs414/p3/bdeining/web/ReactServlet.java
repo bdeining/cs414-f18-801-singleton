@@ -19,7 +19,8 @@ import org.osgi.service.component.annotations.Component;
 public class ReactServlet extends HttpServlet {
   private static final long serialVersionUID = 250817058831319271L;
 
-  private final List<String> routes = Arrays.asList("/", "/counter", "/about", "/machine");
+  private final List<String> routes =
+      Arrays.asList("/", "/counter", "/about", "/machine", "/exercise");
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) {
