@@ -200,6 +200,27 @@ public class MySqlHandlerImpl implements MySqlHandler {
     return true;
   }
 
+  private WorkoutRoutine getWorkoutRoutineById(String id) throws SQLException {
+    try (Connection con = dataSource.getConnection();
+        Statement stmt = con.createStatement()) {
+      ResultSet resultSet =
+          stmt.executeQuery(
+              String.format("SELECT * FROM %s where id='%s'", WORKOUT_ROUTINE_TABLE_NAME, id));
+
+      if (resultSet == null) {
+        return null;
+      }
+
+      while (resultSet.next()) {
+        WorkoutRoutine workoutRoutine = getWorkoutRoutine(resultSet);
+        if (workoutRoutine != null) {
+          return workoutRoutine;
+        }
+      }
+      return null;
+    }
+  }
+
   private Exercise getExerciseById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection();
         Statement stmt = con.createStatement()) {
@@ -404,27 +425,61 @@ public class MySqlHandlerImpl implements MySqlHandler {
     String id = workoutRoutine.getId();
     List<String> workoutRoutineExerciseIds = workoutRoutine.getExerciseIds();
 
-    try (Connection con = dataSource.getConnection()) {
-      LOGGER.trace("Adding workoutRoutine : {}", workoutRoutine);
+    WorkoutRoutine existingCustomer = getWorkoutRoutineById(id);
+    if (existingCustomer != null) {
+      LOGGER.trace("Updating Customer : ID {}", id);
 
-      PreparedStatement insert =
-          con.prepareStatement(
-              "INSERT INTO " + WORKOUT_ROUTINE_TABLE_NAME + " (name, id) VALUES (?,?)");
-      insert.setString(1, name);
-      insert.setString(2, id);
-      insert.execute();
-      insert.close();
+      try (Connection con = dataSource.getConnection()) {
+        LOGGER.trace("Adding exercise : {}", existingCustomer);
 
-      for (String exerciseId : workoutRoutineExerciseIds) {
-        insert =
+        PreparedStatement update =
+            con.prepareStatement("update " + WORKOUT_ROUTINE_TABLE_NAME + " SET name=? WHERE id=?");
+
+        update.setString(1, name);
+        update.setString(2, id);
+        update.execute();
+        update.close();
+
+        removeById("workoutRoutineId", id, EXERCISE_WORKOUT_ROUTINE_TABLE_NAME);
+
+        for (String exerciseId : workoutRoutineExerciseIds) {
+
+          PreparedStatement updateExercise =
+              con.prepareStatement(
+                  "INSERT INTO "
+                      + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
+                      + " (workoutRoutineId, exerciseId) VALUES (?,?)");
+          updateExercise.setString(1, id);
+          updateExercise.setString(2, exerciseId);
+          updateExercise.execute();
+          updateExercise.close();
+        }
+      }
+
+    } else {
+
+      try (Connection con = dataSource.getConnection()) {
+        LOGGER.trace("Adding workoutRoutine : {}", workoutRoutine);
+
+        PreparedStatement insert =
             con.prepareStatement(
-                "INSERT INTO "
-                    + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
-                    + " (workoutRoutineId, exerciseId) VALUES (?,?)");
-        insert.setString(1, id);
-        insert.setString(2, exerciseId);
+                "INSERT INTO " + WORKOUT_ROUTINE_TABLE_NAME + " (name, id) VALUES (?,?)");
+        insert.setString(1, name);
+        insert.setString(2, id);
         insert.execute();
         insert.close();
+
+        for (String exerciseId : workoutRoutineExerciseIds) {
+          insert =
+              con.prepareStatement(
+                  "INSERT INTO "
+                      + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
+                      + " (workoutRoutineId, exerciseId) VALUES (?,?)");
+          insert.setString(1, id);
+          insert.setString(2, exerciseId);
+          insert.execute();
+          insert.close();
+        }
       }
     }
 

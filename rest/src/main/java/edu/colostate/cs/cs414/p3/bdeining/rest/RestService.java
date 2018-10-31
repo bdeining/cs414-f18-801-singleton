@@ -48,6 +48,30 @@ public class RestService {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
+  @Path("/exercisenames")
+  public Response getExerciseNames() {
+    try {
+      List<Exercise> trainerList = mySqlHandler.getExercises();
+      List<Map<String, Object>> machineNames =
+          trainerList
+              .stream()
+              .map(
+                  machine -> {
+                    Map<String, Object> objectMap = new HashMap<>();
+                    objectMap.put("label", machine.getCommonName());
+                    objectMap.put("value", machine.getId());
+                    return objectMap;
+                  })
+              .collect(Collectors.toList());
+      return Response.ok().entity(machineNames).build();
+    } catch (SQLException e) {
+      LOGGER.warn("Could not get trainer list", e);
+      return Response.serverError().build();
+    }
+  }
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
   @Path("/machinenames")
   public Response getMachineNames() {
     try {
