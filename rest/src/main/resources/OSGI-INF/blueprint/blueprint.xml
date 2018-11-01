@@ -11,11 +11,23 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
            xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs">
 
-    <reference id="mySqlHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.MySqlHandler"/>
+    <reference id="customerHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler"/>
+
+    <reference id="trainerHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler"/>
+
+    <reference id="exerciseHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler"/>
+
+    <reference id="workoutRoutineHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.handlers.WorkoutRoutineHandler"/>
+
+    <reference id="machineHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler"/>
 
     <bean id="dataHandlerEndpoint"
           class="edu.colostate.cs.cs414.p3.bdeining.rest.RestService">
-        <argument ref="mySqlHandler"/>
+        <argument ref="customerHandler"/>
+        <argument ref="trainerHandler"/>
+        <argument ref="exerciseHandler"/>
+        <argument ref="workoutRoutineHandler"/>
+        <argument ref="machineHandler"/>
     </bean>
 
     <jaxrs:server id="resourceOrderingService" address="/rest">

@@ -13,11 +13,15 @@ import static org.mockito.Mockito.when;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
-import edu.colostate.cs.cs414.p3.bdeining.api.MySqlHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.WorkoutRoutineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
@@ -38,7 +42,15 @@ public class RestServiceTest {
 
   private RestService restService;
 
-  private MySqlHandler mySqlHandler;
+  private CustomerHandler customerHandler;
+
+  private TrainerHandler trainerHandler;
+
+  private ExerciseHandler exerciseHandler;
+
+  private WorkoutRoutineHandler workoutRoutineHandler;
+
+  private MachineHandler machineHandler;
 
   private static final String ADDRESS = "123 Fake St.";
 
@@ -82,7 +94,13 @@ public class RestServiceTest {
   @Before
   public void setUp() throws Exception {
     setUpMocks();
-    restService = new RestService(mySqlHandler);
+    restService =
+        new RestService(
+            customerHandler,
+            trainerHandler,
+            exerciseHandler,
+            workoutRoutineHandler,
+            machineHandler);
   }
 
   @Test
@@ -99,7 +117,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetCustomerSqlException() throws Exception {
-    when(mySqlHandler.getCustomers()).thenThrow(SQLException.class);
+    when(customerHandler.getCustomers()).thenThrow(SQLException.class);
     Response response = restService.getCustomer();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
@@ -129,7 +147,7 @@ public class RestServiceTest {
   public void testCreateCustomerSqlException() throws Exception {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createCustomer.json");
-    when(mySqlHandler.addCustomer(any(Customer.class))).thenThrow(SQLException.class);
+    when(customerHandler.addCustomer(any(Customer.class))).thenThrow(SQLException.class);
     Response response = restService.createCustomer(inputStream);
     assertThat(response.getStatus(), is(500));
   }
@@ -146,12 +164,12 @@ public class RestServiceTest {
   public void testDeleteCustomer() throws Exception {
     Response response = restService.deleteCustomer("anId");
     assertThat(response.getStatus(), is(200));
-    verify(mySqlHandler, times(1)).removeCustomer(anyString());
+    verify(customerHandler, times(1)).removeCustomer(anyString());
   }
 
   @Test
   public void testDeleteCustomerSqlException() throws Exception {
-    when(mySqlHandler.removeCustomer(anyString())).thenThrow(SQLException.class);
+    when(customerHandler.removeCustomer(anyString())).thenThrow(SQLException.class);
     Response response = restService.deleteCustomer("anId");
     assertThat(response.getStatus(), is(500));
   }
@@ -170,7 +188,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetMachineSqlException() throws Exception {
-    when(mySqlHandler.getMachines()).thenThrow(SQLException.class);
+    when(machineHandler.getMachines()).thenThrow(SQLException.class);
     Response response = restService.getMachine();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
@@ -193,7 +211,7 @@ public class RestServiceTest {
   public void testCreateMachineSqlException() throws Exception {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createMachine.json");
-    when(mySqlHandler.addMachine(any(Machine.class))).thenThrow(SQLException.class);
+    when(machineHandler.addMachine(any(Machine.class))).thenThrow(SQLException.class);
     Response response = restService.createMachine(inputStream);
     assertThat(response.getStatus(), is(500));
   }
@@ -210,12 +228,12 @@ public class RestServiceTest {
   public void testDeleteMachine() throws Exception {
     Response response = restService.deleteMachine("anId");
     assertThat(response.getStatus(), is(200));
-    verify(mySqlHandler, times(1)).removeMachine(anyString());
+    verify(machineHandler, times(1)).removeMachine(anyString());
   }
 
   @Test
   public void testDeleteMachineSqlException() throws Exception {
-    when(mySqlHandler.removeMachine(anyString())).thenThrow(SQLException.class);
+    when(machineHandler.removeMachine(anyString())).thenThrow(SQLException.class);
     Response response = restService.deleteMachine("anId");
     assertThat(response.getStatus(), is(500));
   }
@@ -234,7 +252,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetTrainerSqlException() throws Exception {
-    when(mySqlHandler.getTrainers()).thenThrow(SQLException.class);
+    when(trainerHandler.getTrainers()).thenThrow(SQLException.class);
     Response response = restService.getTrainer();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
@@ -256,7 +274,7 @@ public class RestServiceTest {
   public void testCreateTrainerSqlException() throws Exception {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createTrainer.json");
-    when(mySqlHandler.addTrainer(any(Trainer.class))).thenThrow(SQLException.class);
+    when(trainerHandler.addTrainer(any(Trainer.class))).thenThrow(SQLException.class);
     Response response = restService.createTrainer(inputStream);
     assertThat(response.getStatus(), is(500));
   }
@@ -273,12 +291,12 @@ public class RestServiceTest {
   public void testDeleteTrainer() throws Exception {
     Response response = restService.deleteTrainer("anId");
     assertThat(response.getStatus(), is(200));
-    verify(mySqlHandler, times(1)).removeTrainer(anyString());
+    verify(trainerHandler, times(1)).removeTrainer(anyString());
   }
 
   @Test
   public void testDeleteTrainerSqlException() throws Exception {
-    when(mySqlHandler.removeTrainer(anyString())).thenThrow(SQLException.class);
+    when(trainerHandler.removeTrainer(anyString())).thenThrow(SQLException.class);
     Response response = restService.deleteTrainer("anId");
     assertThat(response.getStatus(), is(500));
   }
@@ -297,7 +315,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetExerciseSqlException() throws Exception {
-    when(mySqlHandler.getExercises()).thenThrow(SQLException.class);
+    when(exerciseHandler.getExercises()).thenThrow(SQLException.class);
     Response response = restService.getExercise();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
@@ -320,7 +338,7 @@ public class RestServiceTest {
   public void testCreateExerciseSqlException() throws Exception {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createExercise.json");
-    when(mySqlHandler.addExercise(any(Exercise.class))).thenThrow(SQLException.class);
+    when(exerciseHandler.addExercise(any(Exercise.class))).thenThrow(SQLException.class);
     Response response = restService.createExercise(inputStream);
     assertThat(response.getStatus(), is(500));
   }
@@ -337,12 +355,12 @@ public class RestServiceTest {
   public void testDeleteExercise() throws Exception {
     Response response = restService.deleteExercise("anId");
     assertThat(response.getStatus(), is(200));
-    verify(mySqlHandler, times(1)).removeExercise(anyString());
+    verify(exerciseHandler, times(1)).removeExercise(anyString());
   }
 
   @Test
   public void testDeleteExerciseSqlException() throws Exception {
-    when(mySqlHandler.removeExercise(anyString())).thenThrow(SQLException.class);
+    when(exerciseHandler.removeExercise(anyString())).thenThrow(SQLException.class);
     Response response = restService.deleteExercise("anId");
     assertThat(response.getStatus(), is(500));
   }
@@ -360,7 +378,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetWorkoutRoutineSqlException() throws Exception {
-    when(mySqlHandler.getWorkoutRoutines()).thenThrow(SQLException.class);
+    when(workoutRoutineHandler.getWorkoutRoutines()).thenThrow(SQLException.class);
     Response response = restService.getRoutine();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
@@ -386,7 +404,8 @@ public class RestServiceTest {
   public void testCreateWorkoutRoutineSqlException() throws Exception {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createWorkoutRoutine.json");
-    when(mySqlHandler.addWorkoutRoutine(any(WorkoutRoutine.class))).thenThrow(SQLException.class);
+    when(workoutRoutineHandler.addWorkoutRoutine(any(WorkoutRoutine.class)))
+        .thenThrow(SQLException.class);
     Response response = restService.createWorkoutRoutine(inputStream);
     assertThat(response.getStatus(), is(500));
   }
@@ -403,37 +422,42 @@ public class RestServiceTest {
   public void testDeleteWorkoutRoutine() throws Exception {
     Response response = restService.deleteRoutine("anId");
     assertThat(response.getStatus(), is(200));
-    verify(mySqlHandler, times(1)).removeWorkoutRoutine(anyString());
+    verify(workoutRoutineHandler, times(1)).removeWorkoutRoutine(anyString());
   }
 
   @Test
   public void testDeleteWorkoutRoutineSqlException() throws Exception {
-    when(mySqlHandler.removeWorkoutRoutine(anyString())).thenThrow(SQLException.class);
+    when(workoutRoutineHandler.removeWorkoutRoutine(anyString())).thenThrow(SQLException.class);
     Response response = restService.deleteRoutine("anId");
     assertThat(response.getStatus(), is(500));
   }
 
-  private MySqlHandler setUpMocks() throws Exception {
-    mySqlHandler = mock(MySqlHandler.class);
-    when(mySqlHandler.getCustomers()).thenReturn(Collections.singletonList(generateCustomer()));
-    when(mySqlHandler.getTrainers()).thenReturn(Collections.singletonList(generateTrainer()));
-    when(mySqlHandler.getMachines()).thenReturn(Collections.singletonList(generateMachine()));
-    when(mySqlHandler.getWorkoutRoutines())
+  private CustomerHandler setUpMocks() throws Exception {
+    customerHandler = mock(CustomerHandler.class);
+    trainerHandler = mock(TrainerHandler.class);
+    exerciseHandler = mock(ExerciseHandler.class);
+    workoutRoutineHandler = mock(WorkoutRoutineHandler.class);
+    machineHandler = mock(MachineHandler.class);
+    when(customerHandler.getCustomers()).thenReturn(Collections.singletonList(generateCustomer()));
+    when(trainerHandler.getTrainers()).thenReturn(Collections.singletonList(generateTrainer()));
+    when(machineHandler.getMachines()).thenReturn(Collections.singletonList(generateMachine()));
+    when(workoutRoutineHandler.getWorkoutRoutines())
         .thenReturn(Collections.singletonList(generateWorkoutRoutine()));
-    when(mySqlHandler.getExercises()).thenReturn(Collections.singletonList(generateExercise()));
+    when(exerciseHandler.getExercises()).thenReturn(Collections.singletonList(generateExercise()));
 
-    when(mySqlHandler.removeCustomer(anyString())).thenReturn(true);
-    when(mySqlHandler.removeMachine(anyString())).thenReturn(true);
-    when(mySqlHandler.removeTrainer(anyString())).thenReturn(true);
-    when(mySqlHandler.removeExercise(anyString())).thenReturn(true);
-    when(mySqlHandler.removeWorkoutRoutine(anyString())).thenReturn(true);
+    when(customerHandler.removeCustomer(anyString())).thenReturn(true);
+    when(machineHandler.removeMachine(anyString())).thenReturn(true);
+    when(trainerHandler.removeTrainer(anyString())).thenReturn(true);
+    when(exerciseHandler.removeExercise(anyString())).thenReturn(true);
+    when(workoutRoutineHandler.removeWorkoutRoutine(anyString())).thenReturn(true);
 
-    when(mySqlHandler.addTrainer(trainerArgumentCaptor.capture())).thenReturn(true);
-    when(mySqlHandler.addMachine(machineArgumentCaptor.capture())).thenReturn(true);
-    when(mySqlHandler.addCustomer(customerArgumentCaptor.capture())).thenReturn(true);
-    when(mySqlHandler.addExercise(exerciseArgumentCaptor.capture())).thenReturn(true);
-    when(mySqlHandler.addWorkoutRoutine(workoutRoutineArgumentCaptor.capture())).thenReturn(true);
-    return mySqlHandler;
+    when(trainerHandler.addTrainer(trainerArgumentCaptor.capture())).thenReturn(true);
+    when(machineHandler.addMachine(machineArgumentCaptor.capture())).thenReturn(true);
+    when(customerHandler.addCustomer(customerArgumentCaptor.capture())).thenReturn(true);
+    when(exerciseHandler.addExercise(exerciseArgumentCaptor.capture())).thenReturn(true);
+    when(workoutRoutineHandler.addWorkoutRoutine(workoutRoutineArgumentCaptor.capture()))
+        .thenReturn(true);
+    return customerHandler;
   }
 
   private Machine generateMachine() {

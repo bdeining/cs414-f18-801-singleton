@@ -4,11 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
-import edu.colostate.cs.cs414.p3.bdeining.api.MySqlHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.WorkoutRoutineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
@@ -38,12 +42,29 @@ public class RestService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RestService.class);
 
-  private MySqlHandler mySqlHandler;
+  private CustomerHandler customerHandler;
+
+  private TrainerHandler trainerHandler;
+
+  private ExerciseHandler exerciseHandler;
+
+  private WorkoutRoutineHandler workoutRoutineHandler;
+
+  private MachineHandler machineHandler;
 
   private Gson gson = new Gson();
 
-  public RestService(MySqlHandler mySqlHandler) {
-    this.mySqlHandler = mySqlHandler;
+  public RestService(
+      CustomerHandler customerHandler,
+      TrainerHandler trainerHandler,
+      ExerciseHandler exerciseHandler,
+      WorkoutRoutineHandler workoutRoutineHandler,
+      MachineHandler machineHandler) {
+    this.customerHandler = customerHandler;
+    this.trainerHandler = trainerHandler;
+    this.exerciseHandler = exerciseHandler;
+    this.workoutRoutineHandler = workoutRoutineHandler;
+    this.machineHandler = machineHandler;
   }
 
   @GET
@@ -51,7 +72,7 @@ public class RestService {
   @Path("/exercisenames")
   public Response getExerciseNames() {
     try {
-      List<Exercise> trainerList = mySqlHandler.getExercises();
+      List<Exercise> trainerList = exerciseHandler.getExercises();
       List<Map<String, Object>> machineNames =
           trainerList
               .stream()
@@ -75,7 +96,7 @@ public class RestService {
   @Path("/machinenames")
   public Response getMachineNames() {
     try {
-      List<Machine> trainerList = mySqlHandler.getMachines();
+      List<Machine> trainerList = machineHandler.getMachines();
       List<Map<String, Object>> machineNames =
           trainerList
               .stream()
@@ -99,7 +120,7 @@ public class RestService {
   @Path("/trainer")
   public Response getTrainer() {
     try {
-      List<Trainer> trainerList = mySqlHandler.getTrainers();
+      List<Trainer> trainerList = trainerHandler.getTrainers();
       return Response.ok().entity(trainerList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get trainer list", e);
@@ -113,7 +134,7 @@ public class RestService {
   public Response createTrainer(InputStream requestBody) {
     try {
       Trainer trainer = gson.fromJson(new InputStreamReader(requestBody), TrainerImpl.class);
-      mySqlHandler.addTrainer(trainer);
+      trainerHandler.addTrainer(trainer);
       return Response.ok().build();
     } catch (JsonSyntaxException | JsonIOException e) {
       LOGGER.warn("Could not parse trainer", e);
@@ -129,7 +150,7 @@ public class RestService {
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteTrainer(@QueryParam("id") String id) {
     try {
-      mySqlHandler.removeTrainer(id);
+      trainerHandler.removeTrainer(id);
       return Response.ok().build();
     } catch (SQLException e) {
       LOGGER.warn("Could not delete trainer {}", id, e);
@@ -142,7 +163,7 @@ public class RestService {
   @Path("/machine")
   public Response getMachine() {
     try {
-      List<Machine> machineList = mySqlHandler.getMachines();
+      List<Machine> machineList = machineHandler.getMachines();
       return Response.ok().entity(machineList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get machine list", e);
@@ -156,7 +177,7 @@ public class RestService {
   public Response createMachine(InputStream requestBody) {
     try {
       Machine machine = gson.fromJson(new InputStreamReader(requestBody), MachineImpl.class);
-      mySqlHandler.addMachine(machine);
+      machineHandler.addMachine(machine);
       return Response.ok().build();
     } catch (JsonSyntaxException | JsonIOException e) {
       LOGGER.warn("Could not parse machine", e);
@@ -172,7 +193,7 @@ public class RestService {
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteMachine(@QueryParam("id") String id) {
     try {
-      mySqlHandler.removeMachine(id);
+      machineHandler.removeMachine(id);
       return Response.ok().build();
     } catch (SQLException e) {
       LOGGER.warn("Could not delete machine {}", id, e);
@@ -185,7 +206,7 @@ public class RestService {
   @Path("/exercise")
   public Response getExercise() {
     try {
-      List<Exercise> exerciseList = mySqlHandler.getExercises();
+      List<Exercise> exerciseList = exerciseHandler.getExercises();
       return Response.ok().entity(exerciseList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get exercise list", e);
@@ -199,7 +220,7 @@ public class RestService {
   public Response createExercise(InputStream requestBody) {
     try {
       Exercise exercise = gson.fromJson(new InputStreamReader(requestBody), ExerciseImpl.class);
-      mySqlHandler.addExercise(exercise);
+      exerciseHandler.addExercise(exercise);
       return Response.ok().build();
     } catch (JsonSyntaxException | JsonIOException e) {
       LOGGER.warn("Could not parse exercise", e);
@@ -215,7 +236,7 @@ public class RestService {
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteExercise(@QueryParam("id") String id) {
     try {
-      mySqlHandler.removeExercise(id);
+      exerciseHandler.removeExercise(id);
       return Response.ok().build();
     } catch (SQLException e) {
       LOGGER.warn("Could not delete exercise {}", id, e);
@@ -228,7 +249,7 @@ public class RestService {
   @Path("/routine")
   public Response getRoutine() {
     try {
-      List<WorkoutRoutine> routineList = mySqlHandler.getWorkoutRoutines();
+      List<WorkoutRoutine> routineList = workoutRoutineHandler.getWorkoutRoutines();
       return Response.ok().entity(routineList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get workout routine list", e);
@@ -243,7 +264,7 @@ public class RestService {
     try {
       WorkoutRoutine workoutRoutine =
           gson.fromJson(new InputStreamReader(requestBody), WorkoutRoutineImpl.class);
-      mySqlHandler.addWorkoutRoutine(workoutRoutine);
+      workoutRoutineHandler.addWorkoutRoutine(workoutRoutine);
       return Response.ok().build();
     } catch (JsonSyntaxException | JsonIOException e) {
       LOGGER.warn("Could not parse routine", e);
@@ -259,7 +280,7 @@ public class RestService {
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteRoutine(@QueryParam("id") String id) {
     try {
-      mySqlHandler.removeWorkoutRoutine(id);
+      workoutRoutineHandler.removeWorkoutRoutine(id);
       return Response.ok().build();
     } catch (SQLException e) {
       LOGGER.warn("Could not delete routine {}", id, e);
@@ -272,7 +293,7 @@ public class RestService {
   @Path("/customer")
   public Response getCustomer() {
     try {
-      List<Customer> customerList = mySqlHandler.getCustomers();
+      List<Customer> customerList = customerHandler.getCustomers();
       return Response.ok().entity(customerList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get customer list", e);
@@ -286,7 +307,7 @@ public class RestService {
   public Response createCustomer(InputStream requestBody) {
     try {
       Customer customer = gson.fromJson(new InputStreamReader(requestBody), CustomerImpl.class);
-      mySqlHandler.addCustomer(customer);
+      customerHandler.addCustomer(customer);
       return Response.ok().build();
     } catch (JsonSyntaxException | JsonIOException e) {
       LOGGER.warn("Could not parse customer", e);
@@ -302,7 +323,7 @@ public class RestService {
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteCustomer(@QueryParam("id") String id) {
     try {
-      mySqlHandler.removeCustomer(id);
+      customerHandler.removeCustomer(id);
       return Response.ok().build();
     } catch (SQLException e) {
       LOGGER.warn("Could not delete customer {}", id, e);
