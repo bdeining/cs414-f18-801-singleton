@@ -105,7 +105,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetCustomer() {
-    Response response = restService.getCustomer();
+    Response response = restService.getCustomers();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Customer> customerList = (List<Customer>) response.getEntity();
@@ -118,7 +118,7 @@ public class RestServiceTest {
   @Test
   public void testGetCustomerSqlException() throws Exception {
     when(customerHandler.getCustomers()).thenThrow(SQLException.class);
-    Response response = restService.getCustomer();
+    Response response = restService.getCustomers();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -127,7 +127,7 @@ public class RestServiceTest {
   public void testCreateCustomer() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createCustomer.json");
-    Response response = restService.createCustomer(inputStream);
+    Response response = restService.createOrUpdateCustomer(inputStream);
 
     Customer customer = customerArgumentCaptor.getValue();
     assertThat(response.getStatus(), is(200));
@@ -148,7 +148,7 @@ public class RestServiceTest {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createCustomer.json");
     when(customerHandler.addCustomer(any(Customer.class))).thenThrow(SQLException.class);
-    Response response = restService.createCustomer(inputStream);
+    Response response = restService.createOrUpdateCustomer(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -156,7 +156,7 @@ public class RestServiceTest {
   public void testCreateCustomerBadJson() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("bad.json");
-    Response response = restService.createCustomer(inputStream);
+    Response response = restService.createOrUpdateCustomer(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -176,7 +176,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetMachine() {
-    Response response = restService.getMachine();
+    Response response = restService.getMachines();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Machine> machineList = (List<Machine>) response.getEntity();
@@ -189,7 +189,7 @@ public class RestServiceTest {
   @Test
   public void testGetMachineSqlException() throws Exception {
     when(machineHandler.getMachines()).thenThrow(SQLException.class);
-    Response response = restService.getMachine();
+    Response response = restService.getMachines();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -198,7 +198,7 @@ public class RestServiceTest {
   public void testCreateMachine() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createMachine.json");
-    Response response = restService.createMachine(inputStream);
+    Response response = restService.createOrUpdateMachine(inputStream);
 
     Machine machine = machineArgumentCaptor.getValue();
     assertThat(response.getStatus(), is(200));
@@ -212,7 +212,7 @@ public class RestServiceTest {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createMachine.json");
     when(machineHandler.addMachine(any(Machine.class))).thenThrow(SQLException.class);
-    Response response = restService.createMachine(inputStream);
+    Response response = restService.createOrUpdateMachine(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -220,7 +220,7 @@ public class RestServiceTest {
   public void testCreateMachineBadJson() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("bad.json");
-    Response response = restService.createMachine(inputStream);
+    Response response = restService.createOrUpdateMachine(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -240,7 +240,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetTrainer() {
-    Response response = restService.getTrainer();
+    Response response = restService.getTrainers();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Trainer> trainerList = (List<Trainer>) response.getEntity();
@@ -253,7 +253,7 @@ public class RestServiceTest {
   @Test
   public void testGetTrainerSqlException() throws Exception {
     when(trainerHandler.getTrainers()).thenThrow(SQLException.class);
-    Response response = restService.getTrainer();
+    Response response = restService.getTrainers();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -262,7 +262,7 @@ public class RestServiceTest {
   public void testCreateTrainer() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createTrainer.json");
-    Response response = restService.createTrainer(inputStream);
+    Response response = restService.createOrUpdateTrainer(inputStream);
 
     Trainer trainer = trainerArgumentCaptor.getValue();
     assertThat(response.getStatus(), is(200));
@@ -275,7 +275,7 @@ public class RestServiceTest {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createTrainer.json");
     when(trainerHandler.addTrainer(any(Trainer.class))).thenThrow(SQLException.class);
-    Response response = restService.createTrainer(inputStream);
+    Response response = restService.createOrUpdateTrainer(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -283,7 +283,7 @@ public class RestServiceTest {
   public void testCreateTrainerBadJson() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("bad.json");
-    Response response = restService.createTrainer(inputStream);
+    Response response = restService.createOrUpdateTrainer(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -303,7 +303,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetExercise() {
-    Response response = restService.getExercise();
+    Response response = restService.getExercises();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Exercise> exerciseList = (List<Exercise>) response.getEntity();
@@ -316,7 +316,7 @@ public class RestServiceTest {
   @Test
   public void testGetExerciseSqlException() throws Exception {
     when(exerciseHandler.getExercises()).thenThrow(SQLException.class);
-    Response response = restService.getExercise();
+    Response response = restService.getExercises();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -325,7 +325,7 @@ public class RestServiceTest {
   public void testCreateExercise() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createExercise.json");
-    Response response = restService.createExercise(inputStream);
+    Response response = restService.createOrUpdateExercise(inputStream);
 
     Exercise exercise = exerciseArgumentCaptor.getValue();
     assertThat(response.getStatus(), is(200));
@@ -339,7 +339,7 @@ public class RestServiceTest {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createExercise.json");
     when(exerciseHandler.addExercise(any(Exercise.class))).thenThrow(SQLException.class);
-    Response response = restService.createExercise(inputStream);
+    Response response = restService.createOrUpdateExercise(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -347,7 +347,7 @@ public class RestServiceTest {
   public void testCreateExerciseBadJson() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("bad.json");
-    Response response = restService.createExercise(inputStream);
+    Response response = restService.createOrUpdateExercise(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -367,7 +367,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetWorkoutRoutine() {
-    Response response = restService.getRoutine();
+    Response response = restService.getWorkoutRoutines();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<WorkoutRoutine> workoutRoutineList = (List<WorkoutRoutine>) response.getEntity();
@@ -379,7 +379,7 @@ public class RestServiceTest {
   @Test
   public void testGetWorkoutRoutineSqlException() throws Exception {
     when(workoutRoutineHandler.getWorkoutRoutines()).thenThrow(SQLException.class);
-    Response response = restService.getRoutine();
+    Response response = restService.getWorkoutRoutines();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -388,7 +388,7 @@ public class RestServiceTest {
   public void testCreateWorkoutRoutine() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("createWorkoutRoutine.json");
-    Response response = restService.createWorkoutRoutine(inputStream);
+    Response response = restService.createOrUpdateWorkoutRoutine(inputStream);
 
     WorkoutRoutine workoutRoutine = workoutRoutineArgumentCaptor.getValue();
     assertThat(response.getStatus(), is(200));
@@ -406,7 +406,7 @@ public class RestServiceTest {
         RestServiceTest.class.getClassLoader().getResourceAsStream("createWorkoutRoutine.json");
     when(workoutRoutineHandler.addWorkoutRoutine(any(WorkoutRoutine.class)))
         .thenThrow(SQLException.class);
-    Response response = restService.createWorkoutRoutine(inputStream);
+    Response response = restService.createOrUpdateWorkoutRoutine(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 
@@ -414,7 +414,7 @@ public class RestServiceTest {
   public void testCreateWorkoutRoutineBadJson() {
     InputStream inputStream =
         RestServiceTest.class.getClassLoader().getResourceAsStream("bad.json");
-    Response response = restService.createWorkoutRoutine(inputStream);
+    Response response = restService.createOrUpdateWorkoutRoutine(inputStream);
     assertThat(response.getStatus(), is(500));
   }
 

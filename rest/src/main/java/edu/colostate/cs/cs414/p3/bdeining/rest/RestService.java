@@ -118,7 +118,7 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/trainer")
-  public Response getTrainer() {
+  public Response getTrainers() {
     try {
       List<Trainer> trainerList = trainerHandler.getTrainers();
       return Response.ok().entity(trainerList).build();
@@ -131,7 +131,7 @@ public class RestService {
   @PUT
   @Path("/trainer")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response createTrainer(InputStream requestBody) {
+  public Response createOrUpdateTrainer(InputStream requestBody) {
     try {
       Trainer trainer = gson.fromJson(new InputStreamReader(requestBody), TrainerImpl.class);
       trainerHandler.addTrainer(trainer);
@@ -161,7 +161,7 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/machine")
-  public Response getMachine() {
+  public Response getMachines() {
     try {
       List<Machine> machineList = machineHandler.getMachines();
       return Response.ok().entity(machineList).build();
@@ -174,7 +174,7 @@ public class RestService {
   @PUT
   @Path("/machine")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response createMachine(InputStream requestBody) {
+  public Response createOrUpdateMachine(InputStream requestBody) {
     try {
       Machine machine = gson.fromJson(new InputStreamReader(requestBody), MachineImpl.class);
       machineHandler.addMachine(machine);
@@ -204,7 +204,7 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/exercise")
-  public Response getExercise() {
+  public Response getExercises() {
     try {
       List<Exercise> exerciseList = exerciseHandler.getExercises();
       return Response.ok().entity(exerciseList).build();
@@ -217,7 +217,7 @@ public class RestService {
   @PUT
   @Path("/exercise")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response createExercise(InputStream requestBody) {
+  public Response createOrUpdateExercise(InputStream requestBody) {
     try {
       Exercise exercise = gson.fromJson(new InputStreamReader(requestBody), ExerciseImpl.class);
       exerciseHandler.addExercise(exercise);
@@ -247,7 +247,7 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/routine")
-  public Response getRoutine() {
+  public Response getWorkoutRoutines() {
     try {
       List<WorkoutRoutine> routineList = workoutRoutineHandler.getWorkoutRoutines();
       return Response.ok().entity(routineList).build();
@@ -260,7 +260,7 @@ public class RestService {
   @PUT
   @Path("/routine")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response createWorkoutRoutine(InputStream requestBody) {
+  public Response createOrUpdateWorkoutRoutine(InputStream requestBody) {
     try {
       WorkoutRoutine workoutRoutine =
           gson.fromJson(new InputStreamReader(requestBody), WorkoutRoutineImpl.class);
@@ -291,7 +291,7 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/customer")
-  public Response getCustomer() {
+  public Response getCustomers() {
     try {
       List<Customer> customerList = customerHandler.getCustomers();
       return Response.ok().entity(customerList).build();
@@ -304,7 +304,7 @@ public class RestService {
   @PUT
   @Path("/customer")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response createCustomer(InputStream requestBody) {
+  public Response createOrUpdateCustomer(InputStream requestBody) {
     try {
       Customer customer = gson.fromJson(new InputStreamReader(requestBody), CustomerImpl.class);
       customerHandler.addCustomer(customer);

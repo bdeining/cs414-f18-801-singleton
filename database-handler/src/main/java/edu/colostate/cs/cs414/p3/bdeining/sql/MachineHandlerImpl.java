@@ -169,7 +169,7 @@ public class MachineHandlerImpl implements MachineHandler {
 
   @Override
   public boolean removeMachine(String id) throws SQLException {
-    removeById(id, MACHINE_TABLE_NAME);
+    HandlerUtils.removeById(dataSource, id, MACHINE_TABLE_NAME);
     return true;
   }
 
@@ -191,22 +191,6 @@ public class MachineHandlerImpl implements MachineHandler {
         }
       }
       return null;
-    }
-  }
-
-  private void removeById(String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';", tableName, id));
-    }
-  }
-
-  private void removeById(String idFieldName, String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE %s = '%s';", tableName, idFieldName, id));
     }
   }
 }

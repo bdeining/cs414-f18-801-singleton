@@ -155,7 +155,7 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
 
   @Override
   public boolean removeExercise(String id) throws SQLException {
-    removeById(id, EXERCISE_TABLE_NAME);
+    HandlerUtils.removeById(dataSource, id, EXERCISE_TABLE_NAME);
     return true;
   }
 
@@ -192,14 +192,6 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
     } catch (SQLException e) {
       LOGGER.error("No data", e);
       return null;
-    }
-  }
-
-  private void removeById(String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';", tableName, id));
     }
   }
 }

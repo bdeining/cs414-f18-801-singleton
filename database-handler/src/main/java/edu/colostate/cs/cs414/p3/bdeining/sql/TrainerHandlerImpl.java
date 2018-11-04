@@ -123,7 +123,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
         update.close();
       }
 
-      removeById("id", id, QUALIFICATION_TABLE_NAME);
+      HandlerUtils.removeById(dataSource, "id", id, QUALIFICATION_TABLE_NAME);
 
       for (String qualification : qualifications) {
 
@@ -167,8 +167,8 @@ public class TrainerHandlerImpl implements TrainerHandler {
 
   @Override
   public boolean removeTrainer(String trainerId) throws SQLException {
-    removeById(trainerId, TRAINER_TABLE_NAME);
-    removeById(trainerId, QUALIFICATION_TABLE_NAME);
+    HandlerUtils.removeById(dataSource, trainerId, TRAINER_TABLE_NAME);
+    HandlerUtils.removeById(dataSource, trainerId, QUALIFICATION_TABLE_NAME);
     return true;
   }
 
@@ -187,14 +187,6 @@ public class TrainerHandlerImpl implements TrainerHandler {
         }
       }
       return trainers;
-    }
-  }
-
-  private void removeById(String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';", tableName, id));
     }
   }
 
@@ -246,14 +238,6 @@ public class TrainerHandlerImpl implements TrainerHandler {
         }
       }
       return null;
-    }
-  }
-
-  private void removeById(String idFieldName, String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE %s = '%s';", tableName, idFieldName, id));
     }
   }
 

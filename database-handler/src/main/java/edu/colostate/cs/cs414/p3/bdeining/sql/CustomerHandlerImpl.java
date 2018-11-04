@@ -126,7 +126,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
         update.close();
       }
 
-      removeById("customerId", id, CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME);
+      HandlerUtils.removeById(dataSource, "customerId", id, CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME);
 
       for (String routineId : routines) {
 
@@ -207,8 +207,8 @@ public class CustomerHandlerImpl implements CustomerHandler {
 
   @Override
   public boolean removeCustomer(String id) throws SQLException {
-    removeById(id, CUSTOMER_TABLE_NAME);
-    removeById("customerId", id, CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME);
+    HandlerUtils.removeById(dataSource, id, CUSTOMER_TABLE_NAME);
+    HandlerUtils.removeById(dataSource, "customerId", id, CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME);
     return true;
   }
 
@@ -274,19 +274,4 @@ public class CustomerHandlerImpl implements CustomerHandler {
     }
   }
 
-  private void removeById(String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';", tableName, id));
-    }
-  }
-
-  private void removeById(String idFieldName, String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE %s = '%s';", tableName, idFieldName, id));
-    }
-  }
 }

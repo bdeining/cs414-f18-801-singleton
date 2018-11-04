@@ -106,7 +106,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
         update.execute();
         update.close();
 
-        removeById("workoutRoutineId", id, EXERCISE_WORKOUT_ROUTINE_TABLE_NAME);
+        HandlerUtils.removeById(dataSource, "workoutRoutineId", id, EXERCISE_WORKOUT_ROUTINE_TABLE_NAME);
 
         for (String exerciseId : workoutRoutineExerciseIds) {
 
@@ -196,7 +196,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
 
   @Override
   public boolean removeWorkoutRoutine(String id) throws SQLException {
-    removeById(id, WORKOUT_ROUTINE_TABLE_NAME);
+    HandlerUtils.removeById(dataSource, id, WORKOUT_ROUTINE_TABLE_NAME);
     try (Connection con = dataSource.getConnection();
         Statement stmt = con.createStatement()) {
       LOGGER.trace("Removing from table {} : {}", EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id);
@@ -206,14 +206,6 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
     }
 
     return true;
-  }
-
-  private void removeById(String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE ID = '%s';", tableName, id));
-    }
   }
 
   private WorkoutRoutine getWorkoutRoutineById(String id) throws SQLException {
@@ -234,14 +226,6 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
         }
       }
       return null;
-    }
-  }
-
-  private void removeById(String idFieldName, String id, String tableName) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Removing from table {} : {}", tableName, id);
-      stmt.execute(String.format("DELETE FROM %s WHERE %s = '%s';", tableName, idFieldName, id));
     }
   }
 }
