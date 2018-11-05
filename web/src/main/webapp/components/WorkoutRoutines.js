@@ -18,7 +18,7 @@ class WorkoutRoutine extends React.Component {
     };
   }
 
- clearCustomerState = () => {
+ clearWorkoutRoutineState = () => {
     this.setState({
         name: '',
         exerciseIds: [],
@@ -41,16 +41,16 @@ class WorkoutRoutine extends React.Component {
  }
 
  hideModal = () => {
-    this.clearCustomerState()
+    this.clearWorkoutRoutineState()
  }
 
- deleteCustomer = () => {
+ deleteWorkoutRoutine = () => {
     axios({
         method: 'delete',
         url: '/services/rest/routine?id=' + this.state.id,
     }).then(res => {
-        this.getCustomerData()
-        this.clearCustomerState()
+        this.getWorkoutRoutineData()
+        this.clearWorkoutRoutineState()
     });
  }
 
@@ -65,7 +65,7 @@ class WorkoutRoutine extends React.Component {
                 "exerciseIds": this.state.exerciseIds
             }
         }).then(res => {
-            this.getCustomerData()
+            this.getWorkoutRoutineData()
         });
     } else {
         axios({
@@ -76,15 +76,15 @@ class WorkoutRoutine extends React.Component {
                 "exerciseIds": this.state.exerciseIds
           }
         }).then(res => {
-            this.getCustomerData()
+            this.getWorkoutRoutineData()
 
         });
     }
 
-    this.clearCustomerState();
+    this.clearWorkoutRoutineState();
  }
 
- getCustomerData() {
+ getWorkoutRoutineData() {
     axios.get('/services/rest/routine')
         .then(res => {
                 this.setState({
@@ -102,7 +102,7 @@ class WorkoutRoutine extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerData()
+    this.getWorkoutRoutineData()
   }
 
   updateInputValue = (evt) => {
@@ -121,19 +121,16 @@ class WorkoutRoutine extends React.Component {
   render() {
       return (
         <div>
-        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
-          <p>Machine</p>
+        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteWorkoutRoutine}>
+          <p>Workout Routine</p>
           <p>Name <input name='name' value={this.state.name} onChange={this.updateInputValue}/></p>
           <Select isMulti closeMenuOnSelect={false} value={this.state.selectedOption} onChange={this.handleChange} options={this.state.exerciseNames}/>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
-        <button type='button' onClick={this.showModal}>Open</button>
+        <button type='button' onClick={this.showModal}>Add</button>
           <ReactTable
             data={this.state.data}
             columns={[
-              {
-                Header: "Name",
-                columns: [
                   {
                     Header: "Name",
                     accessor: "name"
@@ -146,8 +143,6 @@ class WorkoutRoutine extends React.Component {
                     Header: "ID",
                     accessor: "id"
                   }
-                ]
-              }
             ]}
             defaultPageSize={10}
             className="-striped -highlight"
@@ -168,13 +163,12 @@ class WorkoutRoutine extends React.Component {
                                 color: rowInfo.index === this.state.selected ? 'white' : 'black'
                               }
                             }
-                          }else{
-                            return {}
                           }
                         }
-                        }
+                      }
           />
         </div>
+
       );
   }
 }

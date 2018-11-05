@@ -17,7 +17,7 @@ class Trainer extends React.Component {
     };
   }
 
- clearCustomerState = () => {
+ clearTrainerState = () => {
     this.setState({
         firstName: '',
         lastName: '',
@@ -39,16 +39,16 @@ class Trainer extends React.Component {
  }
 
  hideModal = () => {
-    this.clearCustomerState()
+    this.clearTrainerState()
  }
 
- deleteCustomer = () => {
+ deleteTrainer = () => {
     axios({
         method: 'delete',
         url: '/services/rest/trainer?id=' + this.state.id,
     }).then(res => {
-        this.getCustomerData()
-        this.clearCustomerState()
+        this.getTrainerData()
+        this.clearTrainerState()
     });
  }
 
@@ -73,7 +73,7 @@ class Trainer extends React.Component {
                   "qualifications" : qualifications
             }
         }).then(res => {
-            this.getCustomerData()
+            this.getTrainerData()
         });
     } else {
         axios({
@@ -90,14 +90,14 @@ class Trainer extends React.Component {
                 "qualifications" : qualifications
           }
         }).then(res => {
-            this.getCustomerData()
+            this.getTrainerData()
         });
     }
 
-    this.clearCustomerState();
+    this.clearTrainerState();
  }
 
- getCustomerData() {
+ getTrainerData() {
     axios.get('/services/rest/trainer')
         .then(res => {
                 this.setState({
@@ -115,7 +115,7 @@ class Trainer extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerData()
+    this.getTrainerData()
   }
 
   updateInputValue = (evt) => {
@@ -144,8 +144,8 @@ class Trainer extends React.Component {
   render() {
       return (
         <div>
-        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
-          <p>Customer</p>
+        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteTrainer}>
+          <p>Trainer</p>
           <p>First Name <input name='firstName' value={this.state.firstName} onChange={this.updateInputValue}/></p>
           <p>Last Name <input name='lastName' value={this.state.lastName} onChange={this.updateInputValue}/></p>
           <p>Address <input name='address' value={this.state.address} onChange={this.updateInputValue}/></p>
@@ -168,13 +168,10 @@ class Trainer extends React.Component {
 
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
-        <button type='button' onClick={this.showModal}>Open</button>
+        <button type='button' onClick={this.showModal}>Add</button>
           <ReactTable
             data={this.state.data}
             columns={[
-              {
-                Header: "Name",
-                columns: [
                   {
                     Header: "First Name",
                     accessor: "firstName"
@@ -211,8 +208,6 @@ class Trainer extends React.Component {
                     Header: "ID",
                     accessor: "id"
                   }
-                ]
-              }
             ]}
             defaultPageSize={10}
             className="-striped -highlight"

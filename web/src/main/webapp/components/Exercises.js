@@ -18,7 +18,7 @@ class Exercise extends React.Component {
     };
   }
 
- clearCustomerState = () => {
+ clearExerciseState = () => {
     this.setState({
         commonName: '',
         machineId: '',
@@ -44,16 +44,16 @@ class Exercise extends React.Component {
  }
 
  hideModal = () => {
-    this.clearCustomerState()
+    this.clearExerciseState()
  }
 
- deleteCustomer = () => {
+ deleteExercise = () => {
     axios({
         method: 'delete',
         url: '/services/rest/exercise?id=' + this.state.id,
     }).then(res => {
-        this.getCustomerData()
-        this.clearCustomerState()
+        this.getExerciseData()
+        this.clearExerciseState()
     });
  }
 
@@ -70,7 +70,7 @@ class Exercise extends React.Component {
                 "durationPerSet": this.state.durationPerSet
             }
         }).then(res => {
-            this.getCustomerData()
+            this.getExerciseData()
         });
     } else {
         axios({
@@ -83,15 +83,15 @@ class Exercise extends React.Component {
                 "durationPerSet": this.state.durationPerSet
           }
         }).then(res => {
-            this.getCustomerData()
+            this.getExerciseData()
 
         });
     }
 
-    this.clearCustomerState();
+    this.clearExerciseState();
  }
 
- getCustomerData() {
+ getExerciseData() {
     axios.get('/services/rest/exercise')
         .then(res => {
                 this.setState({
@@ -108,7 +108,7 @@ class Exercise extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerData()
+    this.getExerciseData()
   }
 
   updateInputValue = (evt) => {
@@ -124,7 +124,7 @@ class Exercise extends React.Component {
   render() {
       return (
         <div>
-        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
+        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteExercise}>
           <p>Machine</p>
           <p>Common Name <input name='commonName' value={this.state.commonName} onChange={this.updateInputValue}/></p>
           <Select value={this.state.selectedOption} onChange={this.handleChange} options={this.state.machineNames}/>
@@ -132,13 +132,10 @@ class Exercise extends React.Component {
           <p>Duration Per Set <input name='durationPerSet' value={this.state.durationPerSet} onChange={this.updateInputValue}/></p>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
-        <button type='button' onClick={this.showModal}>Open</button>
+        <button type='button' onClick={this.showModal}>Add</button>
           <ReactTable
             data={this.state.data}
             columns={[
-              {
-                Header: "Name",
-                columns: [
                   {
                     Header: "Common Name",
                     accessor: "commonName"
@@ -159,8 +156,6 @@ class Exercise extends React.Component {
                     Header: "ID",
                     accessor: "id"
                   }
-                ]
-              }
             ]}
             defaultPageSize={10}
             className="-striped -highlight"

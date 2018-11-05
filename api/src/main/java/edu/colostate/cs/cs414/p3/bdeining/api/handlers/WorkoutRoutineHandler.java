@@ -1,9 +1,8 @@
 package edu.colostate.cs.cs414.p3.bdeining.api.handlers;
 
+import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import java.sql.SQLException;
 import java.util.List;
-
-import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 
 public interface WorkoutRoutineHandler {
 

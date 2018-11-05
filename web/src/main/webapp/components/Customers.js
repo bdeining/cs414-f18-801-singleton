@@ -149,13 +149,10 @@ class Home extends React.Component {
           <Select isMulti closeMenuOnSelect={false} value={this.state.selectedOption} onChange={this.handleChange} options={this.state.routineNames}/>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
-        <button type='button' onClick={this.showModal}>Open</button>
+        <button type='button' onClick={this.showModal}>Add</button>
           <ReactTable
             data={this.state.data}
             columns={[
-              {
-                Header: "Name",
-                columns: [
                   {
                     Header: "First Name",
                     accessor: "firstName"
@@ -192,8 +189,6 @@ class Home extends React.Component {
                     Header: "ID",
                     accessor: "id"
                   }
-                ]
-              }
             ]}
             defaultPageSize={10}
             className="-striped -highlight"

@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { createStore } from 'redux';
 import { connect, Provider } from 'react-redux';
-import { counterReducer } from './reducers';
+import { customStore } from './stores';
 
 import Customer from './components/Customers';
 import Machine from './components/Machines';
@@ -14,7 +14,7 @@ import Exercise from './components/Exercises';
 import WorkoutRoutine from './components/WorkoutRoutines';
 import Trainer from './components/Trainers';
 
-const store = createStore(counterReducer);
+const store = createStore(customStore);
 
 render(
     <Provider store={store}>

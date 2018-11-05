@@ -16,7 +16,7 @@ class Machine extends React.Component {
     };
   }
 
- clearCustomerState = () => {
+ clearMachineState = () => {
     this.setState({
         quantity: '',
         picture: '',
@@ -33,16 +33,16 @@ class Machine extends React.Component {
  }
 
  hideModal = () => {
-    this.clearCustomerState()
+    this.clearMachineState()
  }
 
- deleteCustomer = () => {
+ deleteMachine = () => {
     axios({
         method: 'delete',
         url: '/services/rest/machine?id=' + this.state.id,
     }).then(res => {
-        this.getCustomerData()
-        this.clearCustomerState()
+        this.getMachineData()
+        this.clearMachineState()
     });
  }
 
@@ -58,7 +58,7 @@ class Machine extends React.Component {
                   "id" : this.state.id
             }
         }).then(res => {
-            this.getCustomerData()
+            this.getMachineData()
         });
     } else {
         axios({
@@ -70,15 +70,15 @@ class Machine extends React.Component {
                   "quantity" : this.state.quantity
           }
         }).then(res => {
-            this.getCustomerData()
+            this.getMachineData()
 
         });
     }
 
-    this.clearCustomerState();
+    this.clearMachineState();
  }
 
- getCustomerData() {
+ getMachineData() {
     axios.get('/services/rest/machine')
         .then(res => {
                 this.setState({
@@ -94,7 +94,7 @@ class Machine extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerData()
+    this.getMachineData()
   }
 
   updateInputValue = (evt) => {
@@ -106,20 +106,17 @@ class Machine extends React.Component {
   render() {
       return (
         <div>
-        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
+        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteMachine}>
           <p>Machine</p>
           <p>Name <input name='name' value={this.state.name} onChange={this.updateInputValue}/></p>
           <p>Quantity <input name='quantity' value={this.state.quantity} onChange={this.updateInputValue}/></p>
           <p>Picture <input name='picture' value={this.state.picture} onChange={this.updateInputValue}/></p>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
-        <button type='button' onClick={this.showModal}>Open</button>
+        <button type='button' onClick={this.showModal}>Add</button>
           <ReactTable
             data={this.state.data}
             columns={[
-              {
-                Header: "Name",
-                columns: [
                   {
                     Header: "Name",
                     accessor: "name"
@@ -136,8 +133,6 @@ class Machine extends React.Component {
                     Header: "ID",
                     accessor: "id"
                   }
-                ]
-              }
             ]}
             defaultPageSize={10}
             className="-striped -highlight"

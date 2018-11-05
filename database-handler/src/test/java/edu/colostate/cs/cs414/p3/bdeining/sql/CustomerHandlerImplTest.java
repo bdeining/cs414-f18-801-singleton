@@ -12,15 +12,7 @@ import static org.mockito.Mockito.when;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
-import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
-import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
-import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
-import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
-import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
-import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
-import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
-import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -191,31 +183,5 @@ public class CustomerHandlerImplTest {
         "kaiser",
         Arrays.asList(UUID.randomUUID().toString()),
         Activity.ACTIVE);
-  }
-
-  private Machine getMockMachine() {
-    return new MachineImpl(UUID.randomUUID().toString(), "aMachine", "12345", 2);
-  }
-
-  private Exercise getMockExercise() {
-    return new ExerciseImpl(UUID.randomUUID().toString(), "aMachine", "12345", 2, 3);
-  }
-
-  private Trainer getMockTrainer() {
-    return new TrainerImpl(
-        UUID.randomUUID().toString(),
-        "anAddress",
-        "Ben",
-        "Deininger",
-        "123-4123",
-        "ben@example.com",
-        "kaiser",
-        3,
-        Arrays.asList(UUID.randomUUID().toString()));
-  }
-
-  private WorkoutRoutine getMockWorkoutRoutine() {
-    return new WorkoutRoutineImpl(
-        UUID.randomUUID().toString(), "aName", Arrays.asList(UUID.randomUUID().toString()));
   }
 }
