@@ -106,7 +106,8 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
         update.execute();
         update.close();
 
-        HandlerUtils.removeById(dataSource, "workoutRoutineId", id, EXERCISE_WORKOUT_ROUTINE_TABLE_NAME);
+        HandlerUtils.removeById(
+            dataSource, "workoutRoutineId", id, EXERCISE_WORKOUT_ROUTINE_TABLE_NAME);
 
         for (String exerciseId : workoutRoutineExerciseIds) {
 

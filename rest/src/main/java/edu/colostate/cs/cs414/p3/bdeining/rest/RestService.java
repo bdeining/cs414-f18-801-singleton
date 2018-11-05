@@ -4,14 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
-import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
-import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
-import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
-import edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.WorkoutRoutineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
@@ -65,6 +65,30 @@ public class RestService {
     this.exerciseHandler = exerciseHandler;
     this.workoutRoutineHandler = workoutRoutineHandler;
     this.machineHandler = machineHandler;
+  }
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/routinenames")
+  public Response getWorkoutRoutineNames() {
+    try {
+      List<WorkoutRoutine> trainerList = workoutRoutineHandler.getWorkoutRoutines();
+      List<Map<String, Object>> machineNames =
+          trainerList
+              .stream()
+              .map(
+                  machine -> {
+                    Map<String, Object> objectMap = new HashMap<>();
+                    objectMap.put("label", machine.getName());
+                    objectMap.put("value", machine.getId());
+                    return objectMap;
+                  })
+              .collect(Collectors.toList());
+      return Response.ok().entity(machineNames).build();
+    } catch (SQLException e) {
+      LOGGER.warn("Could not get trainer list", e);
+      return Response.serverError().build();
+    }
   }
 
   @GET

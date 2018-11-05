@@ -11,6 +11,7 @@ class Trainer extends React.Component {
     this.state ={
         data: [],
         show: false,
+        qualifications: [],
         id: '',
         selected: null
     };
@@ -52,6 +53,10 @@ class Trainer extends React.Component {
  }
 
  saveModal = () => {
+    var qualifications = this.state.qualifications.map(function(item) {
+      return item['name'];
+    });
+
     if (this.state.id) {
         axios({
             method: 'put',
@@ -65,7 +70,7 @@ class Trainer extends React.Component {
                   "healthInsuranceProvider" : this.state.healthInsuranceProvider,
                   "workHours" : this.state.workHours,
                   "id" : this.state.id,
-                  "qualifications" : []
+                  "qualifications" : qualifications
             }
         }).then(res => {
             this.getCustomerData()
@@ -82,11 +87,10 @@ class Trainer extends React.Component {
                 "email" : this.state.email,
                 "healthInsuranceProvider" : this.state.healthInsuranceProvider,
                 "workHours" : this.state.workHours,
-                "qualifications" : []
+                "qualifications" : qualifications
           }
         }).then(res => {
             this.getCustomerData()
-
         });
     }
 
@@ -105,6 +109,8 @@ class Trainer extends React.Component {
                   id: '',
                   show: this.state.show
                 });
+
+
         });
   }
 
@@ -116,6 +122,23 @@ class Trainer extends React.Component {
     this.setState({
       [evt.target.name]: evt.target.value
     });
+  }
+
+  handleAddQualification = () => {
+    this.setState({ qualifications: this.state.qualifications.concat([{ name: '' }]) });
+  }
+
+  handleQualificationNameChange = (idx) => (evt) => {
+    const newQualifications = this.state.qualifications.map((qualification, sidx) => {
+      if (idx !== sidx) return qualification;
+      return { ...qualification, name: evt.target.value };
+    });
+
+    this.setState({ qualifications: newQualifications });
+  }
+
+  handleRemoveQualification = (idx) => () => {
+    this.setState({ qualifications: this.state.qualifications.filter((s, sidx) => idx !== sidx) });
   }
 
   render() {
@@ -130,6 +153,19 @@ class Trainer extends React.Component {
           <p>Email <input name='email' value={this.state.email} onChange={this.updateInputValue}/></p>
           <p>Health Insurance Provider <input name='healthInsuranceProvider' value={this.state.healthInsuranceProvider} onChange={this.updateInputValue}/></p>
           <p>Work Hours <input name='workHours' value={this.state.workHours} onChange={this.updateInputValue}/></p>
+            {this.state.qualifications.map((qualification, idx) => (
+              <div className="qualifications">
+                <input
+                  type="text"
+                  placeholder={`Qualification #${idx + 1} name`}
+                  value={qualification.name}
+                  onChange={this.handleQualificationNameChange(idx)}
+                />
+                <button type="button" onClick={this.handleRemoveQualification(idx)} className="small">-</button>
+              </div>
+            ))}
+            <button type="button" onClick={this.handleAddQualification} className="small">Add Qualification</button>
+
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
         <button type='button' onClick={this.showModal}>Open</button>
@@ -164,6 +200,10 @@ class Trainer extends React.Component {
                     accessor: "workHours"
                   },
                   {
+                    Header: "Qualifications",
+                    accessor: "qualifications"
+                  },
+                  {
                     Header: "Health Insurance Provider",
                     accessor: "healthInsuranceProvider"
                   },
@@ -180,6 +220,14 @@ class Trainer extends React.Component {
                           if (rowInfo && rowInfo.row) {
                             return {
                               onClick: (e) => {
+
+                                  var qualifications = [];
+
+                                  for (var i = 0; i < rowInfo.row.qualifications.length; i++) {
+                                    var obj = {"name" : rowInfo.row.qualifications[i]};
+                                    qualifications.push(obj);
+                                  }
+
                                 this.setState({
                                   firstName: rowInfo.row.firstName,
                                   lastName: rowInfo.row.lastName,
@@ -189,6 +237,7 @@ class Trainer extends React.Component {
                                   healthInsuranceProvider: rowInfo.row.healthInsuranceProvider,
                                   workHours: rowInfo.row.workHours,
                                   id: rowInfo.row.id,
+                                  qualifications: qualifications,
                                   selected: rowInfo.index
                                 })
                                 this.showModal()

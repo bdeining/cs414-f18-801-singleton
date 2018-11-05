@@ -3,6 +3,7 @@ import axios from 'axios';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import './styles.css';
+import Select from 'react-select';
 
 class Home extends React.Component {
 
@@ -10,6 +11,7 @@ class Home extends React.Component {
     super();
     this.state ={
         data: [],
+        routineNames: [],
         show: false,
         id: '',
         selected: null
@@ -27,13 +29,20 @@ class Home extends React.Component {
         activity: '',
         id: '',
         workoutRoutineIds: [],
+        routineNames: [],
         show: false
     });
  }
 
  showModal = () => {
-    this.setState({
-        show: true
+    axios({
+        method: 'get',
+        url: '/services/rest/routinenames',
+    }).then(res => {
+        this.setState({
+            show: true,
+            routineNames: res.data
+        });
     });
  }
 
@@ -65,7 +74,7 @@ class Home extends React.Component {
                   "healthInsuranceProvider" : this.state.healthInsuranceProvider,
                   "activity" : this.state.activity,
                   "id" : this.state.id,
-                  "workoutRoutineIds" : []
+                  "workoutRoutineIds" : this.state.workoutRoutineIds
             }
         }).then(res => {
             this.getCustomerData()
@@ -82,7 +91,7 @@ class Home extends React.Component {
                 "email" : this.state.email,
                 "healthInsuranceProvider" : this.state.healthInsuranceProvider,
                 "activity" : this.state.activity,
-                "workoutRoutineIds" : []
+                "workoutRoutineIds" : this.state.workoutRoutineIds
           }
         }).then(res => {
             this.getCustomerData()
@@ -118,6 +127,13 @@ class Home extends React.Component {
     });
   }
 
+  handleChange = (selectedOption) => {
+    var names = selectedOption.map(function(item) {
+      return item['value'];
+    });
+    this.setState({ workoutRoutineIds: names });
+  }
+
   render() {
       return (
         <div>
@@ -130,6 +146,7 @@ class Home extends React.Component {
           <p>Email <input name='email' value={this.state.email} onChange={this.updateInputValue}/></p>
           <p>Health Insurance Provider <input name='healthInsuranceProvider' value={this.state.healthInsuranceProvider} onChange={this.updateInputValue}/></p>
           <p>Activity <input name='activity' value={this.state.activity} onChange={this.updateInputValue}/></p>
+          <Select isMulti closeMenuOnSelect={false} value={this.state.selectedOption} onChange={this.handleChange} options={this.state.routineNames}/>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
         <button type='button' onClick={this.showModal}>Open</button>
@@ -168,6 +185,10 @@ class Home extends React.Component {
                     accessor: "healthInsuranceProvider"
                   },
                   {
+                    Header: "Workout Routines",
+                    accessor: "workoutRoutineIds"
+                  },
+                  {
                     Header: "ID",
                     accessor: "id"
                   }
@@ -188,6 +209,7 @@ class Home extends React.Component {
                                   phone: rowInfo.row.phone,
                                   healthInsuranceProvider: rowInfo.row.healthInsuranceProvider,
                                   activity: rowInfo.row.activity,
+                                  workoutRoutineIds: rowInfo.row.workoutRoutineIds,
                                   id: rowInfo.row.id,
                                   selected: rowInfo.index
                                 })

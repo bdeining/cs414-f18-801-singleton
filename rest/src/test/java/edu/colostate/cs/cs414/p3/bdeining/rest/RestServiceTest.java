@@ -13,14 +13,14 @@ import static org.mockito.Mockito.when;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
-import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
-import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
-import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
-import edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.WorkoutRoutineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
