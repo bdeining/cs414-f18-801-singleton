@@ -203,7 +203,8 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
       LOGGER.trace("Removing from table {} : {}", EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id);
       stmt.execute(
           String.format(
-              "DELETE FROM %s WHERE workoutId = '%s';", EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id));
+              "DELETE FROM %s WHERE workoutRoutineId = '%s';",
+              EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id));
     }
 
     return true;

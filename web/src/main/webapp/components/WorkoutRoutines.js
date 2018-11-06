@@ -11,6 +11,7 @@ class WorkoutRoutine extends React.Component {
     super();
     this.state ={
         data: [],
+        exerciseIds: [],
         exerciseNames: [],
         show: false,
         id: '',
@@ -137,7 +138,7 @@ class WorkoutRoutine extends React.Component {
                   },
                   {
                     Header: "Exercise IDs",
-                    accessor: "exerciseIds",
+                    accessor: "exerciseIds"
                   },
                   {
                     Header: "ID",
@@ -148,6 +149,7 @@ class WorkoutRoutine extends React.Component {
             className="-striped -highlight"
             getTrProps={(state, rowInfo) => {
                           if (rowInfo && rowInfo.row) {
+
                             return {
                               onClick: (e) => {
                                 this.setState({
@@ -163,9 +165,11 @@ class WorkoutRoutine extends React.Component {
                                 color: rowInfo.index === this.state.selected ? 'white' : 'black'
                               }
                             }
+                          }else{
+                            return {}
                           }
                         }
-                      }
+                        }
           />
         </div>
 
