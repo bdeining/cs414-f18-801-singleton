@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.osgi.service.component.annotations.Component;
 
+/**
+ * This class is adapted from https://github.com/steinarb/frontend-karaf-demo/blob/master/src/main/java/no/priv/bang/demos/frontendkarafdemo/ReactServlet.java
+ *
+ */
+
 @Component(
   service = {Servlet.class},
   property = {"alias=/search"}
