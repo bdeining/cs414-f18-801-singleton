@@ -32,6 +32,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.ws.rs.core.Response;
 import org.junit.Before;
@@ -101,6 +102,66 @@ public class RestServiceTest {
             exerciseHandler,
             workoutRoutineHandler,
             machineHandler);
+  }
+
+  @Test
+  public void testGetWorkoutRoutineNames() {
+    Response response = restService.getWorkoutRoutineNames();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(200));
+    List<Map<String,Object>> workoutRoutines = (List<Map<String,Object>>) response.getEntity();
+    assertThat(workoutRoutines, hasSize(1));
+    Map<String, Object> workoutRoutine = workoutRoutines.get(0);
+    assertThat(workoutRoutine.get(RestService.LABEL_KEY), is(ROUTINE_NAME));
+    assertThat(workoutRoutine.get(RestService.VALUE_KEY), notNullValue());
+  }
+
+  @Test
+  public void testGetWorkoutRoutineNamesSqlException() throws SQLException {
+    when(workoutRoutineHandler.getWorkoutRoutines()).thenThrow(SQLException.class);
+    Response response = restService.getWorkoutRoutineNames();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testGetExerciseNames() {
+    Response response = restService.getExerciseNames();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(200));
+    List<Map<String,Object>> exercises = (List<Map<String,Object>>) response.getEntity();
+    assertThat(exercises, hasSize(1));
+    Map<String, Object> workoutRoutine = exercises.get(0);
+    assertThat(workoutRoutine.get(RestService.LABEL_KEY), is(EXERCISE_NAME));
+    assertThat(workoutRoutine.get(RestService.VALUE_KEY), notNullValue());
+  }
+
+  @Test
+  public void testGetExerciseNamesSqlException() throws SQLException {
+    when(exerciseHandler.getExercises()).thenThrow(SQLException.class);
+    Response response = restService.getExerciseNames();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testGetMachineNames() {
+    Response response = restService.getMachineNames();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(200));
+    List<Map<String,Object>> machines = (List<Map<String,Object>>) response.getEntity();
+    assertThat(machines, hasSize(1));
+    Map<String, Object> workoutRoutine = machines.get(0);
+    assertThat(workoutRoutine.get(RestService.LABEL_KEY), is(MACHINE_NAME));
+    assertThat(workoutRoutine.get(RestService.VALUE_KEY), notNullValue());
+  }
+
+  @Test
+  public void testGetMachineNamesSqlException() throws SQLException {
+    when(machineHandler.getMachines()).thenThrow(SQLException.class);
+    Response response = restService.getMachineNames();
+    assertThat(response, notNullValue());
+    assertThat(response.getStatus(), is(500));
   }
 
   @Test

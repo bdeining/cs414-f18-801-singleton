@@ -40,6 +40,10 @@ import org.slf4j.LoggerFactory;
 @Path("/")
 public class RestService {
 
+  public static final String LABEL_KEY = "label";
+
+  public static final String VALUE_KEY = "value";
+
   private static final Logger LOGGER = LoggerFactory.getLogger(RestService.class);
 
   private CustomerHandler customerHandler;
@@ -79,8 +83,8 @@ public class RestService {
               .map(
                   machine -> {
                     Map<String, Object> objectMap = new HashMap<>();
-                    objectMap.put("label", machine.getName());
-                    objectMap.put("value", machine.getId());
+                    objectMap.put(LABEL_KEY, machine.getName());
+                    objectMap.put(VALUE_KEY, machine.getId());
                     return objectMap;
                   })
               .collect(Collectors.toList());
@@ -103,8 +107,8 @@ public class RestService {
               .map(
                   machine -> {
                     Map<String, Object> objectMap = new HashMap<>();
-                    objectMap.put("label", machine.getCommonName());
-                    objectMap.put("value", machine.getId());
+                    objectMap.put(LABEL_KEY, machine.getCommonName());
+                    objectMap.put(VALUE_KEY, machine.getId());
                     return objectMap;
                   })
               .collect(Collectors.toList());
@@ -127,8 +131,8 @@ public class RestService {
               .map(
                   machine -> {
                     Map<String, Object> objectMap = new HashMap<>();
-                    objectMap.put("label", machine.getName());
-                    objectMap.put("value", machine.getId());
+                    objectMap.put(LABEL_KEY, machine.getName());
+                    objectMap.put(VALUE_KEY, machine.getId());
                     return objectMap;
                   })
               .collect(Collectors.toList());
