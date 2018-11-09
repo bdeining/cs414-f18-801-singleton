@@ -36,7 +36,7 @@ public final class TableConstants {
       "(name varchar(100), id varchar(100), machineId varchar(100), sets integer, duration integer, workoutRoutineId varchar(100))";
 
   public static final String MACHINE_TABLE_DEF =
-      "(name varchar(100), id varchar(100), picture varchar(1024), quantity integer)";
+      "(name varchar(100), id varchar(100), picture varchar(65535), quantity integer)";
 
   public static final String EXERCISE_WORKOUT_ROUTINE_TABLE_DEF =
       "(workoutRoutineId varchar(100), exerciseId varchar(100))";

@@ -12,7 +12,8 @@ class Machine extends React.Component {
         data: [],
         show: false,
         id: '',
-        selected: null
+        selected: null,
+        selectedFile: ''
     };
   }
 
@@ -47,35 +48,48 @@ class Machine extends React.Component {
  }
 
  saveModal = () => {
+          var that = this;
     if (this.state.id) {
-        axios({
-            method: 'put',
-            url: '/services/rest/machine',
-            data: {
-                  "name" : this.state.name,
-                  "picture" : this.state.picture,
-                  "quantity" : this.state.quantity,
-                  "id" : this.state.id
-            }
-        }).then(res => {
-            this.getMachineData()
-        });
+
+          var reader = new FileReader();
+
+           reader.readAsDataURL(this.state.selectedFile);
+           reader.onload = function () {
+                    axios({
+                         method: 'put',
+                         url: '/services/rest/machine',
+                         data: {
+                               "name" : that.state.name,
+                               "picture" : reader.result,
+                               "quantity" : that.state.quantity,
+                               "id" : that.state.id
+                         }
+                     }).then(res => {
+                         that.getMachineData();
+                             that.clearMachineState();
+                     });
+           };
+
+
+
     } else {
-        axios({
-          method: 'put',
-          url: '/services/rest/machine',
-          data: {
-                  "name" : this.state.name,
-                  "picture" : this.state.picture,
-                  "quantity" : this.state.quantity
-          }
-        }).then(res => {
-            this.getMachineData()
-
-        });
+          var reader = new FileReader();
+           reader.readAsDataURL(this.state.selectedFile);
+           reader.onload = function () {
+                    axios({
+                         method: 'put',
+                         url: '/services/rest/machine',
+                         data: {
+                               "name" : that.state.name,
+                               "picture" : reader.result,
+                               "quantity" : that.state.quantity
+                         }
+                     }).then(res => {
+                         that.getMachineData();
+                             that.clearMachineState();
+                     });
+           };
     }
-
-    this.clearMachineState();
  }
 
  getMachineData() {
@@ -103,6 +117,10 @@ class Machine extends React.Component {
     });
   }
 
+  fileChangedHandler = (event) => {
+    this.setState({selectedFile: event.target.files[0]})
+  }
+
   render() {
       return (
         <div>
@@ -110,7 +128,7 @@ class Machine extends React.Component {
           <p>Machine</p>
           <p>Name <input name='name' value={this.state.name} onChange={this.updateInputValue}/></p>
           <p>Quantity <input name='quantity' value={this.state.quantity} onChange={this.updateInputValue}/></p>
-          <p>Picture <input name='picture' value={this.state.picture} onChange={this.updateInputValue}/></p>
+          <input type="file" onChange={this.fileChangedHandler} />
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
         <button type='button' onClick={this.showModal}>Add</button>
@@ -124,6 +142,9 @@ class Machine extends React.Component {
                   {
                     Header: "Picture",
                     accessor: "picture",
+                    Cell: row => (
+                                <img id='base64image' src={row.value} />
+                            )
                   },
                   {
                     Header: "Quantity",
