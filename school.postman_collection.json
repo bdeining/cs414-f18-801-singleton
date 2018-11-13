@@ -1,0 +1,872 @@
+{
+	"info": {
+		"_postman_id": "d54b6ebd-91d7-4977-8445-da29afca00ad",
+		"name": "school",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get trainer",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/trainer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"trainer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get machine",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/machine",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"machine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get machine names",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/machine",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"machine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get exercise names",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/exercisenames",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"exercisenames"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get exercise",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/exercise",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"exercise"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get workout routine",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/routine",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"routine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get customers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"customer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put trainer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/trainer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"trainer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update trainer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/trainer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"trainer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put customer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"customer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update customer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"id\" : \"21cd8020-cee4-4571-b610-b6580c661845\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"customer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put machine",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"picture\" : \"123123\",\n    \t\"quantity\" : 2\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/machine",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"machine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update machine",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"picture\" : \"123123\",\n    \t\"quantity\" : 2,\n    \t\"id\" : \"\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/machine",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"machine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put exercise",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"commonName\" : \"Leg Row\",\n    \t\"durationPerSet\" : \"2\",\n    \t\"sets\" : 2\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/exercise",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"exercise"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update exercise",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"commonName\" : \"Leg Row\",\n    \t\"durationPerSet\" : \"2\",\n    \t\"sets\" : 2\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/exercise",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"exercise"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put workout routine",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"exerciseIds\": [\"dd863f12-a283-4bbe-9afa-41103615d61a\", \"e188d22b-40f3-4f61-ab1b-680da3cba778\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/routine",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"routine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update routine",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"exerciseIds\": [\"dd863f12-a283-4bbe-9afa-41103615d61a\", \"e188d22b-40f3-4f61-ab1b-680da3cba778\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/routine",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"routine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete trainer",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/trainer?id=46bc08fb-5298-431f-b982-013033f28d76",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"trainer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "46bc08fb-5298-431f-b982-013033f28d76"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete machine",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/machine?id=46bc08fb-5298-431f-b982-013033f28d76",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"machine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "46bc08fb-5298-431f-b982-013033f28d76"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete customer",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/customer?id=46bc08fb-5298-431f-b982-013033f28d76",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"customer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "46bc08fb-5298-431f-b982-013033f28d76"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete exercise",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/exercise?id=46bc08fb-5298-431f-b982-013033f28d76",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"exercise"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "46bc08fb-5298-431f-b982-013033f28d76"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete workout routine",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/routine?id=46bc08fb-5298-431f-b982-013033f28d76",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"routine"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "46bc08fb-5298-431f-b982-013033f28d76"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
