@@ -79,6 +79,8 @@ public class RestServiceTest {
 
   private static final List<String> QUALIFICATIONS = Arrays.asList("qual1", "qual2");
 
+  private static final String PASSWORD = "password";
+
   private static final int WORK_HOURS = 12;
 
   private ArgumentCaptor<Customer> customerArgumentCaptor = ArgumentCaptor.forClass(Customer.class);
@@ -109,7 +111,7 @@ public class RestServiceTest {
     Response response = restService.getWorkoutRoutineNames();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
-    List<Map<String,Object>> workoutRoutines = (List<Map<String,Object>>) response.getEntity();
+    List<Map<String, Object>> workoutRoutines = (List<Map<String, Object>>) response.getEntity();
     assertThat(workoutRoutines, hasSize(1));
     Map<String, Object> workoutRoutine = workoutRoutines.get(0);
     assertThat(workoutRoutine.get(RestService.LABEL_KEY), is(ROUTINE_NAME));
@@ -129,7 +131,7 @@ public class RestServiceTest {
     Response response = restService.getExerciseNames();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
-    List<Map<String,Object>> exercises = (List<Map<String,Object>>) response.getEntity();
+    List<Map<String, Object>> exercises = (List<Map<String, Object>>) response.getEntity();
     assertThat(exercises, hasSize(1));
     Map<String, Object> workoutRoutine = exercises.get(0);
     assertThat(workoutRoutine.get(RestService.LABEL_KEY), is(EXERCISE_NAME));
@@ -149,7 +151,7 @@ public class RestServiceTest {
     Response response = restService.getMachineNames();
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
-    List<Map<String,Object>> machines = (List<Map<String,Object>>) response.getEntity();
+    List<Map<String, Object>> machines = (List<Map<String, Object>>) response.getEntity();
     assertThat(machines, hasSize(1));
     Map<String, Object> workoutRoutine = machines.get(0);
     assertThat(workoutRoutine.get(RestService.LABEL_KEY), is(MACHINE_NAME));
@@ -548,7 +550,8 @@ public class RestServiceTest {
         EMAIL,
         HEALTH_INSURANCE_PROVIDER,
         WORK_HOURS,
-        QUALIFICATIONS);
+        QUALIFICATIONS,
+        PASSWORD);
   }
 
   private WorkoutRoutine generateWorkoutRoutine() {

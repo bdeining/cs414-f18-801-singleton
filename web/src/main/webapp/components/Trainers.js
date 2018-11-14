@@ -26,6 +26,7 @@ class Trainer extends React.Component {
         email: '',
         healthInsuranceProvider: '',
         workHours: '',
+        password: '',
         id: '',
         qualifications: [],
         show: false
@@ -70,6 +71,7 @@ class Trainer extends React.Component {
                   "healthInsuranceProvider" : this.state.healthInsuranceProvider,
                   "workHours" : this.state.workHours,
                   "id" : this.state.id,
+                  "password": this.state.password,
                   "qualifications" : qualifications
             }
         }).then(res => {
@@ -87,6 +89,7 @@ class Trainer extends React.Component {
                 "email" : this.state.email,
                 "healthInsuranceProvider" : this.state.healthInsuranceProvider,
                 "workHours" : this.state.workHours,
+                "password": this.state.password,
                 "qualifications" : qualifications
           }
         }).then(res => {
@@ -164,8 +167,8 @@ class Trainer extends React.Component {
                 <button type="button" onClick={this.handleRemoveQualification(idx)} className="small">-</button>
               </div>
             ))}
-            <button type="button" onClick={this.handleAddQualification} className="small">Add Qualification</button>
-
+          <button type="button" onClick={this.handleAddQualification} className="small">Add Qualification</button>
+          <p>Password <input name='password' value={this.state.password} onChange={this.updateInputValue}/></p>
           <p>ID <input name='id' value={this.state.id} readOnly /></p>
         </Modal>
         <button type='button' onClick={this.showModal}>Add</button>
@@ -205,6 +208,10 @@ class Trainer extends React.Component {
                     accessor: "healthInsuranceProvider"
                   },
                   {
+                    Header: "Password",
+                    accessor: "password"
+                  },
+                  {
                     Header: "ID",
                     accessor: "id"
                   }
@@ -233,6 +240,7 @@ class Trainer extends React.Component {
                                   workHours: rowInfo.row.workHours,
                                   id: rowInfo.row.id,
                                   qualifications: qualifications,
+                                  password: rowInfo.row.password,
                                   selected: rowInfo.index
                                 })
                                 this.showModal()

@@ -52,7 +52,7 @@ public class MachineHandlerImplTest {
   public void testInit() throws Exception {
     verify(connection, times(1)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(8)).execute(anyString());
+    verify(statement, times(1)).execute(anyString());
   }
 
   @Test
@@ -67,7 +67,7 @@ public class MachineHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -77,7 +77,7 @@ public class MachineHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(16)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -92,7 +92,7 @@ public class MachineHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -106,7 +106,7 @@ public class MachineHandlerImplTest {
   public void testRemoveMachine() throws Exception {
     boolean result = machineHandler.removeMachine("anId");
     assertThat(result, is(true));
-    verify(statement, times(9)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test

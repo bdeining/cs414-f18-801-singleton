@@ -51,7 +51,7 @@ public class ExerciseHandlerImplTest {
   public void testInit() throws Exception {
     verify(connection, times(1)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(8)).execute(anyString());
+    verify(statement, times(1)).execute(anyString());
   }
 
   @Test
@@ -66,7 +66,7 @@ public class ExerciseHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -76,7 +76,7 @@ public class ExerciseHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(16)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -91,7 +91,7 @@ public class ExerciseHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -104,7 +104,7 @@ public class ExerciseHandlerImplTest {
   @Test
   public void testGetExercises() throws Exception {
     ResultSet tableResultSet = mock(ResultSet.class);
-    when(statement.executeQuery(anyString())).thenReturn(tableResultSet);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
     when(tableResultSet.next()).thenReturn(true, false);
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("name")).thenReturn("aName");
@@ -136,7 +136,7 @@ public class ExerciseHandlerImplTest {
   public void testRemoveExercise() throws Exception {
     boolean result = exerciseHandler.removeExercise("anId");
     assertThat(result, is(true));
-    verify(statement, times(9)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   private void setUpMocks() throws Exception {
@@ -145,7 +145,7 @@ public class ExerciseHandlerImplTest {
     databaseMetaData = mock(DatabaseMetaData.class);
     statement = mock(Statement.class);
     preparedStatement = mock(PreparedStatement.class);
-    callableStatement = mock(CallableStatement.class);
+
     ResultSet tableResultSet = mock(ResultSet.class);
     when(dataSource.getConnection()).thenReturn(connection);
     when(connection.getMetaData()).thenReturn(databaseMetaData);
@@ -153,7 +153,6 @@ public class ExerciseHandlerImplTest {
         .thenReturn(tableResultSet);
     when(connection.createStatement()).thenReturn(statement);
     when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-    when(connection.prepareCall(anyString())).thenReturn(callableStatement);
   }
 
   private Exercise getMockExercise() {

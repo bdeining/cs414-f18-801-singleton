@@ -10,16 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
-import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
-import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
-import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
-import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
-import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
-import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
-import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
-import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -62,7 +53,7 @@ public class WorkoutRoutineHandlerImplTest {
   public void testInit() throws Exception {
     verify(connection, times(1)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(8)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -77,7 +68,7 @@ public class WorkoutRoutineHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test
@@ -87,7 +78,7 @@ public class WorkoutRoutineHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(16)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test
@@ -102,7 +93,7 @@ public class WorkoutRoutineHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test
@@ -146,7 +137,7 @@ public class WorkoutRoutineHandlerImplTest {
   public void testRemoveWorkoutRoutine() throws Exception {
     boolean result = workoutRoutineHandler.removeWorkoutRoutine("anId");
     assertThat(result, is(true));
-    verify(statement, times(10)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   private void setUpMocks() throws Exception {
@@ -164,40 +155,6 @@ public class WorkoutRoutineHandlerImplTest {
     when(connection.createStatement()).thenReturn(statement);
     when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
     when(connection.prepareCall(anyString())).thenReturn(callableStatement);
-  }
-
-  private Customer getMockCustomer() {
-    return new CustomerImpl(
-        UUID.randomUUID().toString(),
-        "anAddress",
-        "Ben",
-        "Deininger",
-        "123-4123",
-        "ben@example.com",
-        "kaiser",
-        Arrays.asList(UUID.randomUUID().toString()),
-        Activity.ACTIVE);
-  }
-
-  private Machine getMockMachine() {
-    return new MachineImpl(UUID.randomUUID().toString(), "aMachine", "12345", 2);
-  }
-
-  private Exercise getMockExercise() {
-    return new ExerciseImpl(UUID.randomUUID().toString(), "aMachine", "12345", 2, 3);
-  }
-
-  private Trainer getMockTrainer() {
-    return new TrainerImpl(
-        UUID.randomUUID().toString(),
-        "anAddress",
-        "Ben",
-        "Deininger",
-        "123-4123",
-        "ben@example.com",
-        "kaiser",
-        3,
-        Arrays.asList(UUID.randomUUID().toString()));
   }
 
   private WorkoutRoutine getMockWorkoutRoutine() {

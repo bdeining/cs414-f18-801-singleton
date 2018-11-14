@@ -53,7 +53,7 @@ public class TrainerHandlerImplTest {
   public void testInit() throws Exception {
     verify(connection, times(1)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(8)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -68,7 +68,7 @@ public class TrainerHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test
@@ -78,7 +78,7 @@ public class TrainerHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(16)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test
@@ -93,13 +93,13 @@ public class TrainerHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test
   public void testAddTrainer() throws Exception {
     boolean result = trainerHandler.addTrainer(getMockTrainer());
-    verify(statement, times(10)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
     assertThat(result, is(true));
   }
 
@@ -107,7 +107,7 @@ public class TrainerHandlerImplTest {
   public void testRemoveTrainer() throws Exception {
     boolean result = trainerHandler.removeTrainer("anId");
     assertThat(result, is(true));
-    verify(statement, times(10)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test
@@ -124,6 +124,7 @@ public class TrainerHandlerImplTest {
     when(tableResultSet.getString("health_insurance_provider")).thenReturn("kaiser");
     when(tableResultSet.getInt("work_hours")).thenReturn(12);
     when(tableResultSet.getString("qualification")).thenReturn("qualification");
+    when(tableResultSet.getString("password")).thenReturn("password");
 
     when(callableStatement.executeQuery()).thenReturn(tableResultSet);
 
@@ -139,6 +140,7 @@ public class TrainerHandlerImplTest {
     assertThat(trainerList.get(0).getWorkHours(), is(12));
     assertThat(trainerList.get(0).getQualifications(), hasSize(1));
     assertThat(trainerList.get(0).getQualifications().get(0), is("qualification"));
+    assertThat(trainerList.get(0).getPassword(), is("password"));
   }
 
   @Test
@@ -168,6 +170,7 @@ public class TrainerHandlerImplTest {
     when(tableResultSet.getString("health_insurance_provider")).thenReturn("kaiser");
     when(tableResultSet.getInt("work_hours")).thenReturn(12);
     when(tableResultSet.getString("qualification")).thenReturn("qualification");
+    when(tableResultSet.getString("password")).thenReturn("password");
 
     List<Trainer> trainerList = trainerHandler.getTrainers();
     assertThat(trainerList, hasSize(1));
@@ -180,6 +183,7 @@ public class TrainerHandlerImplTest {
     assertThat(trainerList.get(0).getHealthInsuranceProvider(), is("kaiser"));
     assertThat(trainerList.get(0).getWorkHours(), is(12));
     assertThat(trainerList.get(0).getQualifications(), hasSize(0));
+    assertThat(trainerList.get(0).getPassword(), is("password"));
   }
 
   private void setUpMocks() throws Exception {
@@ -209,6 +213,7 @@ public class TrainerHandlerImplTest {
         "ben@example.com",
         "kaiser",
         3,
-        Arrays.asList(UUID.randomUUID().toString()));
+        Arrays.asList(UUID.randomUUID().toString()),
+        "password");
   }
 }

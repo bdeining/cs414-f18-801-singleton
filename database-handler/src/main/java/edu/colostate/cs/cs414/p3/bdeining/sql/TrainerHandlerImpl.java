@@ -1,15 +1,16 @@
 package edu.colostate.cs.cs414.p3.bdeining.sql;
 
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.createTable;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getExistingTables;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.QUALIFICATION_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.QUALIFICATION_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TABLES;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TABLES_DEF;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TRAINER_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TRAINER_TABLE_NAME;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,43 +47,16 @@ public class TrainerHandlerImpl implements TrainerHandler {
     createTablesIfNonExistent();
   }
 
-  private List<String> getExistingTables() {
-    List<String> existingTables = new ArrayList<>();
-    try (Connection con = dataSource.getConnection()) {
-      DatabaseMetaData meta = con.getMetaData();
-
-      ResultSet res = meta.getTables(null, null, "%", new String[] {"TABLE"});
-
-      while (res.next()) {
-        existingTables.add(res.getString("TABLE_NAME"));
-      }
-
-    } catch (SQLException e) {
-      LOGGER.error("Unable to fetch exiting tables.", e);
-    }
-    return existingTables;
-  }
-
   private void createTablesIfNonExistent() {
-    List<String> tables = getExistingTables();
+    List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
 
-    for (int i = 0; i < TABLES.size(); i++) {
-      String tableName = TABLES.get(i);
-      String tableDef = TABLES_DEF.get(i);
-      if (!tables.contains(tableName)) {
-        createTable(tableName, tableDef);
-      }
+    if (!tables.contains(TRAINER_TABLE_NAME)) {
+      createTable(dataSource, TRAINER_TABLE_NAME, TRAINER_TABLE_DEF);
     }
-  }
 
-  private void createTable(String tableName, String tableDefinition) {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Creating table : {}", tableDefinition);
-      stmt.execute("create table " + tableName + " " + tableDefinition);
-    } catch (SQLException e) {
-      LOGGER.error("Unable to create table {}", tableName, e);
+    if (!tables.contains(QUALIFICATION_TABLE_NAME)) {
+      createTable(dataSource, QUALIFICATION_TABLE_NAME, QUALIFICATION_TABLE_DEF);
     }
   }
 
@@ -95,6 +69,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
     String healthInsuranceProvider = trainer.getHealthInsuranceProvider();
     String email = trainer.getEmail();
     String id = trainer.getId();
+    String password = trainer.getPassword();
     int workHours = trainer.getWorkHours();
     List<String> qualifications = trainer.getQualifications();
 
@@ -109,7 +84,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
             con.prepareStatement(
                 "update "
                     + TRAINER_TABLE_NAME
-                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, work_hours=? WHERE id=?");
+                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, work_hours=?, password=? WHERE id=?");
 
         update.setString(1, firstName);
         update.setString(2, lastName);
@@ -118,7 +93,8 @@ public class TrainerHandlerImpl implements TrainerHandler {
         update.setString(5, email);
         update.setString(6, healthInsuranceProvider);
         update.setInt(7, workHours);
-        update.setString(8, id);
+        update.setString(8, password);
+        update.setString(9, id);
         update.execute();
         update.close();
       }
@@ -146,7 +122,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
         LOGGER.trace("Adding trainer : {}", trainer);
         stmt.execute(
             String.format(
-                "INSERT INTO %s (first_name, last_name, address, phone, email, id, health_insurance_provider, work_hours) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+                "INSERT INTO %s (first_name, last_name, address, phone, email, id, health_insurance_provider, work_hours, password) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
                 TRAINER_TABLE_NAME,
                 firstName,
                 lastName,
@@ -155,7 +131,8 @@ public class TrainerHandlerImpl implements TrainerHandler {
                 email,
                 id,
                 healthInsuranceProvider,
-                workHours));
+                workHours,
+                password));
 
         for (String qualification : qualifications) {
           addQualification(stmt, qualification, id);
@@ -199,6 +176,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
       String email = resultSet.getString("email");
       String id = resultSet.getString("id");
       String healthInsuranceProvider = resultSet.getString("health_insurance_provider");
+      String password = resultSet.getString("password");
       int workHours = resultSet.getInt("work_hours");
       List<String> qualifications = getQualificationsForTrainer(id);
       Trainer trainer =
@@ -211,7 +189,8 @@ public class TrainerHandlerImpl implements TrainerHandler {
               email,
               healthInsuranceProvider,
               workHours,
-              qualifications);
+              qualifications,
+              password);
       LOGGER.trace("Got trainer {}", trainer);
       return trainer;
     } catch (SQLException e) {

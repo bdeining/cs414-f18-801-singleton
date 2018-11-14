@@ -54,7 +54,7 @@ public class CustomerHandlerImplTest {
   public void testInit() throws Exception {
     verify(connection, times(1)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(8)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
   }
 
   @Test
@@ -69,7 +69,7 @@ public class CustomerHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(3)).execute(anyString());
   }
 
   @Test
@@ -79,7 +79,7 @@ public class CustomerHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(1)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(16)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test
@@ -94,7 +94,7 @@ public class CustomerHandlerImplTest {
 
     verify(connection, times(2)).getMetaData();
     verify(databaseMetaData, times(2)).getTables(anyString(), anyString(), anyString(), any());
-    verify(statement, times(15)).execute(anyString());
+    verify(statement, times(3)).execute(anyString());
   }
 
   @Test
@@ -108,7 +108,7 @@ public class CustomerHandlerImplTest {
   public void testRemoveCustomer() throws Exception {
     boolean result = customerHandler.removeCustomer("anId");
     assertThat(result, is(true));
-    verify(statement, times(10)).execute(anyString());
+    verify(statement, times(4)).execute(anyString());
   }
 
   @Test

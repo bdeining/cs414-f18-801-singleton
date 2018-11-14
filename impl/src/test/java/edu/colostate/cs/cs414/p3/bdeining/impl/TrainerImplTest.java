@@ -32,6 +32,8 @@ public class TrainerImplTest {
 
   private static final List<String> QUALIFICATIONS = Arrays.asList("qual1", "qual2");
 
+  private static final String PASSWORD = "password";
+
   private static final int WORK_HOURS = 12;
 
   @Before
@@ -46,7 +48,8 @@ public class TrainerImplTest {
             EMAIL,
             HEALTH_INSURANCE_PROVIDER,
             WORK_HOURS,
-            QUALIFICATIONS);
+            QUALIFICATIONS,
+            PASSWORD);
   }
 
   @Test
@@ -56,7 +59,7 @@ public class TrainerImplTest {
 
   @Test
   public void testSetters() {
-    trainer = new TrainerImpl(null, null, null, null, null, null, null, 0, null);
+    trainer = new TrainerImpl(null, null, null, null, null, null, null, 0, null, null);
     trainer.setAddress(ADDRESS);
     trainer.setFirstName(FIRST_NAME);
     trainer.setLastName(LAST_NAME);
@@ -80,7 +83,8 @@ public class TrainerImplTest {
             EMAIL,
             HEALTH_INSURANCE_PROVIDER,
             WORK_HOURS,
-            QUALIFICATIONS);
+            QUALIFICATIONS,
+            PASSWORD);
     assertThat(trainer.getId(), notNullValue());
   }
 

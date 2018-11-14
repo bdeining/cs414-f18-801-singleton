@@ -1,14 +1,14 @@
 package edu.colostate.cs.cs414.p3.bdeining.sql;
 
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.createTable;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getExistingTables;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TABLES;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TABLES_DEF;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
 import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,43 +45,12 @@ public class MachineHandlerImpl implements MachineHandler {
     createTablesIfNonExistent();
   }
 
-  private List<String> getExistingTables() {
-    List<String> existingTables = new ArrayList<>();
-    try (Connection con = dataSource.getConnection()) {
-      DatabaseMetaData meta = con.getMetaData();
-
-      ResultSet res = meta.getTables(null, null, "%", new String[] {"TABLE"});
-
-      while (res.next()) {
-        existingTables.add(res.getString("TABLE_NAME"));
-      }
-
-    } catch (SQLException e) {
-      LOGGER.error("Unable to fetch exiting tables.", e);
-    }
-    return existingTables;
-  }
-
   private void createTablesIfNonExistent() {
-    List<String> tables = getExistingTables();
+    List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
 
-    for (int i = 0; i < TABLES.size(); i++) {
-      String tableName = TABLES.get(i);
-      String tableDef = TABLES_DEF.get(i);
-      if (!tables.contains(tableName)) {
-        createTable(tableName, tableDef);
-      }
-    }
-  }
-
-  private void createTable(String tableName, String tableDefinition) {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Creating table : {}", tableDefinition);
-      stmt.execute("create table " + tableName + " " + tableDefinition);
-    } catch (SQLException e) {
-      LOGGER.error("Unable to create table {}", tableName, e);
+    if (!tables.contains(MACHINE_TABLE_NAME)) {
+      createTable(dataSource, MACHINE_TABLE_NAME, MACHINE_TABLE_DEF);
     }
   }
 

@@ -1,16 +1,17 @@
 package edu.colostate.cs.cs414.p3.bdeining.sql;
 
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.createTable;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getExistingTables;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TABLE_NAME;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TABLES;
-import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TABLES_DEF;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,42 +45,16 @@ public class CustomerHandlerImpl implements CustomerHandler {
   }
 
   private void createTablesIfNonExistent() {
-    List<String> tables = getExistingTables();
+    List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
 
-    for (int i = 0; i < TABLES.size(); i++) {
-      String tableName = TABLES.get(i);
-      String tableDef = TABLES_DEF.get(i);
-      if (!tables.contains(tableName)) {
-        createTable(tableName, tableDef);
-      }
+    if (!tables.contains(CUSTOMER_TABLE_NAME)) {
+      createTable(dataSource, CUSTOMER_TABLE_NAME, CUSTOMER_TABLE_DEF);
     }
-  }
 
-  private List<String> getExistingTables() {
-    List<String> existingTables = new ArrayList<>();
-    try (Connection con = dataSource.getConnection()) {
-      DatabaseMetaData meta = con.getMetaData();
-
-      ResultSet res = meta.getTables(null, null, "%", new String[] {"TABLE"});
-
-      while (res.next()) {
-        existingTables.add(res.getString("TABLE_NAME"));
-      }
-
-    } catch (SQLException e) {
-      LOGGER.error("Unable to fetch exiting tables.", e);
-    }
-    return existingTables;
-  }
-
-  private void createTable(String tableName, String tableDefinition) {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      LOGGER.trace("Creating table : {}", tableDefinition);
-      stmt.execute("create table " + tableName + " " + tableDefinition);
-    } catch (SQLException e) {
-      LOGGER.error("Unable to create table {}", tableName, e);
+    if (!tables.contains(CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME)) {
+      createTable(
+          dataSource, CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME, CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF);
     }
   }
 

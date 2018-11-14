@@ -24,6 +24,8 @@ public class TrainerImpl implements Trainer {
 
   private List<String> qualifications;
 
+  private String password;
+
   public TrainerImpl(
       String id,
       String address,
@@ -33,7 +35,8 @@ public class TrainerImpl implements Trainer {
       String email,
       String healthInsuranceProvider,
       int workHours,
-      List<String> qualifications) {
+      List<String> qualifications,
+      String password) {
     this.address = address;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -43,6 +46,7 @@ public class TrainerImpl implements Trainer {
     this.healthInsuranceProvider = healthInsuranceProvider;
     this.workHours = workHours;
     this.qualifications = qualifications;
+    this.password = password;
   }
 
   @Override
@@ -101,6 +105,16 @@ public class TrainerImpl implements Trainer {
   @Override
   public void setQualifications(List<String> qualifications) {
     this.qualifications = qualifications;
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  @Override
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   @Override

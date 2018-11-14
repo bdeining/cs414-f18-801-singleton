@@ -11,4 +11,8 @@ public interface Trainer extends Person {
   void setWorkHours(int workHours);
 
   void setQualifications(List<String> qualifications);
+
+  String getPassword();
+
+  void setPassword(String password);
 }
