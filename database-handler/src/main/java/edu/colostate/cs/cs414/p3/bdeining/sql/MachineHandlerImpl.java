@@ -12,8 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.sql.DataSource;
 import org.osgi.service.component.annotations.Component;
@@ -104,10 +104,17 @@ public class MachineHandlerImpl implements MachineHandler {
 
   @Override
   public List<Machine> getMachines() throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(String.format("SELECT * FROM %s;", MACHINE_TABLE_NAME));
+    try (Connection con = dataSource.getConnection()) {
+
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + MACHINE_TABLE_NAME);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      if (resultSet == null) {
+        preparedStatement.close();
+        return Collections.emptyList();
+      }
 
       List<Machine> machineList = new ArrayList<>();
       while (resultSet.next()) {
@@ -116,6 +123,7 @@ public class MachineHandlerImpl implements MachineHandler {
           machineList.add(machine);
         }
       }
+      preparedStatement.close();
       return machineList;
     }
   }
@@ -143,22 +151,28 @@ public class MachineHandlerImpl implements MachineHandler {
   }
 
   private Machine getMachineById(String id) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(
-              String.format("SELECT * FROM %s where id='%s'", MACHINE_TABLE_NAME, id));
+    try (Connection con = dataSource.getConnection()) {
+
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + MACHINE_TABLE_NAME + " where id=?");
+
+      preparedStatement.setString(1, id);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {
+        preparedStatement.close();
         return null;
       }
 
       while (resultSet.next()) {
         Machine machine = getMachine(resultSet);
         if (machine != null) {
+          preparedStatement.close();
           return machine;
         }
       }
+      preparedStatement.close();
       return null;
     }
   }

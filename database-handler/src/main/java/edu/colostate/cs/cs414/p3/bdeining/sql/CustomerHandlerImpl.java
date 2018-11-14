@@ -15,8 +15,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.sql.DataSource;
 import org.osgi.service.component.annotations.Component;
@@ -31,8 +31,6 @@ import org.slf4j.LoggerFactory;
     "service.exported.interfaces=*", //
   }
 )
-
-// TODO: Prepared Statements
 public class CustomerHandlerImpl implements CustomerHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CustomerHandlerImpl.class);
@@ -160,22 +158,28 @@ public class CustomerHandlerImpl implements CustomerHandler {
   }
 
   private Customer getCustomerById(String id) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(
-              String.format("SELECT * FROM %s where id='%s'", CUSTOMER_TABLE_NAME, id));
+    try (Connection con = dataSource.getConnection()) {
+
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + CUSTOMER_TABLE_NAME + " where id=?");
+
+      preparedStatement.setString(1, id);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {
+        preparedStatement.close();
         return null;
       }
 
       while (resultSet.next()) {
         Customer customer = getCustomer(resultSet);
         if (customer != null) {
+          preparedStatement.close();
           return customer;
         }
       }
+      preparedStatement.close();
       return null;
     }
   }
@@ -189,10 +193,17 @@ public class CustomerHandlerImpl implements CustomerHandler {
 
   @Override
   public List<Customer> getCustomers() throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(String.format("SELECT * FROM %s;", CUSTOMER_TABLE_NAME));
+    try (Connection con = dataSource.getConnection()) {
+
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + CUSTOMER_TABLE_NAME);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      if (resultSet == null) {
+        preparedStatement.close();
+        return Collections.emptyList();
+      }
 
       List<Customer> customers = new ArrayList<>();
       while (resultSet.next()) {
@@ -201,6 +212,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
           customers.add(customer);
         }
       }
+      preparedStatement.close();
       return customers;
     }
   }

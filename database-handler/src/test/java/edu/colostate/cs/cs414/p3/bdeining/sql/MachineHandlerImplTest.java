@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
 import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -38,8 +37,6 @@ public class MachineHandlerImplTest {
   private Statement statement;
 
   private PreparedStatement preparedStatement;
-
-  private CallableStatement callableStatement;
 
   @Before
   public void setUp() throws Exception {
@@ -112,7 +109,7 @@ public class MachineHandlerImplTest {
   @Test
   public void testGetMachines() throws Exception {
     ResultSet tableResultSet = mock(ResultSet.class);
-    when(statement.executeQuery(anyString())).thenReturn(tableResultSet);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
     when(tableResultSet.next()).thenReturn(true, false);
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("name")).thenReturn("aName");
@@ -144,7 +141,6 @@ public class MachineHandlerImplTest {
     databaseMetaData = mock(DatabaseMetaData.class);
     statement = mock(Statement.class);
     preparedStatement = mock(PreparedStatement.class);
-    callableStatement = mock(CallableStatement.class);
     ResultSet tableResultSet = mock(ResultSet.class);
     when(dataSource.getConnection()).thenReturn(connection);
     when(connection.getMetaData()).thenReturn(databaseMetaData);
@@ -152,7 +148,6 @@ public class MachineHandlerImplTest {
         .thenReturn(tableResultSet);
     when(connection.createStatement()).thenReturn(statement);
     when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-    when(connection.prepareCall(anyString())).thenReturn(callableStatement);
   }
 
   private Machine getMockMachine() {

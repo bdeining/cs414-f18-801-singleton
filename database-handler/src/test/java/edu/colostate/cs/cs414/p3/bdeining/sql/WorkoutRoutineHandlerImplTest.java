@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -39,8 +38,6 @@ public class WorkoutRoutineHandlerImplTest {
   private Statement statement;
 
   private PreparedStatement preparedStatement;
-
-  private CallableStatement callableStatement;
 
   @Before
   public void setUp() throws Exception {
@@ -106,7 +103,7 @@ public class WorkoutRoutineHandlerImplTest {
   @Test
   public void testGetWorkoutRoutine() throws Exception {
     ResultSet tableResultSet = mock(ResultSet.class);
-    when(statement.executeQuery(anyString())).thenReturn(tableResultSet);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
     when(tableResultSet.next()).thenReturn(true, true, false);
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("name")).thenReturn("aName");
@@ -137,7 +134,8 @@ public class WorkoutRoutineHandlerImplTest {
   public void testRemoveWorkoutRoutine() throws Exception {
     boolean result = workoutRoutineHandler.removeWorkoutRoutine("anId");
     assertThat(result, is(true));
-    verify(statement, times(4)).execute(anyString());
+    verify(statement, times(3)).execute(anyString());
+    verify(preparedStatement, times(1)).execute();
   }
 
   private void setUpMocks() throws Exception {
@@ -146,7 +144,6 @@ public class WorkoutRoutineHandlerImplTest {
     databaseMetaData = mock(DatabaseMetaData.class);
     statement = mock(Statement.class);
     preparedStatement = mock(PreparedStatement.class);
-    callableStatement = mock(CallableStatement.class);
     ResultSet tableResultSet = mock(ResultSet.class);
     when(dataSource.getConnection()).thenReturn(connection);
     when(connection.getMetaData()).thenReturn(databaseMetaData);
@@ -154,7 +151,6 @@ public class WorkoutRoutineHandlerImplTest {
         .thenReturn(tableResultSet);
     when(connection.createStatement()).thenReturn(statement);
     when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-    when(connection.prepareCall(anyString())).thenReturn(callableStatement);
   }
 
   private WorkoutRoutine getMockWorkoutRoutine() {

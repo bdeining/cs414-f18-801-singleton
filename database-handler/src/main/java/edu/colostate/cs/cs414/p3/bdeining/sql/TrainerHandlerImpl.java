@@ -14,8 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.sql.DataSource;
 import org.osgi.service.component.annotations.Component;
@@ -117,25 +117,29 @@ public class TrainerHandlerImpl implements TrainerHandler {
 
     } else {
 
-      try (Connection con = dataSource.getConnection();
-          Statement stmt = con.createStatement()) {
+      try (Connection con = dataSource.getConnection()) {
         LOGGER.trace("Adding trainer : {}", trainer);
-        stmt.execute(
-            String.format(
-                "INSERT INTO %s (first_name, last_name, address, phone, email, id, health_insurance_provider, work_hours, password) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');",
-                TRAINER_TABLE_NAME,
-                firstName,
-                lastName,
-                address,
-                phone,
-                email,
-                id,
-                healthInsuranceProvider,
-                workHours,
-                password));
+
+        PreparedStatement update =
+            con.prepareStatement(
+                "INSERT INTO "
+                    + TRAINER_TABLE_NAME
+                    + " (first_name, last_name, address, phone, email, id, health_insurance_provider, work_hours, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+        update.setString(1, firstName);
+        update.setString(2, lastName);
+        update.setString(3, address);
+        update.setString(4, phone);
+        update.setString(5, email);
+        update.setString(6, id);
+        update.setString(7, healthInsuranceProvider);
+        update.setInt(8, workHours);
+        update.setString(9, password);
+        update.execute();
+        update.close();
 
         for (String qualification : qualifications) {
-          addQualification(stmt, qualification, id);
+          addQualification(qualification, id);
         }
       }
     }
@@ -151,10 +155,17 @@ public class TrainerHandlerImpl implements TrainerHandler {
 
   @Override
   public List<Trainer> getTrainers() throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(String.format("SELECT * FROM %s;", TRAINER_TABLE_NAME));
+    try (Connection con = dataSource.getConnection()) {
+
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + TRAINER_TABLE_NAME);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      if (resultSet == null) {
+        preparedStatement.close();
+        return Collections.emptyList();
+      }
 
       List<Trainer> trainers = new ArrayList<>();
       while (resultSet.next()) {
@@ -163,6 +174,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
           trainers.add(trainer);
         }
       }
+      preparedStatement.close();
       return trainers;
     }
   }
@@ -200,48 +212,61 @@ public class TrainerHandlerImpl implements TrainerHandler {
   }
 
   private Trainer getTrainerById(String id) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(
-              String.format("SELECT * FROM %s where id='%s'", TRAINER_TABLE_NAME, id));
+    try (Connection con = dataSource.getConnection()) {
+
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + TRAINER_TABLE_NAME + " where id=?");
+
+      preparedStatement.setString(1, id);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {
+        preparedStatement.close();
         return null;
       }
 
       while (resultSet.next()) {
         Trainer trainer = getTrainer(resultSet);
         if (trainer != null) {
+          preparedStatement.close();
           return trainer;
         }
       }
+      preparedStatement.close();
       return null;
     }
   }
 
-  private void addQualification(Statement statement, String qualification, String trainerId)
-      throws SQLException {
-    LOGGER.trace("Adding qualification {} to trainer with id {}", qualification, trainerId);
-    statement.execute(
-        String.format(
-            "INSERT INTO %s (id, qualification) VALUES ('%s', '%s');",
-            QUALIFICATION_TABLE_NAME, trainerId, qualification));
+  private void addQualification(String qualification, String trainerId) throws SQLException {
+    try (Connection con = dataSource.getConnection()) {
+      PreparedStatement preparedStatement =
+          con.prepareStatement(
+              "INSERT INTO " + QUALIFICATION_TABLE_NAME + " (id, qualification) VALUES (?, ?);");
+      preparedStatement.setString(1, trainerId);
+      LOGGER.trace("Adding qualification {} to trainer with id {}", qualification, trainerId);
+      preparedStatement.setString(2, qualification);
+      preparedStatement.execute();
+    }
   }
 
   private List<String> getQualificationsForTrainer(String id) {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
+    try (Connection con = dataSource.getConnection()) {
 
-      ResultSet resultSet =
-          stmt.executeQuery(
-              String.format("SELECT * from %s WHERE ID = '%s';", QUALIFICATION_TABLE_NAME, id));
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * from " + QUALIFICATION_TABLE_NAME + " WHERE ID = ?;");
+
+      preparedStatement.setString(1, id);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
 
       List<String> qualifications = new ArrayList<>();
       while (resultSet.next()) {
         String qualificaiton = resultSet.getString("qualification");
         qualifications.add(qualificaiton);
       }
+
+      preparedStatement.close();
       return qualifications;
     } catch (SQLException e) {
       LOGGER.error("Could not remove trainer {}", id, e);

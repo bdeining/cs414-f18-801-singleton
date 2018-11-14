@@ -44,6 +44,10 @@ public class RestService {
 
   public static final String VALUE_KEY = "value";
 
+  private static final String MANAGER_USER = "manager";
+
+  private static final String MANAGER_PASSWORD = "manager";
+
   private static final Logger LOGGER = LoggerFactory.getLogger(RestService.class);
 
   private CustomerHandler customerHandler;
@@ -69,6 +73,29 @@ public class RestService {
     this.exerciseHandler = exerciseHandler;
     this.workoutRoutineHandler = workoutRoutineHandler;
     this.machineHandler = machineHandler;
+  }
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/login")
+  public Response login(
+      @QueryParam("email") String email, @QueryParam("password") String password) {
+
+    if (email.equals(MANAGER_USER) && password.equals(MANAGER_PASSWORD)) {
+      return Response.ok().build();
+    }
+
+    try {
+      for (Trainer trainer : trainerHandler.getTrainers()) {
+        if (email.equals(trainer.getEmail()) && password.equals(trainer.getPassword())) {
+          return Response.ok().build();
+        }
+      }
+    } catch (SQLException e) {
+      return Response.status(500).build();
+    }
+
+    return Response.status(500).build();
   }
 
   @GET

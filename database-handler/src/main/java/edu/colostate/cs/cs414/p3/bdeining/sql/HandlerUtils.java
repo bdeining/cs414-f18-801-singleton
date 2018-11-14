@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO : Prepared statements
 public class HandlerUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(CustomerHandlerImpl.class);
 

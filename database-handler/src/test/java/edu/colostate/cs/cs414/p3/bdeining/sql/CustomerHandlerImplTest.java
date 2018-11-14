@@ -114,7 +114,7 @@ public class CustomerHandlerImplTest {
   @Test
   public void testGetCustomers() throws Exception {
     ResultSet tableResultSet = mock(ResultSet.class);
-    when(statement.executeQuery(anyString())).thenReturn(tableResultSet);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
     when(tableResultSet.next()).thenReturn(true, true, false);
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("address")).thenReturn("address");

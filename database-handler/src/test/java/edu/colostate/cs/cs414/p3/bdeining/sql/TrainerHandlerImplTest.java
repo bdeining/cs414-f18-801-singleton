@@ -99,7 +99,8 @@ public class TrainerHandlerImplTest {
   @Test
   public void testAddTrainer() throws Exception {
     boolean result = trainerHandler.addTrainer(getMockTrainer());
-    verify(statement, times(4)).execute(anyString());
+    verify(statement, times(2)).execute(anyString());
+    verify(preparedStatement, times(2)).execute();
     assertThat(result, is(true));
   }
 
@@ -113,7 +114,7 @@ public class TrainerHandlerImplTest {
   @Test
   public void testGetTrainers() throws Exception {
     ResultSet tableResultSet = mock(ResultSet.class);
-    when(statement.executeQuery(anyString())).thenReturn(tableResultSet);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
     when(tableResultSet.next()).thenReturn(true, true, false);
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("address")).thenReturn("address");
@@ -159,7 +160,7 @@ public class TrainerHandlerImplTest {
   @Test
   public void testGetTrainersSQLExceptionQualification() throws Exception {
     ResultSet tableResultSet = mock(ResultSet.class);
-    when(statement.executeQuery(anyString())).thenReturn(tableResultSet);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
     when(tableResultSet.next()).thenReturn(true).thenThrow(SQLException.class).thenReturn(false);
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("address")).thenReturn("address");

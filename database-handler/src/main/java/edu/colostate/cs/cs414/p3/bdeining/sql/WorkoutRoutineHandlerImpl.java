@@ -14,8 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.sql.DataSource;
 import org.osgi.service.component.annotations.Component;
@@ -130,10 +130,16 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
 
   @Override
   public List<WorkoutRoutine> getWorkoutRoutines() throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(String.format("SELECT * FROM %s;", WORKOUT_ROUTINE_TABLE_NAME));
+    try (Connection con = dataSource.getConnection()) {
+
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + WORKOUT_ROUTINE_TABLE_NAME);
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      if (resultSet == null) {
+        preparedStatement.close();
+        return Collections.emptyList();
+      }
 
       List<WorkoutRoutine> workoutRoutineList = new ArrayList<>();
       while (resultSet.next()) {
@@ -142,27 +148,36 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
           workoutRoutineList.add(workoutRoutine);
         }
       }
+      preparedStatement.close();
       return workoutRoutineList;
     }
   }
 
   private WorkoutRoutine getWorkoutRoutine(ResultSet resultSet) {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
+    try (Connection con = dataSource.getConnection()) {
       String id = resultSet.getString("id");
       String name = resultSet.getString("name");
 
-      ResultSet exerciseResultSet =
-          stmt.executeQuery(
-              String.format(
-                  "SELECT * FROM %s WHERE workoutRoutineId = '%s';",
-                  EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id));
+      PreparedStatement preparedStatement =
+          con.prepareStatement(
+              "SELECT * FROM "
+                  + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
+                  + " WHERE workoutRoutineId = ?;");
+      preparedStatement.setString(1, id);
+
+      ResultSet exerciseResultSet = preparedStatement.executeQuery();
+
+      if (exerciseResultSet == null) {
+        preparedStatement.close();
+        return null;
+      }
 
       List<String> exerciseIds = new ArrayList<>();
       while (exerciseResultSet.next()) {
         exerciseIds.add(exerciseResultSet.getString("exerciseId"));
       }
 
+      preparedStatement.close();
       return new WorkoutRoutineImpl(id, name, exerciseIds);
     } catch (SQLException e) {
       LOGGER.debug("Could not get routine", e);
@@ -173,26 +188,29 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
   @Override
   public boolean removeWorkoutRoutine(String id) throws SQLException {
     HandlerUtils.removeById(dataSource, id, WORKOUT_ROUTINE_TABLE_NAME);
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
+    try (Connection con = dataSource.getConnection()) {
       LOGGER.trace("Removing from table {} : {}", EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id);
-      stmt.execute(
-          String.format(
-              "DELETE FROM %s WHERE workoutRoutineId = '%s';",
-              EXERCISE_WORKOUT_ROUTINE_TABLE_NAME, id));
-    }
 
-    return true;
+      PreparedStatement preparedStatement =
+          con.prepareStatement(
+              "DELETE FROM "
+                  + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
+                  + " WHERE workoutRoutineId = ?;");
+      preparedStatement.setString(1, id);
+      preparedStatement.execute();
+      return true;
+    }
   }
 
   private WorkoutRoutine getWorkoutRoutineById(String id) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
-      ResultSet resultSet =
-          stmt.executeQuery(
-              String.format("SELECT * FROM %s where id='%s'", WORKOUT_ROUTINE_TABLE_NAME, id));
+    try (Connection con = dataSource.getConnection()) {
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + WORKOUT_ROUTINE_TABLE_NAME + " where id=?");
+      preparedStatement.setString(1, id);
+      ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {
+        preparedStatement.close();
         return null;
       }
 
@@ -202,6 +220,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
           return workoutRoutine;
         }
       }
+      preparedStatement.close();
       return null;
     }
   }

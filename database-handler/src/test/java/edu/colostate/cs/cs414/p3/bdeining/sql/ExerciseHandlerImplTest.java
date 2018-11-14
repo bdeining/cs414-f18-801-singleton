@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
 import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -37,8 +36,6 @@ public class ExerciseHandlerImplTest {
   private Statement statement;
 
   private PreparedStatement preparedStatement;
-
-  private CallableStatement callableStatement;
 
   @Before
   public void setUp() throws Exception {
