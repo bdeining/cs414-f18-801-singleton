@@ -14,6 +14,7 @@ class Home extends React.Component {
         routineNames: [],
         show: false,
         id: '',
+        add: false,
         selected: null
     };
   }
@@ -28,10 +29,18 @@ class Home extends React.Component {
         healthInsuranceProvider: '',
         activity: '',
         id: '',
+        add: false,
         workoutRoutineIds: [],
         routineNames: [],
         show: false
     });
+ }
+
+ showAddModal = () => {
+    this.setState({
+        "add": true
+    });
+    this.showModal();
  }
 
  showModal = () => {
@@ -135,21 +144,22 @@ class Home extends React.Component {
   }
 
   render() {
+
       return (
         <div>
-        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer}>
-          <p>Customer</p>
-          <p>First Name <input name='firstName' value={this.state.firstName} onChange={this.updateInputValue}/></p>
-          <p>Last Name <input name='lastName' value={this.state.lastName} onChange={this.updateInputValue}/></p>
-          <p>Address <input name='address' value={this.state.address} onChange={this.updateInputValue}/></p>
-          <p>Phone <input name='phone' value={this.state.phone} onChange={this.updateInputValue}/></p>
-          <p>Email <input name='email' value={this.state.email} onChange={this.updateInputValue}/></p>
-          <p>Health Insurance Provider <input name='healthInsuranceProvider' value={this.state.healthInsuranceProvider} onChange={this.updateInputValue}/></p>
-          <p>Activity <input name='activity' value={this.state.activity} onChange={this.updateInputValue}/></p>
-          <Select isMulti closeMenuOnSelect={false} value={this.state.selectedOption} onChange={this.handleChange} options={this.state.routineNames}/>
-          <p>ID <input name='id' value={this.state.id} readOnly /></p>
+        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteCustomer} add={this.state.add}>
+          <h1>Customer</h1>
+          <div><label>First Name</label><input name='firstName' value={this.state.firstName} onChange={this.updateInputValue}/></div>
+          <div><label>Last Name</label><input name='lastName' value={this.state.lastName} onChange={this.updateInputValue}/></div>
+          <div><label>Address</label><input name='address' value={this.state.address} onChange={this.updateInputValue}/></div>
+          <div><label>Phone</label><input name='phone' value={this.state.phone} onChange={this.updateInputValue}/></div>
+          <div><label>Email</label><input name='email' value={this.state.email} onChange={this.updateInputValue}/></div>
+          <div><label>Health Insurance Provider</label><input name='healthInsuranceProvider' value={this.state.healthInsuranceProvider} onChange={this.updateInputValue}/></div>
+          <div><label>Activity</label><input name='activity' value={this.state.activity} onChange={this.updateInputValue}/></div>
+          <div><label>Workout Routines</label><div class="react-select-container" classNamePrefix="react-select"><Select isMulti closeMenuOnSelect={false} value={this.state.selectedOption} onChange={this.handleChange} options={this.state.routineNames} /></div></div>
+          <div><label>ID</label><input name='id' value={this.state.id} readOnly /></div>
         </Modal>
-        <button type='button' onClick={this.showModal}>Add</button>
+        <button type='button' onClick={this.showAddModal}>Add</button>
           <ReactTable
             data={this.state.data}
             columns={[
@@ -227,9 +237,9 @@ class Home extends React.Component {
 }
 
 
-const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
+const Modal = ({ handleClose, handleSave, handleDelete, show, add, children }) => {
   const showHideClassName = show ? 'modal display-block' : 'modal display-none';
-
+  const showDeleteButton = add;
   return (
     <div className={showHideClassName}>
       <section className='modal-main'>
@@ -237,7 +247,7 @@ const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
         <button onClick={handleClose}>
           Close
         </button>
-        <button onClick={handleDelete}>
+        <button onClick={handleDelete} disabled={showDeleteButton}>
           Delete
         </button>
         <button onClick={handleSave}>

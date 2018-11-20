@@ -2,6 +2,7 @@ package edu.colostate.cs.cs414.p3.bdeining.sql;
 
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.createTable;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getExistingTables;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getResultSetById;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TABLE_NAME;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF;
@@ -157,33 +158,6 @@ public class CustomerHandlerImpl implements CustomerHandler {
     return true;
   }
 
-  private Customer getCustomerById(String id) throws SQLException {
-    try (Connection con = dataSource.getConnection()) {
-
-      PreparedStatement preparedStatement =
-          con.prepareStatement("SELECT * FROM " + CUSTOMER_TABLE_NAME + " where id=?");
-
-      preparedStatement.setString(1, id);
-
-      ResultSet resultSet = preparedStatement.executeQuery();
-
-      if (resultSet == null) {
-        preparedStatement.close();
-        return null;
-      }
-
-      while (resultSet.next()) {
-        Customer customer = getCustomer(resultSet);
-        if (customer != null) {
-          preparedStatement.close();
-          return customer;
-        }
-      }
-      preparedStatement.close();
-      return null;
-    }
-  }
-
   @Override
   public boolean removeCustomer(String id) throws SQLException {
     HandlerUtils.removeById(dataSource, id, CUSTOMER_TABLE_NAME);
@@ -259,5 +233,27 @@ public class CustomerHandlerImpl implements CustomerHandler {
       LOGGER.error("No data", e);
       return null;
     }
+  }
+
+  private Customer getCustomerById(String id) throws SQLException {
+    try (Connection con = dataSource.getConnection()) {
+      PreparedStatement preparedStatement =
+          con.prepareStatement("SELECT * FROM " + CUSTOMER_TABLE_NAME + " where id=?");
+
+      ResultSet resultSet = getResultSetById(preparedStatement, id);
+
+      if (resultSet == null) {
+        return null;
+      }
+
+      while (resultSet.next()) {
+        Customer customer = getCustomer(resultSet);
+        if (customer != null) {
+          return customer;
+        }
+      }
+      preparedStatement.close();
+    }
+    return null;
   }
 }

@@ -18,6 +18,21 @@
   transform: translate(-50%,-50%);
 }
 
+.modal-main > div > label {
+    clear: left;
+    width: 12%;
+    margin: 10px;
+}
+
+.modal-main > div > input {
+    width: 20%;
+}
+
+.react-select-container {
+    display:inline-block;
+    width:20%;
+}
+
 .display-block {
   display: block;
 }

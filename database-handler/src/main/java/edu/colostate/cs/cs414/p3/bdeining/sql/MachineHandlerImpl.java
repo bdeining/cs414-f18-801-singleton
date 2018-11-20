@@ -2,6 +2,7 @@ package edu.colostate.cs.cs414.p3.bdeining.sql;
 
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.createTable;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getExistingTables;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getResultSetById;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABLE_NAME;
 
@@ -128,6 +129,12 @@ public class MachineHandlerImpl implements MachineHandler {
     }
   }
 
+  @Override
+  public boolean removeMachine(String id) throws SQLException {
+    HandlerUtils.removeById(dataSource, id, MACHINE_TABLE_NAME);
+    return true;
+  }
+
   private Machine getMachine(ResultSet resultSet) {
     try {
       String id = resultSet.getString("id");
@@ -144,36 +151,24 @@ public class MachineHandlerImpl implements MachineHandler {
     }
   }
 
-  @Override
-  public boolean removeMachine(String id) throws SQLException {
-    HandlerUtils.removeById(dataSource, id, MACHINE_TABLE_NAME);
-    return true;
-  }
-
   private Machine getMachineById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
-
       PreparedStatement preparedStatement =
           con.prepareStatement("SELECT * FROM " + MACHINE_TABLE_NAME + " where id=?");
 
-      preparedStatement.setString(1, id);
-
-      ResultSet resultSet = preparedStatement.executeQuery();
-
+      ResultSet resultSet = getResultSetById(preparedStatement, id);
       if (resultSet == null) {
-        preparedStatement.close();
         return null;
       }
 
       while (resultSet.next()) {
         Machine machine = getMachine(resultSet);
         if (machine != null) {
-          preparedStatement.close();
           return machine;
         }
       }
       preparedStatement.close();
-      return null;
     }
+    return null;
   }
 }

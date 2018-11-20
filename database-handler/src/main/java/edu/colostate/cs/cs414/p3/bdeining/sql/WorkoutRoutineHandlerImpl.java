@@ -2,6 +2,7 @@ package edu.colostate.cs.cs414.p3.bdeining.sql;
 
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.createTable;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getExistingTables;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getResultSetById;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_WORKOUT_ROUTINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_WORKOUT_ROUTINE_TABLE_NAME;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.WORKOUT_ROUTINE_TABLE_DEF;
@@ -206,11 +207,9 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
     try (Connection con = dataSource.getConnection()) {
       PreparedStatement preparedStatement =
           con.prepareStatement("SELECT * FROM " + WORKOUT_ROUTINE_TABLE_NAME + " where id=?");
-      preparedStatement.setString(1, id);
-      ResultSet resultSet = preparedStatement.executeQuery();
 
+      ResultSet resultSet = getResultSetById(preparedStatement, id);
       if (resultSet == null) {
-        preparedStatement.close();
         return null;
       }
 
@@ -221,7 +220,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
         }
       }
       preparedStatement.close();
-      return null;
     }
+    return null;
   }
 }

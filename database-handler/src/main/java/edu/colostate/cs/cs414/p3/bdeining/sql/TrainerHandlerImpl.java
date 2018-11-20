@@ -2,6 +2,7 @@ package edu.colostate.cs.cs414.p3.bdeining.sql;
 
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.createTable;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getExistingTables;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getResultSetById;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.QUALIFICATION_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.QUALIFICATION_TABLE_NAME;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TRAINER_TABLE_DEF;
@@ -213,29 +214,23 @@ public class TrainerHandlerImpl implements TrainerHandler {
 
   private Trainer getTrainerById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
-
       PreparedStatement preparedStatement =
           con.prepareStatement("SELECT * FROM " + TRAINER_TABLE_NAME + " where id=?");
 
-      preparedStatement.setString(1, id);
-
-      ResultSet resultSet = preparedStatement.executeQuery();
-
+      ResultSet resultSet = getResultSetById(preparedStatement, id);
       if (resultSet == null) {
-        preparedStatement.close();
         return null;
       }
 
       while (resultSet.next()) {
         Trainer trainer = getTrainer(resultSet);
         if (trainer != null) {
-          preparedStatement.close();
           return trainer;
         }
       }
       preparedStatement.close();
-      return null;
     }
+    return null;
   }
 
   private void addQualification(String qualification, String trainerId) throws SQLException {

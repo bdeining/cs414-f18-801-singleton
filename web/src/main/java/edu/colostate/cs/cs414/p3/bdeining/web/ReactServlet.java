@@ -24,7 +24,7 @@ public class ReactServlet extends HttpServlet {
   private static final long serialVersionUID = 250817058831319271L;
 
   private final List<String> routes =
-      Arrays.asList("/", "/trainer", "/workouts", "/machine", "/exercise");
+      Arrays.asList("/", "/trainer", "/workouts", "/machine", "/exercise", "/login");
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) {

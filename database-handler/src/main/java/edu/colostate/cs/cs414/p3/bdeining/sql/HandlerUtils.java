@@ -2,6 +2,7 @@ package edu.colostate.cs.cs414.p3.bdeining.sql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -58,5 +59,13 @@ public class HandlerUtils {
       LOGGER.error("Unable to fetch exiting tables.", e);
     }
     return existingTables;
+  }
+
+  public static ResultSet getResultSetById(PreparedStatement preparedStatement, String id)
+      throws SQLException {
+    preparedStatement.setString(1, id);
+    ResultSet resultSet = preparedStatement.executeQuery();
+
+    return resultSet;
   }
 }

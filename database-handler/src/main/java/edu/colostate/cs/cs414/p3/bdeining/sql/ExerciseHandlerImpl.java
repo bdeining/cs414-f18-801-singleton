@@ -2,6 +2,7 @@ package edu.colostate.cs.cs414.p3.bdeining.sql;
 
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.createTable;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getExistingTables;
+import static edu.colostate.cs.cs414.p3.bdeining.sql.HandlerUtils.getResultSetById;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_TABLE_NAME;
 
@@ -142,24 +143,21 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
       PreparedStatement preparedStatement =
           con.prepareStatement("SELECT * FROM " + EXERCISE_TABLE_NAME + " where id=?");
 
-      preparedStatement.setString(1, id);
-      ResultSet resultSet = preparedStatement.executeQuery();
+      ResultSet resultSet = getResultSetById(preparedStatement, id);
 
       if (resultSet == null) {
-        preparedStatement.close();
         return null;
       }
 
       while (resultSet.next()) {
         Exercise exercise = getExercise(resultSet);
         if (exercise != null) {
-          preparedStatement.close();
           return exercise;
         }
       }
       preparedStatement.close();
-      return null;
     }
+    return null;
   }
 
   private Exercise getExercise(ResultSet resultSet) {
