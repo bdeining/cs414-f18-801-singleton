@@ -140,18 +140,21 @@ public class CustomerHandlerImpl implements CustomerHandler {
         insert.close();
       }
 
-      for (String routineId : routines) {
-        try (Connection con = dataSource.getConnection()) {
-          LOGGER.trace("Adding customer : {}", customer);
-          PreparedStatement insert =
-              con.prepareStatement(
-                  "INSERT INTO "
-                      + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME
-                      + " (workoutRoutineId, customerId) VALUES (?,?)");
-          insert.setString(1, routineId);
-          insert.setString(2, id);
-          insert.execute();
-          insert.close();
+      if (routines != null && !routines.isEmpty()) {
+
+        for (String routineId : routines) {
+          try (Connection con = dataSource.getConnection()) {
+            LOGGER.trace("Adding customer : {}", customer);
+            PreparedStatement insert =
+                con.prepareStatement(
+                    "INSERT INTO "
+                        + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME
+                        + " (workoutRoutineId, customerId) VALUES (?,?)");
+            insert.setString(1, routineId);
+            insert.setString(2, id);
+            insert.execute();
+            insert.close();
+          }
         }
       }
     }

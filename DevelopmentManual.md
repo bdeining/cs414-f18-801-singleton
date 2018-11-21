@@ -10,6 +10,13 @@ development.  No additional preliminary actions are required to build the applic
 
 `mvn clean install`
 
+JavaScript Formatting
+---------------------
+The .js files in this project are formatted using prettier.  This can be installed with the following command
+`npm install -g prettier`
+Run the formatter before committing files.
+`prettier --write "**/*.js"`
+
 Usage Instructions
 ------------------
 Once built, once can navigate to the distribution directory and run the Karaf executable in either windows or mac.
