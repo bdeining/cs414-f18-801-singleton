@@ -1,208 +1,217 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import './styles.css';
+import "./styles.css";
 
 class Machine extends React.Component {
-
- constructor() {
+  constructor() {
     super();
-    this.state ={
-        data: [],
-        show: false,
-        id: '',
-        selected: null,
-        selectedFile: ''
+    this.state = {
+      data: [],
+      show: false,
+      id: "",
+      selected: null,
+      selectedFile: ""
     };
   }
 
- clearMachineState = () => {
+  clearMachineState = () => {
     this.setState({
-        quantity: '',
-        picture: '',
-        name: '',
-        id: '',
-        show: false
+      quantity: "",
+      picture: "",
+      name: "",
+      id: "",
+      show: false
     });
- }
+  };
 
- showModal = () => {
+  showModal = () => {
     this.setState({
-        show: true
+      show: true
     });
- }
+  };
 
- hideModal = () => {
-    this.clearMachineState()
- }
+  hideModal = () => {
+    this.clearMachineState();
+  };
 
- deleteMachine = () => {
+  deleteMachine = () => {
     axios({
-        method: 'delete',
-        url: '/services/rest/machine?id=' + this.state.id,
+      method: "delete",
+      url: "/services/rest/machine?id=" + this.state.id
     }).then(res => {
-        this.getMachineData()
-        this.clearMachineState()
+      this.getMachineData();
+      this.clearMachineState();
     });
- }
+  };
 
- saveModal = () => {
-          var that = this;
+  saveModal = () => {
+    var that = this;
     if (this.state.id) {
+      var reader = new FileReader();
 
-          var reader = new FileReader();
-
-           reader.readAsDataURL(this.state.selectedFile);
-           reader.onload = function () {
-                    axios({
-                         method: 'put',
-                         url: '/services/rest/machine',
-                         data: {
-                               "name" : that.state.name,
-                               "picture" : reader.result,
-                               "quantity" : that.state.quantity,
-                               "id" : that.state.id
-                         }
-                     }).then(res => {
-                         that.getMachineData();
-                             that.clearMachineState();
-                     });
-           };
-
-
-
-    } else {
-          var reader = new FileReader();
-           reader.readAsDataURL(this.state.selectedFile);
-           reader.onload = function () {
-                    axios({
-                         method: 'put',
-                         url: '/services/rest/machine',
-                         data: {
-                               "name" : that.state.name,
-                               "picture" : reader.result,
-                               "quantity" : that.state.quantity
-                         }
-                     }).then(res => {
-                         that.getMachineData();
-                             that.clearMachineState();
-                     });
-           };
-    }
- }
-
- getMachineData() {
-    axios.get('/services/rest/machine')
-        .then(res => {
-                this.setState({
-                  data: [ ...this.state.data ]
-                })
-
-                this.setState({
-                  data: res.data,
-                  id: '',
-                  show: this.state.show
-                });
+      reader.readAsDataURL(this.state.selectedFile);
+      reader.onload = function() {
+        axios({
+          method: "put",
+          url: "/services/rest/machine",
+          data: {
+            name: that.state.name,
+            picture: reader.result,
+            quantity: that.state.quantity,
+            id: that.state.id
+          }
+        }).then(res => {
+          that.getMachineData();
+          that.clearMachineState();
         });
+      };
+    } else {
+      var reader = new FileReader();
+      reader.readAsDataURL(this.state.selectedFile);
+      reader.onload = function() {
+        axios({
+          method: "put",
+          url: "/services/rest/machine",
+          data: {
+            name: that.state.name,
+            picture: reader.result,
+            quantity: that.state.quantity
+          }
+        }).then(res => {
+          that.getMachineData();
+          that.clearMachineState();
+        });
+      };
+    }
+  };
+
+  getMachineData() {
+    axios.get("/services/rest/machine").then(res => {
+      this.setState({
+        data: [...this.state.data]
+      });
+
+      this.setState({
+        data: res.data,
+        id: "",
+        show: this.state.show
+      });
+    });
   }
 
   componentDidMount() {
-    this.getMachineData()
+    this.getMachineData();
   }
 
-  updateInputValue = (evt) => {
+  updateInputValue = evt => {
     this.setState({
       [evt.target.name]: evt.target.value
     });
-  }
+  };
 
-  fileChangedHandler = (event) => {
-    this.setState({selectedFile: event.target.files[0]})
-  }
+  fileChangedHandler = event => {
+    this.setState({ selectedFile: event.target.files[0] });
+  };
 
   render() {
-      return (
-        <div>
-        <Modal show={this.state.show} handleClose={this.hideModal} handleSave={this.saveModal} handleDelete={this.deleteMachine}>
+    return (
+      <div>
+        <Modal
+          show={this.state.show}
+          handleClose={this.hideModal}
+          handleSave={this.saveModal}
+          handleDelete={this.deleteMachine}
+        >
           <p>Machine</p>
-          <p>Name <input name='name' value={this.state.name} onChange={this.updateInputValue}/></p>
-          <p>Quantity <input name='quantity' value={this.state.quantity} onChange={this.updateInputValue}/></p>
+          <p>
+            Name{" "}
+            <input
+              name="name"
+              value={this.state.name}
+              onChange={this.updateInputValue}
+            />
+          </p>
+          <p>
+            Quantity{" "}
+            <input
+              name="quantity"
+              value={this.state.quantity}
+              onChange={this.updateInputValue}
+            />
+          </p>
           <input type="file" onChange={this.fileChangedHandler} />
-          <p>ID <input name='id' value={this.state.id} readOnly /></p>
+          <p>
+            ID <input name="id" value={this.state.id} readOnly />
+          </p>
         </Modal>
-        <button type='button' onClick={this.showModal}>Add</button>
-          <ReactTable
-            data={this.state.data}
-            columns={[
-                  {
-                    Header: "Name",
-                    accessor: "name"
-                  },
-                  {
-                    Header: "Picture",
-                    accessor: "picture",
-                    Cell: row => (
-                                <img id='base64image' src={row.value} />
-                            )
-                  },
-                  {
-                    Header: "Quantity",
-                    accessor: "quantity"
-                  },
-                  {
-                    Header: "ID",
-                    accessor: "id"
-                  }
-            ]}
-            defaultPageSize={10}
-            className="-striped -highlight"
-            getTrProps={(state, rowInfo) => {
-                          if (rowInfo && rowInfo.row) {
-                            return {
-                              onClick: (e) => {
-                                this.setState({
-                                  name: rowInfo.row.name,
-                                  picture: rowInfo.row.picture,
-                                  quantity: rowInfo.row.quantity,
-                                  id: rowInfo.row.id,
-                                  selected: rowInfo.index
-                                })
-                                this.showModal()
-                              },
-                              style: {
-                                background: rowInfo.index === this.state.selected ? '#00afec' : 'white',
-                                color: rowInfo.index === this.state.selected ? 'white' : 'black'
-                              }
-                            }
-                          }else{
-                            return {}
-                          }
-                        }
-                        }
-          />
-        </div>
-      );
+        <button type="button" onClick={this.showModal}>
+          Add
+        </button>
+        <ReactTable
+          data={this.state.data}
+          columns={[
+            {
+              Header: "Name",
+              accessor: "name"
+            },
+            {
+              Header: "Picture",
+              accessor: "picture",
+              Cell: row => <img id="base64image" src={row.value} />
+            },
+            {
+              Header: "Quantity",
+              accessor: "quantity"
+            },
+            {
+              Header: "ID",
+              accessor: "id"
+            }
+          ]}
+          defaultPageSize={10}
+          className="-striped -highlight"
+          getTrProps={(state, rowInfo) => {
+            if (rowInfo && rowInfo.row) {
+              return {
+                onClick: e => {
+                  this.setState({
+                    name: rowInfo.row.name,
+                    picture: rowInfo.row.picture,
+                    quantity: rowInfo.row.quantity,
+                    id: rowInfo.row.id,
+                    selected: rowInfo.index
+                  });
+                  this.showModal();
+                },
+                style: {
+                  background:
+                    rowInfo.index === this.state.selected ? "#00afec" : "white",
+                  color:
+                    rowInfo.index === this.state.selected ? "white" : "black"
+                }
+              };
+            } else {
+              return {};
+            }
+          }}
+        />
+      </div>
+    );
   }
 }
 
-
 const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
-  const showHideClassName = show ? 'modal display-block' : 'modal display-none';
+  const showHideClassName = show ? "modal display-block" : "modal display-none";
 
   return (
     <div className={showHideClassName}>
-      <section className='modal-main'>
+      <section className="modal-main">
         {children}
-        <button onClick={handleClose}>
-          Close
-        </button>
-        <button onClick={handleDelete}>
-          Delete
-        </button>
-        <button onClick={handleSave}>
-          Save
-        </button>
+        <button onClick={handleClose}>Close</button>
+        <button onClick={handleDelete}>Delete</button>
+        <button onClick={handleSave}>Save</button>
       </section>
     </div>
   );
