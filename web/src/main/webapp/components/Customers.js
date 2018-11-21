@@ -280,7 +280,8 @@ class Home extends React.Component {
             },
             {
               Header: "Workout Routines",
-              accessor: "workoutRoutineIds"
+              accessor: "workoutRoutineIds",
+              Cell: row => <span>{row.value.join(", ")}</span>
             },
             {
               Header: "ID",
