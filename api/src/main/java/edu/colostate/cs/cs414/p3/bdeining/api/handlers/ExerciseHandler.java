@@ -31,6 +31,4 @@ public interface ExerciseHandler {
    * @throws SQLException when a database error occurs
    */
   List<Exercise> getExercises() throws SQLException;
-
-
 }

@@ -32,9 +32,6 @@ public interface WorkoutRoutine {
    */
   void setExcerciseIds(List<String> exerciseIds);
 
-  /**
-   * Gets a list of UUIDs for exercises that are performed in this workout routine
-   *
-   */
+  /** Gets a list of UUIDs for exercises that are performed in this workout routine */
   List<String> getExerciseIds();
 }

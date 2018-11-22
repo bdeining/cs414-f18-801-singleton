@@ -31,5 +31,4 @@ public interface MachineHandler {
    * @throws SQLException when a database error occurs
    */
   List<Machine> getMachines() throws SQLException;
-
 }
