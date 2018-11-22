@@ -63,6 +63,9 @@ public class CustomerHandlerImpl implements CustomerHandler {
     init();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean addCustomer(Customer customer) throws SQLException {
     String address = customer.getAddress();
@@ -161,6 +164,9 @@ public class CustomerHandlerImpl implements CustomerHandler {
     return true;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean removeCustomer(String id) throws SQLException {
     HandlerUtils.removeById(dataSource, id, CUSTOMER_TABLE_NAME);
@@ -168,6 +174,9 @@ public class CustomerHandlerImpl implements CustomerHandler {
     return true;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<Customer> getCustomers() throws SQLException {
     try (Connection con = dataSource.getConnection()) {
