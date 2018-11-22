@@ -34,17 +34,29 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
 
   private DataSource dataSource;
 
+  /**
+   * Sets the data source for the class; this is a reference to the data source that is registered
+   * as a service in OSGi
+   *
+   * @param dataSource
+   */
   @Reference
   public void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
     init();
   }
 
+  /**
+   * Called when the class is instantiated.
+   */
   public void init() {
     LOGGER.trace("Initializing {}", CustomerHandlerImpl.class.getName());
     createTablesIfNonExistent();
   }
 
+  /**
+   * Creates the tables that this handler uses if they have not been added in data store.
+   */
   private void createTablesIfNonExistent() {
     List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
@@ -54,6 +66,9 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean addExercise(Exercise exercise) throws SQLException {
     String id = exercise.getId();
@@ -105,6 +120,9 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
     return true;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<Exercise> getExercises() throws SQLException {
     try (Connection con = dataSource.getConnection()) {
@@ -121,7 +139,7 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
 
       List<Exercise> exerciseList = new ArrayList<>();
       while (resultSet.next()) {
-        Exercise exercise = getExercise(resultSet);
+        Exercise exercise = convertResultSetToExercise(resultSet);
         if (exercise != null) {
           exerciseList.add(exercise);
         }
@@ -132,6 +150,9 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean removeExercise(String id) throws SQLException {
     HandlerUtils.removeById(dataSource, id, EXERCISE_TABLE_NAME);
@@ -150,7 +171,7 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
       }
 
       while (resultSet.next()) {
-        Exercise exercise = getExercise(resultSet);
+        Exercise exercise = convertResultSetToExercise(resultSet);
         if (exercise != null) {
           return exercise;
         }
@@ -160,7 +181,13 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
     return null;
   }
 
-  private Exercise getExercise(ResultSet resultSet) {
+  /**
+   * Converts a {@link ResultSet} into an {@link Exercise}
+   *
+   * @param resultSet 
+   * @return an {@link Exercise} if successful, null otherwise
+   */
+  private Exercise convertResultSetToExercise(ResultSet resultSet) {
     try {
       String id = resultSet.getString("id");
       String name = resultSet.getString("name");

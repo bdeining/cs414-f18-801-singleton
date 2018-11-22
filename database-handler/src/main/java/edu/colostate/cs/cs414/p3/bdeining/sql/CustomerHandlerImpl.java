@@ -38,11 +38,29 @@ public class CustomerHandlerImpl implements CustomerHandler {
 
   private DataSource dataSource;
 
+  /**
+   * Sets the data source for the class; this is a reference to the data source that is registered
+   * as a service in OSGi
+   *
+   * @param dataSource
+   */
+  @Reference
+  public void setDataSource(DataSource dataSource) {
+    this.dataSource = dataSource;
+    init();
+  }
+
+  /**
+   * Called when the class is instantiated.
+   */
   public void init() {
     LOGGER.trace("Initializing {}", CustomerHandlerImpl.class.getName());
     createTablesIfNonExistent();
   }
 
+  /**
+   * Creates the tables that this handler uses if they have not been added in data store.
+   */
   private void createTablesIfNonExistent() {
     List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
@@ -55,12 +73,6 @@ public class CustomerHandlerImpl implements CustomerHandler {
       createTable(
           dataSource, CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME, CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF);
     }
-  }
-
-  @Reference
-  public void setDataSource(DataSource dataSource) {
-    this.dataSource = dataSource;
-    init();
   }
 
   /**
@@ -193,7 +205,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
 
       List<Customer> customers = new ArrayList<>();
       while (resultSet.next()) {
-        Customer customer = getCustomer(resultSet);
+        Customer customer = convertResultSetToCustomer(resultSet);
         if (customer != null) {
           customers.add(customer);
         }
@@ -203,7 +215,13 @@ public class CustomerHandlerImpl implements CustomerHandler {
     }
   }
 
-  private Customer getCustomer(ResultSet resultSet) {
+  /**
+   * Converts a result set into a {@link Customer} object
+   *
+   * @param resultSet the result set from the data source
+   * @return customer object read from the data source
+   */
+  private Customer convertResultSetToCustomer(ResultSet resultSet) {
     try {
       String firstName = resultSet.getString("first_name");
       String lastName = resultSet.getString("last_name");
@@ -247,6 +265,13 @@ public class CustomerHandlerImpl implements CustomerHandler {
     }
   }
 
+  /**
+   * Searches the {@link DataSource} for a customer by the given ID.
+   *
+   * @param id uuid for a customer
+   * @return the customer if found, null otherwise
+   * @throws SQLException when there is a database error
+   */
   private Customer getCustomerById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
       PreparedStatement preparedStatement =
@@ -259,7 +284,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
       }
 
       while (resultSet.next()) {
-        Customer customer = getCustomer(resultSet);
+        Customer customer = convertResultSetToCustomer(resultSet);
         if (customer != null) {
           return customer;
         }
