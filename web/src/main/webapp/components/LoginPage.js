@@ -37,7 +37,6 @@ class LoginPage extends React.Component {
 
   render() {
     const isLoggedIn = localStorage.getItem("user");
-    console.log(isLoggedIn);
     return (
       <div>
         {!isLoggedIn ? (

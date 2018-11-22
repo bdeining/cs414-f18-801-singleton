@@ -15,18 +15,33 @@ class Exercise extends React.Component {
       id: "",
       selected: null
     };
+    axios({
+      method: "get",
+      url: "/services/rest/machinenames"
+    }).then(res => {
+      this.setState({
+        machineNames: res.data
+      });
+    });
   }
 
   clearExerciseState = () => {
     this.setState({
       commonName: "",
       machineId: "",
-      machineNames: [],
       sets: "",
+      add: false,
       durationPerSet: "",
       id: "",
       show: false
     });
+  };
+
+  showAddModal = () => {
+    this.setState({
+      add: true
+    });
+    this.showModal();
   };
 
   showModal = () => {
@@ -34,7 +49,6 @@ class Exercise extends React.Component {
       method: "get",
       url: "/services/rest/machinenames"
     }).then(res => {
-      console.log(res);
       this.setState({
         show: true,
         machineNames: res.data
@@ -64,7 +78,7 @@ class Exercise extends React.Component {
         data: {
           commonName: this.state.commonName,
           id: this.state.id,
-          machineId: this.state.machineId,
+          machineId: this.state.machineId ? this.state.machineId.value : null,
           sets: this.state.sets,
           durationPerSet: this.state.durationPerSet
         }
@@ -77,7 +91,7 @@ class Exercise extends React.Component {
         url: "/services/rest/exercise",
         data: {
           commonName: this.state.commonName,
-          machineId: this.state.machineId,
+          machineId: this.state.machineId ? this.state.machineId.value : null,
           sets: this.state.sets,
           durationPerSet: this.state.durationPerSet
         }
@@ -98,7 +112,6 @@ class Exercise extends React.Component {
       this.setState({
         data: res.data,
         id: "",
-        machineNames: [],
         show: this.state.show
       });
     });
@@ -115,7 +128,7 @@ class Exercise extends React.Component {
   };
 
   handleChange = selectedOption => {
-    this.setState({ machineId: selectedOption.value });
+    this.setState({ machineId: selectedOption });
   };
 
   render() {
@@ -126,42 +139,49 @@ class Exercise extends React.Component {
           handleClose={this.hideModal}
           handleSave={this.saveModal}
           handleDelete={this.deleteExercise}
+          add={this.state.add}
         >
-          <p>Machine</p>
-          <p>
-            Common Name{" "}
+          <h1>Machine</h1>
+          <div>
+            <label>Common Name</label>
             <input
               name="commonName"
               value={this.state.commonName}
               onChange={this.updateInputValue}
             />
-          </p>
+          </div>
+          <div>
+          <label>Machine Name</label>
+          <div className="react-select-container">
           <Select
-            value={this.state.selectedOption}
+            value={this.state.machineId}
             onChange={this.handleChange}
             options={this.state.machineNames}
           />
-          <p>
-            Sets{" "}
+          </div>
+          </div>
+          <div>
+            <label>Sets</label>
             <input
               name="sets"
               value={this.state.sets}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            Duration Per Set{" "}
+          </div>
+          <div>
+            <label>Duration Per Set (minutes)</label>
             <input
               name="durationPerSet"
               value={this.state.durationPerSet}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            ID <input name="id" value={this.state.id} readOnly />
-          </p>
+          </div>
+          <div>
+            <label>ID</label>
+            <input name="id" value={this.state.id} readOnly />
+          </div>
         </Modal>
-        <button type="button" onClick={this.showModal}>
+        <button type="button" onClick={this.showAddModal}>
           Add
         </button>
         <ReactTable
@@ -192,13 +212,20 @@ class Exercise extends React.Component {
           className="-striped -highlight"
           getTrProps={(state, rowInfo) => {
             if (rowInfo && rowInfo.row) {
+              var selectedOption;
+              for (var i = 0; i < this.state.machineNames.length; i++) {
+                if (this.state.machineNames[i].value === rowInfo.row.machineId) {
+                  selectedOption = this.state.machineNames[i];
+                }
+              }
+
               return {
                 onClick: e => {
                   this.setState({
                     commonName: rowInfo.row.commonName,
                     sets: rowInfo.row.sets,
                     durationPerSet: rowInfo.row.durationPerSet,
-                    machineId: rowInfo.row.machineId,
+                    machineId: selectedOption,
                     id: rowInfo.row.id,
                     selected: rowInfo.index
                   });
@@ -221,15 +248,15 @@ class Exercise extends React.Component {
   }
 }
 
-const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
+const Modal = ({ handleClose, handleSave, handleDelete, show, add, children }) => {
   const showHideClassName = show ? "modal display-block" : "modal display-none";
-
+  const showDeleteButton = add;
   return (
     <div className={showHideClassName}>
       <section className="modal-main">
         {children}
         <button onClick={handleClose}>Close</button>
-        <button onClick={handleDelete}>Delete</button>
+        <button onClick={handleDelete} disabled={showDeleteButton}>Delete</button>
         <button onClick={handleSave}>Save</button>
       </section>
     </div>
