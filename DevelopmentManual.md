@@ -35,6 +35,11 @@ for debugging and tracing.
 `log:set TRACE edu.colostate.cs.cs414.p3.bdeining.sql
 log:tail`
 
+The upload functionality for pictures in the Machines tab should be less than 20kb.  Images above this size will fail.
+
+The default manager login is manager, password is manager.  This currently is the only manager known to the system.  Trainers
+that are added to the system by a manager will specify a password and will be able to login.
+
 Debugging
 ---------
 Karaf supports attaching IDE debuggers and setting breakpoints; once must set up a remote configuration in the IDE
