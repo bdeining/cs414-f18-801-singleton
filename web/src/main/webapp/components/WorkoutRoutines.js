@@ -4,6 +4,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Select from "react-select";
 import "./styles.css";
+import Modal from "./Modal";
 
 class WorkoutRoutine extends React.Component {
   constructor() {
@@ -181,7 +182,8 @@ class WorkoutRoutine extends React.Component {
             },
             {
               Header: "Exercise IDs",
-              accessor: "exerciseIds"
+              accessor: "exerciseIds",
+              Cell: row => <span>{row.value.join(", ")}</span>
             },
             {
               Header: "ID",
@@ -230,29 +232,5 @@ class WorkoutRoutine extends React.Component {
     );
   }
 }
-
-const Modal = ({
-  handleClose,
-  handleSave,
-  handleDelete,
-  show,
-  add,
-  children
-}) => {
-  const showHideClassName = show ? "modal display-block" : "modal display-none";
-  const showDeleteButton = add;
-  return (
-    <div className={showHideClassName}>
-      <section className="modal-main">
-        {children}
-        <button onClick={handleClose}>Close</button>
-        <button onClick={handleDelete} disabled={showDeleteButton}>
-          Delete
-        </button>
-        <button onClick={handleSave}>Save</button>
-      </section>
-    </div>
-  );
-};
 
 export default WorkoutRoutine;

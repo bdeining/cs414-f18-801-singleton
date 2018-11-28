@@ -50,18 +50,22 @@ class LoginPage extends React.Component {
                   value={this.state.email}
                   onChange={this.updateInputValue}
                 />
+              </div>
+              <div>
                 <label>Password</label>
                 <input
                   name="password"
                   value={this.state.password}
                   onChange={this.updateInputValue}
                 />
-                <input type="submit" value="Submit" />
               </div>
+              <input type="submit" value="Submit" />
             </form>
           </div>
         ) : (
-          <div>You are logged in. Use the tabs to navigate.</div>
+          <div class="loggedIn">
+            You are logged in. Use the tabs to navigate.
+          </div>
         )}
       </div>
     );

@@ -18,7 +18,7 @@
   transform: translate(-50%,-50%);
 }
 
-.modal-main > div > label {
+.modal-main > div > label, form > div > label {
     clear: left;
     width: 30%;
     margin: 10px;
@@ -36,8 +36,12 @@ input[type="file"] {
     display: inline-block;
 }
 
-.modal-main > div > input {
-    width: 20%;
+.loggedIn {
+   margin: 5px;
+}
+
+.modal-main > div > input, form > div > input {
+    width: 30%;
 }
 
 .react-select-container {
