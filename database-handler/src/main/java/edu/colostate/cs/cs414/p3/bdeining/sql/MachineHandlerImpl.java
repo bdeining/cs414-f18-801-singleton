@@ -35,17 +35,25 @@ public class MachineHandlerImpl implements MachineHandler {
 
   private DataSource dataSource;
 
+  /**
+   * Sets the data source for the class; this is a reference to the data source that is registered
+   * as a service in OSGi
+   *
+   * @param dataSource the given data source
+   */
   @Reference
   public void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
     init();
   }
 
+  /** Called when the class is instantiated. */
   public void init() {
     LOGGER.trace("Initializing {}", CustomerHandlerImpl.class.getName());
     createTablesIfNonExistent();
   }
 
+  /** Creates the tables that this handler uses if they have not been added in data store. */
   private void createTablesIfNonExistent() {
     List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
@@ -55,6 +63,7 @@ public class MachineHandlerImpl implements MachineHandler {
     }
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean addMachine(Machine machine) throws SQLException {
     String id = machine.getId();
@@ -103,6 +112,7 @@ public class MachineHandlerImpl implements MachineHandler {
     return true;
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<Machine> getMachines() throws SQLException {
     try (Connection con = dataSource.getConnection()) {
@@ -129,12 +139,19 @@ public class MachineHandlerImpl implements MachineHandler {
     }
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean removeMachine(String id) throws SQLException {
     HandlerUtils.removeById(dataSource, id, MACHINE_TABLE_NAME);
     return true;
   }
 
+  /**
+   * Converts a {@link ResultSet} into a {@link Machine}
+   *
+   * @param resultSet the given result set
+   * @return the machine, or null if the conversion fails
+   */
   private Machine getMachine(ResultSet resultSet) {
     try {
       String id = resultSet.getString("id");
@@ -151,6 +168,13 @@ public class MachineHandlerImpl implements MachineHandler {
     }
   }
 
+  /**
+   * Gets a machine by a given id
+   *
+   * @param id the given id
+   * @return the converted machine, or null if none was found
+   * @throws SQLException when a database error occurs
+   */
   private Machine getMachineById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
       PreparedStatement preparedStatement =

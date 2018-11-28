@@ -18,6 +18,7 @@ public class WorkoutRoutineImpl implements WorkoutRoutine {
     this.exerciseIds = exerciseIds;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getId() {
     if (id == null) {
@@ -26,31 +27,37 @@ public class WorkoutRoutineImpl implements WorkoutRoutine {
     return id;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setName(String name) {
     this.name = name;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getName() {
     return name;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setExcerciseIds(List<String> exerciseIds) {
     this.exerciseIds = exerciseIds;
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<String> getExerciseIds() {
     return exerciseIds;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     return String.format("Name : %s, ID : %s", name, id);
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof WorkoutRoutineImpl)) {
@@ -62,6 +69,7 @@ public class WorkoutRoutineImpl implements WorkoutRoutine {
     return workoutRoutine.getId().equals(getId());
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     int hash = 7;

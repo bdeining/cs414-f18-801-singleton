@@ -42,7 +42,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
    * Sets the data source for the class; this is a reference to the data source that is registered
    * as a service in OSGi
    *
-   * @param dataSource
+   * @param dataSource the given data source
    */
   @Reference
   public void setDataSource(DataSource dataSource) {
@@ -50,17 +50,13 @@ public class CustomerHandlerImpl implements CustomerHandler {
     init();
   }
 
-  /**
-   * Called when the class is instantiated.
-   */
+  /** Called when the class is instantiated. */
   public void init() {
     LOGGER.trace("Initializing {}", CustomerHandlerImpl.class.getName());
     createTablesIfNonExistent();
   }
 
-  /**
-   * Creates the tables that this handler uses if they have not been added in data store.
-   */
+  /** Creates the tables that this handler uses if they have not been added in data store. */
   private void createTablesIfNonExistent() {
     List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
@@ -75,9 +71,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean addCustomer(Customer customer) throws SQLException {
     String address = customer.getAddress();
@@ -176,9 +170,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
     return true;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean removeCustomer(String id) throws SQLException {
     HandlerUtils.removeById(dataSource, id, CUSTOMER_TABLE_NAME);
@@ -186,9 +178,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
     return true;
   }
 
-  /**
-   * {@inheritDoc}
-   */
+  /** {@inheritDoc} */
   @Override
   public List<Customer> getCustomers() throws SQLException {
     try (Connection con = dataSource.getConnection()) {

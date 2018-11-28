@@ -75,6 +75,7 @@ public class RestService {
     this.machineHandler = machineHandler;
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/login")
@@ -98,6 +99,7 @@ public class RestService {
     return Response.status(500).build();
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/routinenames")
@@ -122,6 +124,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/exercisenames")
@@ -146,6 +149,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/machinenames")
@@ -170,6 +174,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/trainer")
@@ -183,6 +188,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @PUT
   @Path("/trainer")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -200,6 +206,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @DELETE
   @Path("/trainer")
   @Produces(MediaType.APPLICATION_JSON)
@@ -213,6 +220,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/machine")
@@ -226,6 +234,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @PUT
   @Path("/machine")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -243,6 +252,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @DELETE
   @Path("/machine")
   @Produces(MediaType.APPLICATION_JSON)
@@ -256,6 +266,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/exercise")
@@ -269,6 +280,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @PUT
   @Path("/exercise")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -286,6 +298,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @DELETE
   @Path("/exercise")
   @Produces(MediaType.APPLICATION_JSON)
@@ -299,6 +312,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/routine")
@@ -312,6 +326,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @PUT
   @Path("/routine")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -330,6 +345,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @DELETE
   @Path("/routine")
   @Produces(MediaType.APPLICATION_JSON)
@@ -343,6 +359,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/customer")
@@ -356,6 +373,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @PUT
   @Path("/customer")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -373,6 +391,7 @@ public class RestService {
     }
   }
 
+  /** {@inheritDoc} */
   @DELETE
   @Path("/customer")
   @Produces(MediaType.APPLICATION_JSON)

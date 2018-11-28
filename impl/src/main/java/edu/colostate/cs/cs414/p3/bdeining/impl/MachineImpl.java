@@ -20,6 +20,7 @@ public class MachineImpl implements Machine {
     this.quantity = quantity;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getId() {
     if (id == null) {
@@ -29,41 +30,49 @@ public class MachineImpl implements Machine {
     return id;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getName() {
     return name;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setName(String name) {
     this.name = name;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getPicture() {
     return picture;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setPicture(String picture) {
     this.picture = picture;
   }
 
+  /** {@inheritDoc} */
   @Override
   public int getQuantity() {
     return quantity;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setQuantity(int quantity) {
     this.quantity = quantity;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     return String.format("Name : %s, ID : %s, Quantity : %d", name, id, quantity);
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof MachineImpl)) {
@@ -75,6 +84,7 @@ public class MachineImpl implements Machine {
     return machine.getId().equals(getId());
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     int hash = 7;

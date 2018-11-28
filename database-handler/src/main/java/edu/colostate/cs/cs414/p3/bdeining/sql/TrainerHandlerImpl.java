@@ -37,17 +37,25 @@ public class TrainerHandlerImpl implements TrainerHandler {
 
   private DataSource dataSource;
 
+  /**
+   * Sets the data source for the class; this is a reference to the data source that is registered
+   * as a service in OSGi
+   *
+   * @param dataSource the given data source
+   */
   @Reference
   public void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
     init();
   }
 
+  /** Called when the class is instantiated. */
   public void init() {
     LOGGER.trace("Initializing {}", CustomerHandlerImpl.class.getName());
     createTablesIfNonExistent();
   }
 
+  /** Creates the tables that this handler uses if they have not been added in data store. */
   private void createTablesIfNonExistent() {
     List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
@@ -61,6 +69,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
     }
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean addTrainer(Trainer trainer) throws SQLException {
     String address = trainer.getAddress();
@@ -147,6 +156,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
     return true;
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean removeTrainer(String trainerId) throws SQLException {
     HandlerUtils.removeById(dataSource, trainerId, TRAINER_TABLE_NAME);
@@ -154,6 +164,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
     return true;
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<Trainer> getTrainers() throws SQLException {
     try (Connection con = dataSource.getConnection()) {
@@ -180,6 +191,12 @@ public class TrainerHandlerImpl implements TrainerHandler {
     }
   }
 
+  /**
+   * Converts a {@link ResultSet} into a {@link Trainer}.
+   *
+   * @param resultSet the given result set
+   * @return the trainer converted, null otherwise
+   */
   private Trainer getTrainer(ResultSet resultSet) {
     try {
       String firstName = resultSet.getString("first_name");
@@ -212,6 +229,13 @@ public class TrainerHandlerImpl implements TrainerHandler {
     }
   }
 
+  /**
+   * Gets a trainer by the given id
+   *
+   * @param id the given id
+   * @return the {@link Trainer}, or null if none was found
+   * @throws SQLException
+   */
   private Trainer getTrainerById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
       PreparedStatement preparedStatement =
@@ -233,6 +257,13 @@ public class TrainerHandlerImpl implements TrainerHandler {
     return null;
   }
 
+  /**
+   * Adds a qualification to the Qualification table with the given parameters.
+   *
+   * @param qualification the qualification
+   * @param trainerId the id of the trainer
+   * @throws SQLException when a database error occurs
+   */
   private void addQualification(String qualification, String trainerId) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
       PreparedStatement preparedStatement =
@@ -245,6 +276,12 @@ public class TrainerHandlerImpl implements TrainerHandler {
     }
   }
 
+  /**
+   * Gets the lists of qualifications for the given trainer's id.
+   *
+   * @param id the given id
+   * @return the list of qualifications, or an empty list if the trainer has none
+   */
   private List<String> getQualificationsForTrainer(String id) {
     try (Connection con = dataSource.getConnection()) {
 
@@ -267,6 +304,6 @@ public class TrainerHandlerImpl implements TrainerHandler {
       LOGGER.error("Could not remove trainer {}", id, e);
     }
 
-    return new ArrayList<>();
+    return Collections.emptyList();
   }
 }

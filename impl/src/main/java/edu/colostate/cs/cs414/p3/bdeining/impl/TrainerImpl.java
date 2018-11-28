@@ -49,31 +49,37 @@ public class TrainerImpl implements Trainer {
     this.password = password;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getAddress() {
     return address;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getFirstName() {
     return firstName;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getLastName() {
     return lastName;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getPhone() {
     return phone;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getEmail() {
     return email;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getId() {
     if (id == null) {
@@ -82,76 +88,91 @@ public class TrainerImpl implements Trainer {
     return id;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getHealthInsuranceProvider() {
     return healthInsuranceProvider;
   }
 
+  /** {@inheritDoc} */
   @Override
   public int getWorkHours() {
     return workHours;
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<String> getQualifications() {
     return qualifications;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setWorkHours(int workHours) {
     this.workHours = workHours;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setQualifications(List<String> qualifications) {
     this.qualifications = qualifications;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getPassword() {
     return password;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setPassword(String password) {
     this.password = password;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setAddress(String address) {
     this.address = address;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setPhone(String phone) {
     this.phone = phone;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setEmail(String email) {
     this.email = email;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setHealthInsuranceProvider(String healthInsuranceProvider) {
     this.healthInsuranceProvider = healthInsuranceProvider;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     return String.format("Name : %s %s, Id : %s", firstName, lastName, id);
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof TrainerImpl)) {
@@ -163,6 +184,7 @@ public class TrainerImpl implements Trainer {
     return trainer.getId().equals(getId());
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     int hash = 7;

@@ -36,17 +36,25 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
 
   private DataSource dataSource;
 
+  /**
+   * Sets the data source for the class; this is a reference to the data source that is registered
+   * as a service in OSGi
+   *
+   * @param dataSource the given data source
+   */
   @Reference
   public void setDataSource(DataSource dataSource) {
     this.dataSource = dataSource;
     init();
   }
 
+  /** Called when the class is instantiated. */
   public void init() {
     LOGGER.trace("Initializing {}", CustomerHandlerImpl.class.getName());
     createTablesIfNonExistent();
   }
 
+  /** Creates the tables that this handler uses if they have not been added in data store. */
   private void createTablesIfNonExistent() {
     List<String> tables = getExistingTables(dataSource);
     LOGGER.trace("Existing tables : {}", tables);
@@ -61,6 +69,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
     }
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean addWorkoutRoutine(WorkoutRoutine workoutRoutine) throws SQLException {
     String name = workoutRoutine.getName();
@@ -129,6 +138,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
     return true;
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<WorkoutRoutine> getWorkoutRoutines() throws SQLException {
     try (Connection con = dataSource.getConnection()) {
@@ -186,6 +196,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
     }
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean removeWorkoutRoutine(String id) throws SQLException {
     HandlerUtils.removeById(dataSource, id, WORKOUT_ROUTINE_TABLE_NAME);
@@ -203,6 +214,13 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
     }
   }
 
+  /**
+   * Gets a {@link WorkoutRoutine} by the given id
+   *
+   * @param id the given id
+   * @return a workoutroutine, null if none is found
+   * @throws SQLException when a database error occurs
+   */
   private WorkoutRoutine getWorkoutRoutineById(String id) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
       PreparedStatement preparedStatement =
