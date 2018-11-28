@@ -141,7 +141,7 @@ class Exercise extends React.Component {
           handleDelete={this.deleteExercise}
           add={this.state.add}
         >
-          <h1>Machine</h1>
+          <h1>Exercise</h1>
           <div>
             <label>Common Name</label>
             <input
@@ -151,14 +151,14 @@ class Exercise extends React.Component {
             />
           </div>
           <div>
-          <label>Machine Name</label>
-          <div className="react-select-container">
-          <Select
-            value={this.state.machineId}
-            onChange={this.handleChange}
-            options={this.state.machineNames}
-          />
-          </div>
+            <label>Machine Name</label>
+            <div className="react-select-container">
+              <Select
+                value={this.state.machineId}
+                onChange={this.handleChange}
+                options={this.state.machineNames}
+              />
+            </div>
           </div>
           <div>
             <label>Sets</label>
@@ -214,7 +214,9 @@ class Exercise extends React.Component {
             if (rowInfo && rowInfo.row) {
               var selectedOption;
               for (var i = 0; i < this.state.machineNames.length; i++) {
-                if (this.state.machineNames[i].value === rowInfo.row.machineId) {
+                if (
+                  this.state.machineNames[i].value === rowInfo.row.machineId
+                ) {
                   selectedOption = this.state.machineNames[i];
                 }
               }
@@ -248,7 +250,14 @@ class Exercise extends React.Component {
   }
 }
 
-const Modal = ({ handleClose, handleSave, handleDelete, show, add, children }) => {
+const Modal = ({
+  handleClose,
+  handleSave,
+  handleDelete,
+  show,
+  add,
+  children
+}) => {
   const showHideClassName = show ? "modal display-block" : "modal display-none";
   const showDeleteButton = add;
   return (
@@ -256,7 +265,9 @@ const Modal = ({ handleClose, handleSave, handleDelete, show, add, children }) =
       <section className="modal-main">
         {children}
         <button onClick={handleClose}>Close</button>
-        <button onClick={handleDelete} disabled={showDeleteButton}>Delete</button>
+        <button onClick={handleDelete} disabled={showDeleteButton}>
+          Delete
+        </button>
         <button onClick={handleSave}>Save</button>
       </section>
     </div>

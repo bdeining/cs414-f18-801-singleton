@@ -16,6 +16,13 @@ class Trainer extends React.Component {
     };
   }
 
+  showAddModal = () => {
+    this.setState({
+      add: true
+    });
+    this.showModal();
+  };
+
   clearTrainerState = () => {
     this.setState({
       firstName: "",
@@ -28,6 +35,7 @@ class Trainer extends React.Component {
       password: "",
       id: "",
       qualifications: [],
+      add: false,
       show: false
     });
   };
@@ -156,66 +164,68 @@ class Trainer extends React.Component {
           handleClose={this.hideModal}
           handleSave={this.saveModal}
           handleDelete={this.deleteTrainer}
+          add={this.state.add}
         >
-          <p>Trainer</p>
-          <p>
-            First Name{" "}
+          <h1>Trainer</h1>
+          <div>
+            <label>First Name</label>
             <input
               name="firstName"
               value={this.state.firstName}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            Last Name{" "}
+          </div>
+          <div>
+            <label>Last Name</label>
             <input
               name="lastName"
               value={this.state.lastName}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            Address{" "}
+          </div>
+          <div>
+            <label>Address</label>
             <input
               name="address"
               value={this.state.address}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            Phone{" "}
+          </div>
+          <div>
+            <label>Phone Number</label>
             <input
               name="phone"
               value={this.state.phone}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            Email{" "}
+          </div>
+          <div>
+            <label>Email</label>
             <input
               name="email"
               value={this.state.email}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            Health Insurance Provider{" "}
+          </div>
+          <div>
+            <label>Health Insurance Provider</label>
             <input
               name="healthInsuranceProvider"
               value={this.state.healthInsuranceProvider}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            Work Hours{" "}
+          </div>
+          <div>
+            <label>Work Hours</label>
             <input
               name="workHours"
               value={this.state.workHours}
               onChange={this.updateInputValue}
             />
-          </p>
+          </div>
           {this.state.qualifications.map((qualification, idx) => (
             <div className="qualifications">
+              <label>Qualification</label>
               <input
                 type="text"
                 placeholder={`Qualification #${idx + 1} name`}
@@ -226,31 +236,32 @@ class Trainer extends React.Component {
                 type="button"
                 onClick={this.handleRemoveQualification(idx)}
                 className="small"
-              >
-                -
-              </button>
+              />
             </div>
           ))}
-          <button
-            type="button"
-            onClick={this.handleAddQualification}
-            className="small"
-          >
-            Add Qualification
-          </button>
-          <p>
-            Password{" "}
+          <div>
+            <button
+              type="button"
+              onClick={this.handleAddQualification}
+              className="small"
+            >
+              Add Qualification
+            </button>
+          </div>
+          <div>
+            <label>Password</label>
             <input
               name="password"
               value={this.state.password}
               onChange={this.updateInputValue}
             />
-          </p>
-          <p>
-            ID <input name="id" value={this.state.id} readOnly />
-          </p>
+          </div>
+          <div>
+            <label>ID</label>
+            <input name="id" value={this.state.id} readOnly />
+          </div>
         </Modal>
-        <button type="button" onClick={this.showModal}>
+        <button type="button" onClick={this.showAddModal}>
           Add
         </button>
         <ReactTable
@@ -343,15 +354,24 @@ class Trainer extends React.Component {
   }
 }
 
-const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
+const Modal = ({
+  handleClose,
+  handleSave,
+  handleDelete,
+  show,
+  add,
+  children
+}) => {
   const showHideClassName = show ? "modal display-block" : "modal display-none";
-
+  const showDeleteButton = add;
   return (
     <div className={showHideClassName}>
       <section className="modal-main">
         {children}
         <button onClick={handleClose}>Close</button>
-        <button onClick={handleDelete}>Delete</button>
+        <button onClick={handleDelete} disabled={showDeleteButton}>
+          Delete
+        </button>
         <button onClick={handleSave}>Save</button>
       </section>
     </div>

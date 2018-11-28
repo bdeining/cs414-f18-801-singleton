@@ -13,17 +13,34 @@ class WorkoutRoutine extends React.Component {
       exerciseIds: [],
       exerciseNames: [],
       show: false,
+      add: false,
       id: "",
       selected: null
     };
+
+    axios({
+      method: "get",
+      url: "/services/rest/exercisenames"
+    }).then(res => {
+      this.setState({
+        exerciseNames: res.data
+      });
+    });
   }
+
+  showAddModal = () => {
+    this.setState({
+      add: true
+    });
+    this.showModal();
+  };
 
   clearWorkoutRoutineState = () => {
     this.setState({
       name: "",
       exerciseIds: [],
-      exerciseNames: [],
       id: "",
+      add: false,
       show: false
     });
   };
@@ -55,6 +72,10 @@ class WorkoutRoutine extends React.Component {
   };
 
   saveModal = () => {
+    var exerciseIdList = this.state.exerciseIds.map(function(item) {
+      return item["value"];
+    });
+
     if (this.state.id) {
       axios({
         method: "put",
@@ -62,7 +83,7 @@ class WorkoutRoutine extends React.Component {
         data: {
           name: this.state.name,
           id: this.state.id,
-          exerciseIds: this.state.exerciseIds
+          exerciseIds: exerciseIdList
         }
       }).then(res => {
         this.getWorkoutRoutineData();
@@ -73,7 +94,7 @@ class WorkoutRoutine extends React.Component {
         url: "/services/rest/routine",
         data: {
           name: this.state.name,
-          exerciseIds: this.state.exerciseIds
+          exerciseIds: exerciseIdList
         }
       }).then(res => {
         this.getWorkoutRoutineData();
@@ -93,7 +114,6 @@ class WorkoutRoutine extends React.Component {
         data: res.data,
         id: "",
         exerciseIds: [],
-        exerciseNames: [],
         show: this.state.show
       });
     });
@@ -110,10 +130,7 @@ class WorkoutRoutine extends React.Component {
   };
 
   handleChange = selectedOption => {
-    var names = selectedOption.map(function(item) {
-      return item["value"];
-    });
-    this.setState({ exerciseIds: names });
+    this.setState({ exerciseIds: selectedOption });
   };
 
   render() {
@@ -124,28 +141,35 @@ class WorkoutRoutine extends React.Component {
           handleClose={this.hideModal}
           handleSave={this.saveModal}
           handleDelete={this.deleteWorkoutRoutine}
+          add={this.state.add}
         >
-          <p>Workout Routine</p>
-          <p>
-            Name{" "}
+          <h1>Workout Routine</h1>
+          <div>
+            <label>Name</label>
             <input
               name="name"
               value={this.state.name}
               onChange={this.updateInputValue}
             />
-          </p>
-          <Select
-            isMulti
-            closeMenuOnSelect={false}
-            value={this.state.selectedOption}
-            onChange={this.handleChange}
-            options={this.state.exerciseNames}
-          />
-          <p>
-            ID <input name="id" value={this.state.id} readOnly />
-          </p>
+          </div>
+          <div>
+            <label>Exercise Names</label>
+            <div className="react-select-container">
+              <Select
+                isMulti
+                closeMenuOnSelect={false}
+                value={this.state.exerciseIds}
+                onChange={this.handleChange}
+                options={this.state.exerciseNames}
+              />
+            </div>
+          </div>
+          <div>
+            <label>ID</label>
+            <input name="id" value={this.state.id} readOnly />
+          </div>
         </Modal>
-        <button type="button" onClick={this.showModal}>
+        <button type="button" onClick={this.showAddModal}>
           Add
         </button>
         <ReactTable
@@ -168,11 +192,23 @@ class WorkoutRoutine extends React.Component {
           className="-striped -highlight"
           getTrProps={(state, rowInfo) => {
             if (rowInfo && rowInfo.row) {
+              var exerciseNameList = [];
+              for (var i = 0; i < this.state.exerciseNames.length; i++) {
+                for (var c = 0; c < rowInfo.row.exerciseIds.length; c++) {
+                  if (
+                    this.state.exerciseNames[i].value ===
+                    rowInfo.row.exerciseIds[c]
+                  ) {
+                    exerciseNameList.push(this.state.exerciseNames[i]);
+                  }
+                }
+              }
+
               return {
                 onClick: e => {
                   this.setState({
                     name: rowInfo.row.name,
-                    exerciseIds: rowInfo.row.exerciseIds,
+                    exerciseIds: exerciseNameList,
                     id: rowInfo.row.id,
                     selected: rowInfo.index
                   });
@@ -195,15 +231,24 @@ class WorkoutRoutine extends React.Component {
   }
 }
 
-const Modal = ({ handleClose, handleSave, handleDelete, show, children }) => {
+const Modal = ({
+  handleClose,
+  handleSave,
+  handleDelete,
+  show,
+  add,
+  children
+}) => {
   const showHideClassName = show ? "modal display-block" : "modal display-none";
-
+  const showDeleteButton = add;
   return (
     <div className={showHideClassName}>
       <section className="modal-main">
         {children}
         <button onClick={handleClose}>Close</button>
-        <button onClick={handleDelete}>Delete</button>
+        <button onClick={handleDelete} disabled={showDeleteButton}>
+          Delete
+        </button>
         <button onClick={handleSave}>Save</button>
       </section>
     </div>

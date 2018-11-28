@@ -20,8 +20,20 @@
 
 .modal-main > div > label {
     clear: left;
-    width: 12%;
+    width: 30%;
     margin: 10px;
+}
+
+.modal-main > div > h1 {
+    margin: 5px;
+}
+
+.small {
+    margin: 5px;
+}
+
+input[type="file"] {
+    display: inline-block;
 }
 
 .modal-main > div > input {
@@ -30,7 +42,7 @@
 
 .react-select-container {
     display:inline-block;
-    width:20%;
+    width:30%;
 }
 
 .display-block {
