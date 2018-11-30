@@ -168,6 +168,7 @@ class Home extends React.Component {
           handleSave={this.saveModal}
           handleDelete={this.deleteCustomer}
           add={this.state.add}
+          manipulated={false}
         >
           <h1>Customer</h1>
           <div>

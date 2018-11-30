@@ -12,6 +12,7 @@ class Trainer extends React.Component {
       data: [],
       show: false,
       qualifications: [],
+      isManager : (localStorage.getItem("user") === 'manager'),
       id: "",
       selected: null
     };
@@ -166,6 +167,7 @@ class Trainer extends React.Component {
           handleSave={this.saveModal}
           handleDelete={this.deleteTrainer}
           add={this.state.add}
+          manipulated={!this.state.isManager}
         >
           <h1>Trainer</h1>
           <div>
@@ -174,6 +176,7 @@ class Trainer extends React.Component {
               name="firstName"
               value={this.state.firstName}
               onChange={this.updateInputValue}
+              readOnly={!this.state.isManager}
             />
           </div>
           <div>
@@ -182,6 +185,7 @@ class Trainer extends React.Component {
               name="lastName"
               value={this.state.lastName}
               onChange={this.updateInputValue}
+              readOnly={!this.state.isManager}
             />
           </div>
           <div>
@@ -190,6 +194,7 @@ class Trainer extends React.Component {
               name="address"
               value={this.state.address}
               onChange={this.updateInputValue}
+              readOnly={!this.state.isManager}
             />
           </div>
           <div>
@@ -198,6 +203,7 @@ class Trainer extends React.Component {
               name="phone"
               value={this.state.phone}
               onChange={this.updateInputValue}
+              readOnly={!this.state.isManager}
             />
           </div>
           <div>
@@ -206,6 +212,7 @@ class Trainer extends React.Component {
               name="email"
               value={this.state.email}
               onChange={this.updateInputValue}
+              readOnly={!this.state.isManager}
             />
           </div>
           <div>
@@ -214,6 +221,7 @@ class Trainer extends React.Component {
               name="healthInsuranceProvider"
               value={this.state.healthInsuranceProvider}
               onChange={this.updateInputValue}
+              readOnly={!this.state.isManager}
             />
           </div>
           <div>
@@ -222,6 +230,7 @@ class Trainer extends React.Component {
               name="workHours"
               value={this.state.workHours}
               onChange={this.updateInputValue}
+              readOnly={!this.state.isManager}
             />
           </div>
           {this.state.qualifications.map((qualification, idx) => (
@@ -245,6 +254,7 @@ class Trainer extends React.Component {
               type="button"
               onClick={this.handleAddQualification}
               className="small"
+              disabled={!this.state.isManager}
             >
               Add Qualification
             </button>
@@ -255,6 +265,7 @@ class Trainer extends React.Component {
               name="password"
               value={this.state.password}
               onChange={this.updateInputValue}
+              readOnly={!this.state.isManager}
             />
           </div>
           <div>
@@ -262,7 +273,7 @@ class Trainer extends React.Component {
             <input name="id" value={this.state.id} readOnly />
           </div>
         </Modal>
-        <button type="button" onClick={this.showAddModal}>
+        <button type="button" onClick={this.showAddModal} disabled={!this.state.isManager}>
           Add
         </button>
         <ReactTable

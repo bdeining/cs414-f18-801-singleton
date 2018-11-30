@@ -63,7 +63,7 @@ class LoginPage extends React.Component {
             </form>
           </div>
         ) : (
-          <div class="loggedIn">
+          <div className="loggedIn">
             You are logged in. Use the tabs to navigate.
           </div>
         )}

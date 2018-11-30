@@ -13,6 +13,7 @@ class Exercise extends React.Component {
       data: [],
       machineNames: [],
       show: false,
+      isManager : (localStorage.getItem("user") === 'manager'),
       id: "",
       selected: null
     };
@@ -141,6 +142,7 @@ class Exercise extends React.Component {
           handleSave={this.saveModal}
           handleDelete={this.deleteExercise}
           add={this.state.add}
+          manipulated={this.state.isManager}
         >
           <h1>Exercise</h1>
           <div>
@@ -149,6 +151,7 @@ class Exercise extends React.Component {
               name="commonName"
               value={this.state.commonName}
               onChange={this.updateInputValue}
+              readOnly={this.state.isManager}
             />
           </div>
           <div>
@@ -158,6 +161,7 @@ class Exercise extends React.Component {
                 value={this.state.machineId}
                 onChange={this.handleChange}
                 options={this.state.machineNames}
+                isDisabled={this.state.isManager}
               />
             </div>
           </div>
@@ -167,6 +171,7 @@ class Exercise extends React.Component {
               name="sets"
               value={this.state.sets}
               onChange={this.updateInputValue}
+              readOnly={this.state.isManager}
             />
           </div>
           <div>
@@ -175,6 +180,7 @@ class Exercise extends React.Component {
               name="durationPerSet"
               value={this.state.durationPerSet}
               onChange={this.updateInputValue}
+              readOnly={this.state.isManager}
             />
           </div>
           <div>
@@ -182,7 +188,7 @@ class Exercise extends React.Component {
             <input name="id" value={this.state.id} readOnly />
           </div>
         </Modal>
-        <button type="button" onClick={this.showAddModal}>
+        <button type="button" onClick={this.showAddModal} disabled={this.state.isManager}>
           Add
         </button>
         <ReactTable

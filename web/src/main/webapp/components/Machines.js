@@ -152,6 +152,7 @@ class Machine extends React.Component {
           handleSave={this.saveModal}
           handleDelete={this.deleteMachine}
           add={this.state.add}
+          manipulated={false}
         >
           <h1>Machine</h1>
           <div>

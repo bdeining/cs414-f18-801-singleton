@@ -16,6 +16,7 @@ class WorkoutRoutine extends React.Component {
       show: false,
       add: false,
       id: "",
+      isManager : (localStorage.getItem("user") === 'manager'),
       selected: null
     };
 
@@ -143,6 +144,7 @@ class WorkoutRoutine extends React.Component {
           handleSave={this.saveModal}
           handleDelete={this.deleteWorkoutRoutine}
           add={this.state.add}
+          manipulated={this.state.isManager}
         >
           <h1>Workout Routine</h1>
           <div>
@@ -151,6 +153,7 @@ class WorkoutRoutine extends React.Component {
               name="name"
               value={this.state.name}
               onChange={this.updateInputValue}
+              readOnly={this.state.isManager}
             />
           </div>
           <div>
@@ -162,6 +165,7 @@ class WorkoutRoutine extends React.Component {
                 value={this.state.exerciseIds}
                 onChange={this.handleChange}
                 options={this.state.exerciseNames}
+                isDisabled={this.state.isManager}
               />
             </div>
           </div>
@@ -170,7 +174,7 @@ class WorkoutRoutine extends React.Component {
             <input name="id" value={this.state.id} readOnly />
           </div>
         </Modal>
-        <button type="button" onClick={this.showAddModal}>
+        <button type="button" onClick={this.showAddModal} disabled={this.state.isManager}>
           Add
         </button>
         <ReactTable

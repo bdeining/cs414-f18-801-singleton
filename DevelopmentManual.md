@@ -77,4 +77,11 @@ Pax JDBC 1.3.1
 
 Demo Video
 ----------
-https://youtu.be/-kWzcN7gv0I
+Iteration 1 : https://youtu.be/-kWzcN7gv0I
+
+TODOs
+----------
+Validation of input fields
+Restrictions based on user type
+Finish coverage
+CSS styles on tables
