@@ -63,6 +63,9 @@ class Trainer extends React.Component {
   };
 
   saveModal = () => {
+  
+
+
     var qualifications = this.state.qualifications.map(function(item) {
       return item["name"];
     });

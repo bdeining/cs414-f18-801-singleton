@@ -1,12 +1,19 @@
+Required Software
+-----------------
+Apache Maven 3.5.3
+Java 8+
+Git
+
 Development Environment
 -----------------------
 `git clone https://github.com/bdeining/cs414.git`
-The .gitignore file is set up to ignore both Intellij and Eclipse IDE specific files; thus, once can
-use whichever IDE they prefer to develop in.
+The .gitignore file is set up to ignore both Intellij and Eclipse IDE specific files; thus, one can
+use whichever IDE they prefer to develop in.  The preferred IDE is Intellij Community Edition.
 
-This project uses maven as its build management tool.  To build, one must have Apache Maven 3.5.3 and Java 8+ installed.
-It is built on top of Apache Karaf 4.2.0, a polymorphic OSGi container that has MySQL support and allows for rapid
-development.  No additional preliminary actions are required to build the application.
+Open the project in Intellij / Eclipse by Navigating to File -> Open
+
+This project uses maven as its build management tool. It is built on top of Apache Karaf 4.2.0, a polymorphic OSGi
+container that has MySQL support and allows for rapid development.  No additional preliminary actions are required to build the application.
 
 `mvn clean install`
 
@@ -17,8 +24,8 @@ The .js files in this project are formatted using prettier.  This can be install
 Run the formatter before committing files.
 `prettier --write "**/*.js"`
 
-Usage Instructions
-------------------
+Installation and Usage Instructions
+-----------------------------------
 Once built, once can navigate to the distribution directory and run the Karaf executable in either windows or mac.
 
 `cd distribution/target
@@ -82,6 +89,5 @@ Iteration 1 : https://youtu.be/-kWzcN7gv0I
 TODOs
 ----------
 Validation of input fields
-Restrictions based on user type
 Finish coverage
 CSS styles on tables
