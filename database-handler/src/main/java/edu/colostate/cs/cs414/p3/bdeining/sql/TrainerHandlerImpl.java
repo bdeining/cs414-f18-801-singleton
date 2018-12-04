@@ -81,6 +81,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
     String id = trainer.getId();
     String password = trainer.getPassword();
     int workHours = trainer.getWorkHours();
+    String branch = trainer.getBranch();
     List<String> qualifications = trainer.getQualifications();
 
     Trainer existingTrainer = getTrainerById(id);
@@ -94,7 +95,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
             con.prepareStatement(
                 "update "
                     + TRAINER_TABLE_NAME
-                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, work_hours=?, password=? WHERE id=?");
+                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, work_hours=?, password=?, branch=? WHERE id=?");
 
         update.setString(1, firstName);
         update.setString(2, lastName);
@@ -104,7 +105,8 @@ public class TrainerHandlerImpl implements TrainerHandler {
         update.setString(6, healthInsuranceProvider);
         update.setInt(7, workHours);
         update.setString(8, password);
-        update.setString(9, id);
+        update.setString(9, branch);
+        update.setString(10, id);
         update.execute();
         update.close();
       }
@@ -134,7 +136,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
             con.prepareStatement(
                 "INSERT INTO "
                     + TRAINER_TABLE_NAME
-                    + " (first_name, last_name, address, phone, email, id, health_insurance_provider, work_hours, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                    + " (first_name, last_name, address, phone, email, id, health_insurance_provider, work_hours, password, branch) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
         update.setString(1, firstName);
         update.setString(2, lastName);
@@ -145,6 +147,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
         update.setString(7, healthInsuranceProvider);
         update.setInt(8, workHours);
         update.setString(9, password);
+        update.setString(10, branch);
         update.execute();
         update.close();
 
@@ -204,6 +207,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
       String address = resultSet.getString("address");
       String phone = resultSet.getString("phone");
       String email = resultSet.getString("email");
+      String branch = resultSet.getString("branch");
       String id = resultSet.getString("id");
       String healthInsuranceProvider = resultSet.getString("health_insurance_provider");
       String password = resultSet.getString("password");
@@ -218,7 +222,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
               phone,
               email,
               healthInsuranceProvider,
-              "",
+              branch,
               workHours,
               qualifications,
               password);

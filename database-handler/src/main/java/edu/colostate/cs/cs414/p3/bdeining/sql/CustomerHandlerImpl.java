@@ -81,6 +81,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
     String healthInsuranceProvider = customer.getHealthInsuranceProvider();
     String email = customer.getEmail();
     String id = customer.getId();
+    String branch = customer.getBranch();
     String activity = customer.getActivity().toString();
     List<String> routines = customer.getWorkoutRoutineIds();
 
@@ -95,7 +96,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
             con.prepareStatement(
                 "update "
                     + CUSTOMER_TABLE_NAME
-                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, activity=? WHERE id=?");
+                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, activity=? branch=? WHERE id=?");
 
         update.setString(1, firstName);
         update.setString(2, lastName);
@@ -104,7 +105,8 @@ public class CustomerHandlerImpl implements CustomerHandler {
         update.setString(5, email);
         update.setString(6, healthInsuranceProvider);
         update.setString(7, activity);
-        update.setString(8, id);
+        update.setString(8, branch);
+        update.setString(9, id);
         update.execute();
         update.close();
       }
@@ -136,7 +138,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
             con.prepareStatement(
                 "INSERT INTO "
                     + CUSTOMER_TABLE_NAME
-                    + " (first_name, last_name, address, phone, email, id, health_insurance_provider, activity) VALUES (?,?,?,?,?,?,?,?)");
+                    + " (first_name, last_name, address, phone, email, id, health_insurance_provider, activity, branch) VALUES (?,?,?,?,?,?,?,?,?)");
         insert.setString(1, firstName);
         insert.setString(2, lastName);
         insert.setString(3, address);
@@ -145,6 +147,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
         insert.setString(6, id);
         insert.setString(7, healthInsuranceProvider);
         insert.setString(8, activity);
+        insert.setString(9, branch);
         insert.execute();
         insert.close();
       }
@@ -219,6 +222,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
       String phone = resultSet.getString("phone");
       String email = resultSet.getString("email");
       String id = resultSet.getString("id");
+      String branch = resultSet.getString("branch");
       String healthInsuranceProvider = resultSet.getString("health_insurance_provider");
       Activity activity = Activity.valueOf(resultSet.getString("activity"));
 
@@ -244,7 +248,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
               phone,
               email,
               healthInsuranceProvider,
-              "",
+              branch,
               workoutRoutines,
               activity);
 

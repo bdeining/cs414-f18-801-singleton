@@ -33,7 +33,7 @@ public final class TableConstants {
       "(workoutRoutineId varchar(100), customerId varchar(100))";
 
   public static final String CUSTOMER_TABLE_DEF =
-      "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), activity varchar(100))";
+      "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), activity varchar(100), branch varchar(100))";
 
   public static final String WORKOUT_ROUTINE_TABLE_DEF = "(id varchar(100), name varchar(100))";
 
@@ -41,7 +41,7 @@ public final class TableConstants {
       "(id varchar(100), qualification varchar(100))";
 
   public static final String TRAINER_TABLE_DEF =
-      "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), work_hours integer, password varchar(100))";
+      "(first_name varchar(100), last_name varchar(100), address varchar(100), phone varchar(100), email varchar(100), id varchar(100), health_insurance_provider varchar(100), work_hours integer, password varchar(100), branch varchar(100))";
 
   public static final String BRANCH_TABLE_DEF = "(name varchar(100))";
 
