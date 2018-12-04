@@ -8,6 +8,7 @@ import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.BranchHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
@@ -60,6 +61,8 @@ public class RestService {
 
   private MachineHandler machineHandler;
 
+  private BranchHandler branchHandler;
+
   private Gson gson = new Gson();
 
   public RestService(
@@ -67,12 +70,14 @@ public class RestService {
       TrainerHandler trainerHandler,
       ExerciseHandler exerciseHandler,
       WorkoutRoutineHandler workoutRoutineHandler,
-      MachineHandler machineHandler) {
+      MachineHandler machineHandler,
+      BranchHandler branchHandler) {
     this.customerHandler = customerHandler;
     this.trainerHandler = trainerHandler;
     this.exerciseHandler = exerciseHandler;
     this.workoutRoutineHandler = workoutRoutineHandler;
     this.machineHandler = machineHandler;
+    this.branchHandler = branchHandler;
   }
 
   /** {@inheritDoc} */
@@ -177,6 +182,20 @@ public class RestService {
   /** {@inheritDoc} */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
+  @Path("/branch")
+  public Response getBranch() {
+    try {
+      List<String> branches = branchHandler.getBranches();
+      return Response.ok().entity(branches).build();
+    } catch (SQLException e) {
+      LOGGER.warn("Could not get branch list", e);
+      return Response.serverError().build();
+    }
+  }
+
+  /** {@inheritDoc} */
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
   @Path("/trainer")
   public Response getTrainers() {
     try {
@@ -202,6 +221,38 @@ public class RestService {
       return Response.serverError().build();
     } catch (SQLException e) {
       LOGGER.warn("Could not add trainer", e);
+      return Response.serverError().build();
+    }
+  }
+
+  /** {@inheritDoc} */
+  @PUT
+  @Path("/branch")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response createBranch(InputStream requestBody) {
+    try {
+      String branch = gson.fromJson(new InputStreamReader(requestBody), String.class);
+      branchHandler.addBranch(branch);
+      return Response.ok().build();
+    } catch (JsonSyntaxException | JsonIOException e) {
+      LOGGER.warn("Could not parse branch", e);
+      return Response.serverError().build();
+    } catch (SQLException e) {
+      LOGGER.warn("Could not add branch", e);
+      return Response.serverError().build();
+    }
+  }
+
+  /** {@inheritDoc} */
+  @DELETE
+  @Path("/trainer")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response deleteBranch(@QueryParam("branch") String branchH) {
+    try {
+      branchHandler.removeBranch(branchH);
+      return Response.ok().build();
+    } catch (SQLException e) {
+      LOGGER.warn("Could not delete branch {}", branchH, e);
       return Response.serverError().build();
     }
   }

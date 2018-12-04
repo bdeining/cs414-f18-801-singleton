@@ -213,6 +213,7 @@ public class TrainerHandlerImplTest {
         "123-4123",
         "ben@example.com",
         "kaiser",
+        "branch",
         3,
         Arrays.asList(UUID.randomUUID().toString()),
         "password");

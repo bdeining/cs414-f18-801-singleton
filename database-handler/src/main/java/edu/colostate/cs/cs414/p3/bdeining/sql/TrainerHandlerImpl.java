@@ -218,6 +218,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
               phone,
               email,
               healthInsuranceProvider,
+              "",
               workHours,
               qualifications,
               password);

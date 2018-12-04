@@ -24,6 +24,8 @@ public class TrainerImpl implements Trainer {
 
   private List<String> qualifications;
 
+  private String branch;
+
   private String password;
 
   public TrainerImpl(
@@ -34,6 +36,7 @@ public class TrainerImpl implements Trainer {
       String phone,
       String email,
       String healthInsuranceProvider,
+      String branch,
       int workHours,
       List<String> qualifications,
       String password) {
@@ -46,6 +49,7 @@ public class TrainerImpl implements Trainer {
     this.healthInsuranceProvider = healthInsuranceProvider;
     this.workHours = workHours;
     this.qualifications = qualifications;
+    this.branch = branch;
     this.password = password;
   }
 
@@ -92,6 +96,11 @@ public class TrainerImpl implements Trainer {
   @Override
   public String getHealthInsuranceProvider() {
     return healthInsuranceProvider;
+  }
+
+  @Override
+  public String getBranch() {
+    return branch;
   }
 
   /** {@inheritDoc} */
@@ -164,6 +173,11 @@ public class TrainerImpl implements Trainer {
   @Override
   public void setHealthInsuranceProvider(String healthInsuranceProvider) {
     this.healthInsuranceProvider = healthInsuranceProvider;
+  }
+
+  @Override
+  public void setBranch(String branch) {
+    this.branch = branch;
   }
 
   /** {@inheritDoc} */

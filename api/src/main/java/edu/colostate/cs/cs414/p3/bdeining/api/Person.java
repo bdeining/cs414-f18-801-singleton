@@ -52,6 +52,13 @@ public interface Person {
   String getHealthInsuranceProvider();
 
   /**
+   * Gets the Branch
+   *
+   * @return
+   */
+  String getBranch();
+
+  /**
    * Sets the address of this person
    *
    * @param address
@@ -92,4 +99,11 @@ public interface Person {
    * @param healthInsuranceProvider
    */
   void setHealthInsuranceProvider(String healthInsuranceProvider);
+
+  /**
+   * Sets the Branch
+   *
+   * @param branch
+   */
+  void setBranch(String branch);
 }

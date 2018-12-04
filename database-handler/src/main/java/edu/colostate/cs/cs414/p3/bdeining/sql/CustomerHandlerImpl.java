@@ -244,6 +244,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
               phone,
               email,
               healthInsuranceProvider,
+              "",
               workoutRoutines,
               activity);
 

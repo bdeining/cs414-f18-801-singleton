@@ -33,6 +33,8 @@ public class CustomerImplTest {
 
   private static final List<String> WORKOUT_ROUTINE = Arrays.asList("id1", "id2");
 
+  private static final String BRANCH = "branch";
+
   private static final Activity ACTIVITY = Activity.ACTIVE;
 
   @Before
@@ -46,6 +48,7 @@ public class CustomerImplTest {
             PHONE,
             EMAIL,
             HEALTH_INSURANCE_PROVIDER,
+            BRANCH,
             WORKOUT_ROUTINE,
             ACTIVITY);
   }
@@ -57,7 +60,7 @@ public class CustomerImplTest {
 
   @Test
   public void testSetters() {
-    customer = new CustomerImpl(null, null, null, null, null, null, null, null, null);
+    customer = new CustomerImpl(null, null, null, null, null, null, null, null, null, null);
     customer.setAddress(ADDRESS);
     customer.setFirstName(FIRST_NAME);
     customer.setLastName(LAST_NAME);
@@ -65,6 +68,7 @@ public class CustomerImplTest {
     customer.setEmail(EMAIL);
     customer.setHealthInsuranceProvider(HEALTH_INSURANCE_PROVIDER);
     customer.setWorkoutRoutineIds(WORKOUT_ROUTINE);
+    customer.setBranch(BRANCH);
     customer.setActivity(ACTIVITY);
     assertFields(null);
   }
@@ -80,6 +84,7 @@ public class CustomerImplTest {
             PHONE,
             EMAIL,
             HEALTH_INSURANCE_PROVIDER,
+            BRANCH,
             WORKOUT_ROUTINE,
             ACTIVITY);
     assertThat(customer.getId(), notNullValue());
@@ -112,6 +117,7 @@ public class CustomerImplTest {
     assertThat(customer.getFirstName(), is(FIRST_NAME));
     assertThat(customer.getLastName(), is(LAST_NAME));
     assertThat(customer.getPhone(), is(PHONE));
+    assertThat(customer.getBranch(), is(BRANCH));
     assertThat(customer.getEmail(), is(EMAIL));
     assertThat(customer.getHealthInsuranceProvider(), is(HEALTH_INSURANCE_PROVIDER));
     assertThat(customer.getWorkoutRoutineIds(), is(WORKOUT_ROUTINE));

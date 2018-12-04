@@ -181,6 +181,7 @@ public class CustomerHandlerImplTest {
         "123-4123",
         "ben@example.com",
         "kaiser",
+        "branch",
         Arrays.asList(UUID.randomUUID().toString()),
         Activity.ACTIVE);
   }

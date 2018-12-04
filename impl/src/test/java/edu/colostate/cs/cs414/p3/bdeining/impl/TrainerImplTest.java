@@ -34,6 +34,8 @@ public class TrainerImplTest {
 
   private static final String PASSWORD = "password";
 
+  private static final String BRANCH = "branch1";
+
   private static final int WORK_HOURS = 12;
 
   @Before
@@ -47,6 +49,7 @@ public class TrainerImplTest {
             PHONE,
             EMAIL,
             HEALTH_INSURANCE_PROVIDER,
+            BRANCH,
             WORK_HOURS,
             QUALIFICATIONS,
             PASSWORD);
@@ -59,7 +62,7 @@ public class TrainerImplTest {
 
   @Test
   public void testSetters() {
-    trainer = new TrainerImpl(null, null, null, null, null, null, null, 0, null, null);
+    trainer = new TrainerImpl(null, null, null, null, null, null, null, null, 0, null, null);
     trainer.setAddress(ADDRESS);
     trainer.setFirstName(FIRST_NAME);
     trainer.setLastName(LAST_NAME);
@@ -67,6 +70,7 @@ public class TrainerImplTest {
     trainer.setEmail(EMAIL);
     trainer.setHealthInsuranceProvider(HEALTH_INSURANCE_PROVIDER);
     trainer.setWorkHours(WORK_HOURS);
+    trainer.setBranch(BRANCH);
     trainer.setQualifications(QUALIFICATIONS);
     assertFields(null);
   }
@@ -82,6 +86,7 @@ public class TrainerImplTest {
             PHONE,
             EMAIL,
             HEALTH_INSURANCE_PROVIDER,
+            BRANCH,
             WORK_HOURS,
             QUALIFICATIONS,
             PASSWORD);
@@ -116,6 +121,7 @@ public class TrainerImplTest {
     assertThat(trainer.getLastName(), is(LAST_NAME));
     assertThat(trainer.getPhone(), is(PHONE));
     assertThat(trainer.getEmail(), is(EMAIL));
+    assertThat(trainer.getBranch(), is(BRANCH));
     assertThat(trainer.getHealthInsuranceProvider(), is(HEALTH_INSURANCE_PROVIDER));
     assertThat(trainer.getQualifications(), is(QUALIFICATIONS));
     assertThat(trainer.getWorkHours(), is(WORK_HOURS));

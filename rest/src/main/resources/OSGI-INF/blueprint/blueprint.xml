@@ -21,6 +21,8 @@
 
     <reference id="machineHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler"/>
 
+    <reference id="branchHandler" interface="edu.colostate.cs.cs414.p3.bdeining.api.handlers.BranchHandler"/>
+
     <bean id="dataHandlerEndpoint"
           class="edu.colostate.cs.cs414.p3.bdeining.rest.RestService">
         <argument ref="customerHandler"/>
@@ -28,6 +30,7 @@
         <argument ref="exerciseHandler"/>
         <argument ref="workoutRoutineHandler"/>
         <argument ref="machineHandler"/>
+        <argument ref="branchHandler"/>
     </bean>
 
     <jaxrs:server id="resourceOrderingService" address="/rest">

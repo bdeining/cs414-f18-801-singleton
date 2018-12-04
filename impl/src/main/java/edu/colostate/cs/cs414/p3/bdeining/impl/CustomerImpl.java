@@ -25,6 +25,8 @@ public class CustomerImpl implements Customer {
 
   private List<String> workoutRoutineIds;
 
+  private String branch;
+
   public CustomerImpl(
       String id,
       String address,
@@ -33,6 +35,7 @@ public class CustomerImpl implements Customer {
       String phone,
       String email,
       String healthInsuranceProvider,
+      String branch,
       List<String> workoutRoutineIds,
       Activity activity) {
     this.address = address;
@@ -43,6 +46,7 @@ public class CustomerImpl implements Customer {
     this.id = id;
     this.healthInsuranceProvider = healthInsuranceProvider;
     this.activity = activity;
+    this.branch = branch;
     this.workoutRoutineIds = workoutRoutineIds;
   }
 
@@ -89,6 +93,11 @@ public class CustomerImpl implements Customer {
   @Override
   public String getHealthInsuranceProvider() {
     return healthInsuranceProvider;
+  }
+
+  @Override
+  public String getBranch() {
+    return branch;
   }
 
   /** {@inheritDoc} */
@@ -149,6 +158,11 @@ public class CustomerImpl implements Customer {
   @Override
   public void setHealthInsuranceProvider(String healthInsuranceProvider) {
     this.healthInsuranceProvider = healthInsuranceProvider;
+  }
+
+  @Override
+  public void setBranch(String branch) {
+    this.branch = branch;
   }
 
   /** {@inheritDoc} */

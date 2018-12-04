@@ -17,6 +17,7 @@ import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
+import edu.colostate.cs.cs414.p3.bdeining.api.handlers.BranchHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
@@ -53,6 +54,8 @@ public class RestServiceTest {
 
   private MachineHandler machineHandler;
 
+  private BranchHandler branchHandler;
+
   private static final String ADDRESS = "123 Fake St.";
 
   private static final String MACHINE_NAME = "aMachine";
@@ -60,6 +63,8 @@ public class RestServiceTest {
   private static final String ROUTINE_NAME = "routineName";
 
   private static final String EXERCISE_NAME = "exerciseName";
+
+  private static final String BRANCH = "branch";
 
   private static final int QUANTITY = 1;
 
@@ -103,7 +108,8 @@ public class RestServiceTest {
             trainerHandler,
             exerciseHandler,
             workoutRoutineHandler,
-            machineHandler);
+            machineHandler,
+            branchHandler);
   }
 
   @Test
@@ -501,12 +507,14 @@ public class RestServiceTest {
     exerciseHandler = mock(ExerciseHandler.class);
     workoutRoutineHandler = mock(WorkoutRoutineHandler.class);
     machineHandler = mock(MachineHandler.class);
+    branchHandler = mock(BranchHandler.class);
     when(customerHandler.getCustomers()).thenReturn(Collections.singletonList(generateCustomer()));
     when(trainerHandler.getTrainers()).thenReturn(Collections.singletonList(generateTrainer()));
     when(machineHandler.getMachines()).thenReturn(Collections.singletonList(generateMachine()));
     when(workoutRoutineHandler.getWorkoutRoutines())
         .thenReturn(Collections.singletonList(generateWorkoutRoutine()));
     when(exerciseHandler.getExercises()).thenReturn(Collections.singletonList(generateExercise()));
+    when(branchHandler.getBranches()).thenReturn(Collections.singletonList(BRANCH));
 
     when(customerHandler.removeCustomer(anyString())).thenReturn(true);
     when(machineHandler.removeMachine(anyString())).thenReturn(true);
@@ -536,6 +544,7 @@ public class RestServiceTest {
         PHONE,
         EMAIL,
         HEALTH_INSURANCE_PROVIDER,
+        BRANCH,
         ID_LIST,
         ACTIVITY);
   }
@@ -549,6 +558,7 @@ public class RestServiceTest {
         PHONE,
         EMAIL,
         HEALTH_INSURANCE_PROVIDER,
+        BRANCH,
         WORK_HOURS,
         QUALIFICATIONS,
         PASSWORD);
