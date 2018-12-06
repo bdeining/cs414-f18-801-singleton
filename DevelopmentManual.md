@@ -88,6 +88,5 @@ Iteration 1 : https://youtu.be/-kWzcN7gv0I
 
 TODOs
 ----------
-Validation of input fields
 Finish coverage
 CSS styles on tables

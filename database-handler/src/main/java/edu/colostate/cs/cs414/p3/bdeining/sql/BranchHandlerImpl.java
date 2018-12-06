@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -86,10 +85,14 @@ public class BranchHandlerImpl implements BranchHandler {
 
   @Override
   public boolean removeBranch(String branch) throws SQLException {
-    try (Connection con = dataSource.getConnection();
-        Statement stmt = con.createStatement()) {
+    try (Connection con = dataSource.getConnection()) {
       LOGGER.trace("Removing from table {} : {}", BRANCH_TABLE_NAME, branch);
-      stmt.execute(String.format("DELETE FROM %s WHERE name = '%s';", BRANCH_TABLE_NAME, branch));
+      PreparedStatement deleteStatement =
+          con.prepareStatement("DELETE FROM " + BRANCH_TABLE_NAME + " WHERE name=?");
+
+      deleteStatement.setString(1, branch);
+      deleteStatement.execute();
+      deleteStatement.close();
     }
     return true;
   }

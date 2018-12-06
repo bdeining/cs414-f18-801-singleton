@@ -8,7 +8,6 @@ import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.MACHINE_TABL
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.MachineHandler;
-import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

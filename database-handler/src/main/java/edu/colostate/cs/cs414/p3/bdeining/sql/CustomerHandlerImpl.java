@@ -8,10 +8,8 @@ import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_TAB
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_DEF;
 import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME;
 
-import edu.colostate.cs.cs414.p3.bdeining.api.Activity;
 import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.CustomerHandler;
-import edu.colostate.cs.cs414.p3.bdeining.impl.CustomerImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

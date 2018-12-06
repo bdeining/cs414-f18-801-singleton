@@ -8,7 +8,6 @@ import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.EXERCISE_TAB
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.ExerciseHandler;
-import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

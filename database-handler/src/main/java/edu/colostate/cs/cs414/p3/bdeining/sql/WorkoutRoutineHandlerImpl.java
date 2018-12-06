@@ -10,7 +10,6 @@ import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.WORKOUT_ROUT
 
 import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.WorkoutRoutineHandler;
-import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

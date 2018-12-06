@@ -10,7 +10,6 @@ import static edu.colostate.cs.cs414.p3.bdeining.sql.TableConstants.TRAINER_TABL
 
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
 import edu.colostate.cs.cs414.p3.bdeining.api.handlers.TrainerHandler;
-import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -241,5 +240,4 @@ public class TrainerHandlerImpl implements TrainerHandler {
       preparedStatement.execute();
     }
   }
-
 }
