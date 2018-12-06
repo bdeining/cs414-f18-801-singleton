@@ -185,53 +185,13 @@ public class TrainerHandlerImpl implements TrainerHandler {
 
       List<Trainer> trainers = new ArrayList<>();
       while (resultSet.next()) {
-        Trainer trainer = getTrainer(resultSet);
+        Trainer trainer = Factory.createTrainer(dataSource, resultSet);
         if (trainer != null) {
           trainers.add(trainer);
         }
       }
       preparedStatement.close();
       return trainers;
-    }
-  }
-
-  /**
-   * Converts a {@link ResultSet} into a {@link Trainer}.
-   *
-   * @param resultSet the given result set
-   * @return the trainer converted, null otherwise
-   */
-  private Trainer getTrainer(ResultSet resultSet) {
-    try {
-      String firstName = resultSet.getString("first_name");
-      String lastName = resultSet.getString("last_name");
-      String address = resultSet.getString("address");
-      String phone = resultSet.getString("phone");
-      String email = resultSet.getString("email");
-      String branch = resultSet.getString("branch");
-      String id = resultSet.getString("id");
-      String healthInsuranceProvider = resultSet.getString("health_insurance_provider");
-      String password = resultSet.getString("password");
-      int workHours = resultSet.getInt("work_hours");
-      List<String> qualifications = getQualificationsForTrainer(id);
-      Trainer trainer =
-          new TrainerImpl(
-              id,
-              address,
-              firstName,
-              lastName,
-              phone,
-              email,
-              healthInsuranceProvider,
-              branch,
-              workHours,
-              qualifications,
-              password);
-      LOGGER.trace("Got trainer {}", trainer);
-      return trainer;
-    } catch (SQLException e) {
-      LOGGER.error("No data", e);
-      return null;
     }
   }
 
@@ -253,7 +213,7 @@ public class TrainerHandlerImpl implements TrainerHandler {
       }
 
       while (resultSet.next()) {
-        Trainer trainer = getTrainer(resultSet);
+        Trainer trainer = Factory.createTrainer(dataSource, resultSet);
         if (trainer != null) {
           return trainer;
         }
@@ -282,34 +242,4 @@ public class TrainerHandlerImpl implements TrainerHandler {
     }
   }
 
-  /**
-   * Gets the lists of qualifications for the given trainer's id.
-   *
-   * @param id the given id
-   * @return the list of qualifications, or an empty list if the trainer has none
-   */
-  private List<String> getQualificationsForTrainer(String id) {
-    try (Connection con = dataSource.getConnection()) {
-
-      PreparedStatement preparedStatement =
-          con.prepareStatement("SELECT * from " + QUALIFICATION_TABLE_NAME + " WHERE ID = ?;");
-
-      preparedStatement.setString(1, id);
-
-      ResultSet resultSet = preparedStatement.executeQuery();
-
-      List<String> qualifications = new ArrayList<>();
-      while (resultSet.next()) {
-        String qualificaiton = resultSet.getString("qualification");
-        qualifications.add(qualificaiton);
-      }
-
-      preparedStatement.close();
-      return qualifications;
-    } catch (SQLException e) {
-      LOGGER.error("Could not remove trainer {}", id, e);
-    }
-
-    return Collections.emptyList();
-  }
 }

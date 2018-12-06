@@ -9,6 +9,14 @@ class Trainer extends React.Component {
   constructor() {
     super();
     this.state = {
+      firstName: "",
+      lastName: "",
+      address: "",
+      phone: "",
+      email: "",
+      healthInsuranceProvider: "",
+      activity: "",
+      workHours: "",
       data: [],
       show: false,
       qualifications: [],
@@ -63,7 +71,28 @@ class Trainer extends React.Component {
     });
   };
 
+  validate = () => {
+    return {
+      address: this.state.address.length === 0,
+      firstName: this.state.firstName.length === 0,
+      lastName: this.state.lastName.length === 0,
+      phone: this.state.phone.length === 0,
+      email: this.state.email.length === 0,
+      healthInsuranceProvider: this.state.healthInsuranceProvider.length === 0,
+      workHours: this.state.workHours.length === 0
+    };
+  };
+
+  canBeSaved = () => {
+    const errors = this.validate();
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+    return !isDisabled;
+  };
+
   saveModal = () => {
+    if (!this.canBeSaved()) {
+      return;
+    }
     var qualifications = this.state.qualifications.map(function(item) {
       return item["name"];
     });
@@ -113,17 +142,19 @@ class Trainer extends React.Component {
   };
 
   getTrainerData() {
-    axios.get("/services/rest/trainer?branch=" + this.state.branch).then(res => {
-      this.setState({
-        data: [...this.state.data]
-      });
+    axios
+      .get("/services/rest/trainer?branch=" + this.state.branch)
+      .then(res => {
+        this.setState({
+          data: [...this.state.data]
+        });
 
-      this.setState({
-        data: res.data,
-        id: "",
-        show: this.state.show
+        this.setState({
+          data: res.data,
+          id: "",
+          show: this.state.show
+        });
       });
-    });
   }
 
   componentDidMount() {
@@ -162,6 +193,9 @@ class Trainer extends React.Component {
   };
 
   render() {
+    const errors = this.validate();
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+
     return (
       <div>
         <Modal
@@ -176,6 +210,7 @@ class Trainer extends React.Component {
           <div>
             <label>First Name</label>
             <input
+              className={errors.firstName ? "error" : ""}
               name="firstName"
               value={this.state.firstName}
               onChange={this.updateInputValue}
@@ -185,6 +220,7 @@ class Trainer extends React.Component {
           <div>
             <label>Last Name</label>
             <input
+              className={errors.lastName ? "error" : ""}
               name="lastName"
               value={this.state.lastName}
               onChange={this.updateInputValue}
@@ -194,6 +230,7 @@ class Trainer extends React.Component {
           <div>
             <label>Address</label>
             <input
+              className={errors.address ? "error" : ""}
               name="address"
               value={this.state.address}
               onChange={this.updateInputValue}
@@ -203,6 +240,7 @@ class Trainer extends React.Component {
           <div>
             <label>Phone Number</label>
             <input
+              className={errors.phone ? "error" : ""}
               name="phone"
               value={this.state.phone}
               onChange={this.updateInputValue}
@@ -212,6 +250,7 @@ class Trainer extends React.Component {
           <div>
             <label>Email</label>
             <input
+              className={errors.email ? "error" : ""}
               name="email"
               value={this.state.email}
               onChange={this.updateInputValue}
@@ -221,6 +260,7 @@ class Trainer extends React.Component {
           <div>
             <label>Health Insurance Provider</label>
             <input
+              className={errors.healthInsuranceProvider ? "error" : ""}
               name="healthInsuranceProvider"
               value={this.state.healthInsuranceProvider}
               onChange={this.updateInputValue}
@@ -230,6 +270,7 @@ class Trainer extends React.Component {
           <div>
             <label>Work Hours</label>
             <input
+              className={errors.workHours ? "error" : ""}
               name="workHours"
               value={this.state.workHours}
               onChange={this.updateInputValue}

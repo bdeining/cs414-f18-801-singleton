@@ -58,15 +58,15 @@ public class BranchHandlerImpl implements BranchHandler {
 
     if (!tables.contains(BRANCH_TABLE_NAME)) {
       createTable(dataSource, BRANCH_TABLE_NAME, BRANCH_TABLE_DEF);
-    }
 
-    try {
-      addBranch("Colorado Springs");
-      addBranch("Aurora");
-      addBranch("Cherry Creek");
+      try {
+        addBranch("Colorado Springs");
+        addBranch("Aurora");
+        addBranch("Cherry Creek");
 
-    } catch (SQLException e) {
-      LOGGER.debug("Could not add branches", e);
+      } catch (SQLException e) {
+        LOGGER.debug("Could not add branches", e);
+      }
     }
   }
 

@@ -159,46 +159,13 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
 
       List<WorkoutRoutine> workoutRoutineList = new ArrayList<>();
       while (resultSet.next()) {
-        WorkoutRoutine workoutRoutine = getWorkoutRoutine(resultSet);
+        WorkoutRoutine workoutRoutine = Factory.createWorkoutRoutine(dataSource, resultSet);
         if (workoutRoutine != null) {
           workoutRoutineList.add(workoutRoutine);
         }
       }
       preparedStatement.close();
       return workoutRoutineList;
-    }
-  }
-
-  private WorkoutRoutine getWorkoutRoutine(ResultSet resultSet) {
-    try (Connection con = dataSource.getConnection()) {
-      String id = resultSet.getString("id");
-      String name = resultSet.getString("name");
-      String branch = resultSet.getString("branch");
-
-      PreparedStatement preparedStatement =
-          con.prepareStatement(
-              "SELECT * FROM "
-                  + EXERCISE_WORKOUT_ROUTINE_TABLE_NAME
-                  + " WHERE workoutRoutineId = ?;");
-      preparedStatement.setString(1, id);
-
-      ResultSet exerciseResultSet = preparedStatement.executeQuery();
-
-      if (exerciseResultSet == null) {
-        preparedStatement.close();
-        return null;
-      }
-
-      List<String> exerciseIds = new ArrayList<>();
-      while (exerciseResultSet.next()) {
-        exerciseIds.add(exerciseResultSet.getString("exerciseId"));
-      }
-
-      preparedStatement.close();
-      return new WorkoutRoutineImpl(id, name, exerciseIds, branch);
-    } catch (SQLException e) {
-      LOGGER.debug("Could not get routine", e);
-      return null;
     }
   }
 
@@ -238,7 +205,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
       }
 
       while (resultSet.next()) {
-        WorkoutRoutine workoutRoutine = getWorkoutRoutine(resultSet);
+        WorkoutRoutine workoutRoutine = Factory.createWorkoutRoutine(dataSource, resultSet);
         if (workoutRoutine != null) {
           return workoutRoutine;
         }

@@ -15,6 +15,7 @@ class WorkoutRoutine extends React.Component {
       exerciseNames: [],
       show: false,
       add: false,
+      name: "",
       id: "",
       isManager: localStorage.getItem("user") === "manager",
       branch: localStorage.getItem("branch"),
@@ -74,7 +75,22 @@ class WorkoutRoutine extends React.Component {
     });
   };
 
+  validate = () => {
+    return {
+      name: this.state.name.length === 0
+    };
+  };
+
+  canBeSaved = () => {
+    const errors = this.validate();
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+    return !isDisabled;
+  };
+
   saveModal = () => {
+    if (!this.canBeSaved()) {
+      return;
+    }
     var exerciseIdList = this.state.exerciseIds.map(function(item) {
       return item["value"];
     });
@@ -110,18 +126,20 @@ class WorkoutRoutine extends React.Component {
   };
 
   getWorkoutRoutineData() {
-    axios.get("/services/rest/routine?branch=" + this.state.branch).then(res => {
-      this.setState({
-        data: [...this.state.data]
-      });
+    axios
+      .get("/services/rest/routine?branch=" + this.state.branch)
+      .then(res => {
+        this.setState({
+          data: [...this.state.data]
+        });
 
-      this.setState({
-        data: res.data,
-        id: "",
-        exerciseIds: [],
-        show: this.state.show
+        this.setState({
+          data: res.data,
+          id: "",
+          exerciseIds: [],
+          show: this.state.show
+        });
       });
-    });
   }
 
   componentDidMount() {
@@ -139,6 +157,9 @@ class WorkoutRoutine extends React.Component {
   };
 
   render() {
+    const errors = this.validate();
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+
     return (
       <div>
         <Modal
@@ -153,6 +174,7 @@ class WorkoutRoutine extends React.Component {
           <div>
             <label>Name</label>
             <input
+              className={errors.name ? "error" : ""}
               name="name"
               value={this.state.name}
               onChange={this.updateInputValue}

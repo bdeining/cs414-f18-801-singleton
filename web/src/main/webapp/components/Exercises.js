@@ -14,6 +14,11 @@ class Exercise extends React.Component {
       machineNames: [],
       show: false,
       isManager: localStorage.getItem("user") === "manager",
+      commonName: "",
+      machineId: "",
+      sets: "",
+      add: false,
+      durationPerSet: "",
       id: "",
       branch: localStorage.getItem("branch"),
       selected: null
@@ -73,7 +78,26 @@ class Exercise extends React.Component {
     });
   };
 
+  validate = () => {
+    return {
+      commonName: this.state.commonName.length === 0,
+      sets: this.state.sets.length === 0,
+      durationPerSet: this.state.durationPerSet.length === 0
+    };
+  };
+
+  canBeSaved = () => {
+    const errors = this.validate();
+    console.log(errors);
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+    return !isDisabled;
+  };
+
   saveModal = () => {
+    if (!this.canBeSaved()) {
+      return;
+    }
+
     if (this.state.id) {
       axios({
         method: "put",
@@ -109,17 +133,19 @@ class Exercise extends React.Component {
   };
 
   getExerciseData() {
-    axios.get("/services/rest/exercise?branch=" + this.state.branch).then(res => {
-      this.setState({
-        data: [...this.state.data]
-      });
+    axios
+      .get("/services/rest/exercise?branch=" + this.state.branch)
+      .then(res => {
+        this.setState({
+          data: [...this.state.data]
+        });
 
-      this.setState({
-        data: res.data,
-        id: "",
-        show: this.state.show
+        this.setState({
+          data: res.data,
+          id: "",
+          show: this.state.show
+        });
       });
-    });
   }
 
   componentDidMount() {
@@ -137,6 +163,9 @@ class Exercise extends React.Component {
   };
 
   render() {
+    const errors = this.validate();
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+
     return (
       <div>
         <Modal
@@ -151,6 +180,7 @@ class Exercise extends React.Component {
           <div>
             <label>Common Name</label>
             <input
+              className={errors.commonName ? "error" : ""}
               name="commonName"
               value={this.state.commonName}
               onChange={this.updateInputValue}
@@ -171,6 +201,7 @@ class Exercise extends React.Component {
           <div>
             <label>Sets</label>
             <input
+              className={errors.sets ? "error" : ""}
               name="sets"
               value={this.state.sets}
               onChange={this.updateInputValue}
@@ -180,6 +211,7 @@ class Exercise extends React.Component {
           <div>
             <label>Duration Per Set (minutes)</label>
             <input
+              className={errors.durationPerSet ? "error" : ""}
               name="durationPerSet"
               value={this.state.durationPerSet}
               onChange={this.updateInputValue}

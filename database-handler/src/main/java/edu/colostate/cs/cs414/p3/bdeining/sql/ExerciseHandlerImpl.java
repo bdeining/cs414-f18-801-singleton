@@ -135,7 +135,7 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
 
       List<Exercise> exerciseList = new ArrayList<>();
       while (resultSet.next()) {
-        Exercise exercise = convertResultSetToExercise(resultSet);
+        Exercise exercise = Factory.createExercise(resultSet);
         if (exercise != null) {
           exerciseList.add(exercise);
         }
@@ -171,7 +171,7 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
       }
 
       while (resultSet.next()) {
-        Exercise exercise = convertResultSetToExercise(resultSet);
+        Exercise exercise = Factory.createExercise(resultSet);
         if (exercise != null) {
           return exercise;
         }
@@ -179,27 +179,5 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
       preparedStatement.close();
     }
     return null;
-  }
-
-  /**
-   * Converts a {@link ResultSet} into an {@link Exercise}
-   *
-   * @param resultSet the given result set
-   * @return an {@link Exercise}, or null if none was found
-   */
-  private Exercise convertResultSetToExercise(ResultSet resultSet) {
-    try {
-      String id = resultSet.getString("id");
-      String name = resultSet.getString("name");
-      String machineId = resultSet.getString("machineId");
-      String branch = resultSet.getString("branch");
-      int sets = resultSet.getInt("sets");
-      int duration = resultSet.getInt("duration");
-
-      return new ExerciseImpl(id, name, machineId, sets, duration, branch);
-    } catch (SQLException e) {
-      LOGGER.error("No data", e);
-      return null;
-    }
   }
 }

@@ -199,65 +199,13 @@ public class CustomerHandlerImpl implements CustomerHandler {
 
       List<Customer> customers = new ArrayList<>();
       while (resultSet.next()) {
-        Customer customer = convertResultSetToCustomer(resultSet);
+        Customer customer = Factory.createCustomer(dataSource, resultSet);
         if (customer != null) {
           customers.add(customer);
         }
       }
       preparedStatement.close();
       return customers;
-    }
-  }
-
-  /**
-   * Converts a result set into a {@link Customer} object
-   *
-   * @param resultSet the result set from the data source
-   * @return customer object read from the data source
-   */
-  private Customer convertResultSetToCustomer(ResultSet resultSet) {
-    try {
-      String firstName = resultSet.getString("first_name");
-      String lastName = resultSet.getString("last_name");
-      String address = resultSet.getString("address");
-      String phone = resultSet.getString("phone");
-      String email = resultSet.getString("email");
-      String id = resultSet.getString("id");
-      String branch = resultSet.getString("branch");
-      String healthInsuranceProvider = resultSet.getString("health_insurance_provider");
-      Activity activity = Activity.valueOf(resultSet.getString("activity"));
-
-      List<String> workoutRoutines = new ArrayList<>();
-      try (Connection con = dataSource.getConnection()) {
-        PreparedStatement insert =
-            con.prepareCall(
-                "SELECT * FROM " + CUSTOMER_WORKOUT_ROUTINE_TABLE_NAME + " WHERE CUSTOMERID = ?");
-        insert.setString(1, id);
-        ResultSet resultSetWorkouts = insert.executeQuery();
-        while (resultSetWorkouts.next()) {
-          workoutRoutines.add(resultSetWorkouts.getString("WORKOUTROUTINEID"));
-        }
-        insert.close();
-      }
-
-      Customer customer =
-          new CustomerImpl(
-              id,
-              address,
-              firstName,
-              lastName,
-              phone,
-              email,
-              healthInsuranceProvider,
-              branch,
-              workoutRoutines,
-              activity);
-
-      LOGGER.trace("Got customer {}", customer);
-      return customer;
-    } catch (SQLException e) {
-      LOGGER.error("No data", e);
-      return null;
     }
   }
 
@@ -280,7 +228,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
       }
 
       while (resultSet.next()) {
-        Customer customer = convertResultSetToCustomer(resultSet);
+        Customer customer = Factory.createCustomer(dataSource, resultSet);
         if (customer != null) {
           return customer;
         }

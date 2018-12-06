@@ -135,7 +135,7 @@ public class MachineHandlerImpl implements MachineHandler {
 
       List<Machine> machineList = new ArrayList<>();
       while (resultSet.next()) {
-        Machine machine = getMachine(resultSet);
+        Machine machine = Factory.createMachine(resultSet);
         if (machine != null) {
           machineList.add(machine);
         }
@@ -150,29 +150,6 @@ public class MachineHandlerImpl implements MachineHandler {
   public boolean removeMachine(String id) throws SQLException {
     HandlerUtils.removeById(dataSource, id, MACHINE_TABLE_NAME);
     return true;
-  }
-
-  /**
-   * Converts a {@link ResultSet} into a {@link Machine}
-   *
-   * @param resultSet the given result set
-   * @return the machine, or null if the conversion fails
-   */
-  private Machine getMachine(ResultSet resultSet) {
-    try {
-      String id = resultSet.getString("id");
-      String name = resultSet.getString("name");
-      String picture = resultSet.getString("picture");
-      int quantity = resultSet.getInt("quantity");
-      String branch = resultSet.getString("branch");
-
-      Machine machine = new MachineImpl(id, name, picture, quantity, branch);
-      LOGGER.trace("Got machine {}", machine);
-      return machine;
-    } catch (SQLException e) {
-      LOGGER.error("No data", e);
-      return null;
-    }
   }
 
   /**
@@ -193,7 +170,7 @@ public class MachineHandlerImpl implements MachineHandler {
       }
 
       while (resultSet.next()) {
-        Machine machine = getMachine(resultSet);
+        Machine machine = Factory.createMachine(resultSet);
         if (machine != null) {
           return machine;
         }

@@ -12,6 +12,8 @@ class Machine extends React.Component {
       data: [],
       show: false,
       id: "",
+      name: "",
+      quantity: "",
       selected: null,
       add: false,
       branch: localStorage.getItem("branch"),
@@ -59,7 +61,25 @@ class Machine extends React.Component {
     });
   };
 
+  validate = () => {
+    return {
+      name: this.state.name.length === 0,
+      quantity: this.state.quantity.length === 0
+    };
+  };
+
+  canBeSaved = () => {
+    const errors = this.validate();
+    console.log(errors);
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+    return !isDisabled;
+  };
+
   saveModal = () => {
+    if (!this.canBeSaved()) {
+      return;
+    }
+
     var that = this;
     if (this.state.id) {
       if (this.state.selectedFile) {
@@ -99,16 +119,31 @@ class Machine extends React.Component {
         });
       }
     } else {
-    if (this.state.selectedFile) {
-      var reader = new FileReader();
-      reader.readAsDataURL(this.state.selectedFile);
-      reader.onload = function() {
+      if (this.state.selectedFile) {
+        var reader = new FileReader();
+        reader.readAsDataURL(this.state.selectedFile);
+        reader.onload = function() {
+          axios({
+            method: "put",
+            url: "/services/rest/machine",
+            data: {
+              name: that.state.name,
+              picture: reader.result,
+              quantity: that.state.quantity,
+              branch: that.state.branch
+            }
+          }).then(res => {
+            that.getMachineData();
+            that.clearMachineState();
+          });
+        };
+      } else {
         axios({
           method: "put",
           url: "/services/rest/machine",
           data: {
             name: that.state.name,
-            picture: reader.result,
+            picture: "",
             quantity: that.state.quantity,
             branch: that.state.branch
           }
@@ -116,41 +151,24 @@ class Machine extends React.Component {
           that.getMachineData();
           that.clearMachineState();
         });
-      };
-
-
-  } else {
-
-            axios({
-              method: "put",
-              url: "/services/rest/machine",
-              data: {
-                name: that.state.name,
-                picture: "",
-                quantity: that.state.quantity,
-                branch: that.state.branch
-              }
-            }).then(res => {
-              that.getMachineData();
-              that.clearMachineState();
-            });
-
-        }
-        }
-  }
+      }
+    }
+  };
 
   getMachineData() {
-    axios.get("/services/rest/machine?branch=" + this.state.branch).then(res => {
-      this.setState({
-        data: [...this.state.data]
-      });
+    axios
+      .get("/services/rest/machine?branch=" + this.state.branch)
+      .then(res => {
+        this.setState({
+          data: [...this.state.data]
+        });
 
-      this.setState({
-        data: res.data,
-        id: "",
-        show: this.state.show
+        this.setState({
+          data: res.data,
+          id: "",
+          show: this.state.show
+        });
       });
-    });
   }
 
   componentDidMount() {
@@ -168,6 +186,9 @@ class Machine extends React.Component {
   };
 
   render() {
+    const errors = this.validate();
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+
     return (
       <div>
         <Modal
@@ -182,6 +203,7 @@ class Machine extends React.Component {
           <div>
             <label>Name</label>
             <input
+              className={errors.name ? "error" : ""}
               name="name"
               value={this.state.name}
               onChange={this.updateInputValue}
@@ -190,6 +212,7 @@ class Machine extends React.Component {
           <div>
             <label>Quantity</label>
             <input
+              className={errors.quantity ? "error" : ""}
               name="quantity"
               value={this.state.quantity}
               onChange={this.updateInputValue}

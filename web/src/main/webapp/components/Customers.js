@@ -15,11 +15,18 @@ class Customer extends React.Component {
   constructor() {
     super();
     this.state = {
+      firstName: "",
+      lastName: "",
+      address: "",
+      phone: "",
+      email: "",
+      healthInsuranceProvider: "",
+      activity: "",
+      id: "",
       data: [],
       routineNames: [],
-      activity: "",
+      activity: activityOptions[0],
       show: false,
-      id: "",
       add: false,
       branch: localStorage.getItem("branch"),
       selected: null
@@ -42,7 +49,6 @@ class Customer extends React.Component {
       phone: "",
       email: "",
       healthInsuranceProvider: "",
-      activity: "",
       id: "",
       add: false,
       workoutRoutineIds: [],
@@ -83,14 +89,34 @@ class Customer extends React.Component {
     });
   };
 
+  validate = () => {
+    return {
+      address: this.state.address.length === 0,
+      firstName: this.state.firstName.length === 0,
+      lastName: this.state.lastName.length === 0,
+      phone: this.state.phone.length === 0,
+      email: this.state.email.length === 0,
+      healthInsuranceProvider: this.state.healthInsuranceProvider.length === 0
+    };
+  };
+
+  canBeSaved = () => {
+    const errors = this.validate();
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+    return !isDisabled;
+  };
+
   saveModal = () => {
+    if (!this.canBeSaved()) {
+      return;
+    }
 
     var routineIds = [];
 
     if (this.state.workoutRoutineIds) {
-        routineIds = this.state.workoutRoutineIds.map(function(item) {
-                           return item["value"];
-                         });
+      routineIds = this.state.workoutRoutineIds.map(function(item) {
+        return item["value"];
+      });
     }
 
     if (this.state.id) {
@@ -170,6 +196,8 @@ class Customer extends React.Component {
   };
 
   render() {
+    const errors = this.validate();
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
     return (
       <div>
         <Modal
@@ -184,6 +212,7 @@ class Customer extends React.Component {
           <div>
             <label>First Name</label>
             <input
+              className={errors.firstName ? "error" : ""}
               name="firstName"
               value={this.state.firstName}
               onChange={this.updateInputValue}
@@ -192,6 +221,7 @@ class Customer extends React.Component {
           <div>
             <label>Last Name</label>
             <input
+              className={errors.lastName ? "error" : ""}
               name="lastName"
               value={this.state.lastName}
               onChange={this.updateInputValue}
@@ -200,6 +230,7 @@ class Customer extends React.Component {
           <div>
             <label>Address</label>
             <input
+              className={errors.address ? "error" : ""}
               name="address"
               value={this.state.address}
               onChange={this.updateInputValue}
@@ -208,6 +239,7 @@ class Customer extends React.Component {
           <div>
             <label>Phone</label>
             <input
+              className={errors.phone ? "error" : ""}
               name="phone"
               value={this.state.phone}
               onChange={this.updateInputValue}
@@ -216,6 +248,7 @@ class Customer extends React.Component {
           <div>
             <label>Email</label>
             <input
+              className={errors.email ? "error" : ""}
               name="email"
               value={this.state.email}
               onChange={this.updateInputValue}
@@ -224,6 +257,7 @@ class Customer extends React.Component {
           <div>
             <label>Health Insurance Provider</label>
             <input
+              className={errors.healthInsuranceProvider ? "error" : ""}
               name="healthInsuranceProvider"
               value={this.state.healthInsuranceProvider}
               onChange={this.updateInputValue}
