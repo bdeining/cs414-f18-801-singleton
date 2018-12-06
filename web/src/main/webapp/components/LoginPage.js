@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Select from "react-select";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -9,6 +10,11 @@ class LoginPage extends React.Component {
       password: ""
     };
     localStorage.removeItem("user");
+    axios.get("/services/rest/branch").then(res => {
+      this.setState({
+        branches: res.data
+      });
+    });
   }
 
   handleSubmit = e => {
@@ -18,13 +24,17 @@ class LoginPage extends React.Component {
         "/services/rest/login?email=" +
           this.state.email +
           "&password=" +
-          this.state.password
+          this.state.password +
+          "&branch=" +
+          this.state.branch.value
       )
       .then(res => {
         localStorage.setItem("user", this.state.email);
+        localStorage.setItem("branch", this.state.branch.value);
         this.setState({
           email: this.state.email,
-          password: this.state.password
+          password: this.state.password,
+          branch: this.state.branch.value
         });
       });
   };
@@ -33,6 +43,10 @@ class LoginPage extends React.Component {
     this.setState({
       [evt.target.name]: evt.target.value
     });
+  };
+
+  handleChange = selectedOption => {
+    this.setState({ branch: selectedOption });
   };
 
   render() {
@@ -59,6 +73,11 @@ class LoginPage extends React.Component {
                   onChange={this.updateInputValue}
                 />
               </div>
+              <Select
+                value={this.state.branch}
+                onChange={this.handleChange}
+                options={this.state.branches}
+              />
               <input type="submit" value="Submit" />
             </form>
           </div>

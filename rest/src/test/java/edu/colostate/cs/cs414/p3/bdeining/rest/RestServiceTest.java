@@ -114,7 +114,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetWorkoutRoutineNames() {
-    Response response = restService.getWorkoutRoutineNames();
+    Response response = restService.getWorkoutRoutineNames(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Map<String, Object>> workoutRoutines = (List<Map<String, Object>>) response.getEntity();
@@ -126,15 +126,15 @@ public class RestServiceTest {
 
   @Test
   public void testGetWorkoutRoutineNamesSqlException() throws SQLException {
-    when(workoutRoutineHandler.getWorkoutRoutines()).thenThrow(SQLException.class);
-    Response response = restService.getWorkoutRoutineNames();
+    when(workoutRoutineHandler.getWorkoutRoutines(BRANCH)).thenThrow(SQLException.class);
+    Response response = restService.getWorkoutRoutineNames(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
 
   @Test
   public void testGetExerciseNames() {
-    Response response = restService.getExerciseNames();
+    Response response = restService.getExerciseNames(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Map<String, Object>> exercises = (List<Map<String, Object>>) response.getEntity();
@@ -146,15 +146,15 @@ public class RestServiceTest {
 
   @Test
   public void testGetExerciseNamesSqlException() throws SQLException {
-    when(exerciseHandler.getExercises()).thenThrow(SQLException.class);
-    Response response = restService.getExerciseNames();
+    when(exerciseHandler.getExercises(BRANCH)).thenThrow(SQLException.class);
+    Response response = restService.getExerciseNames(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
 
   @Test
   public void testGetMachineNames() {
-    Response response = restService.getMachineNames();
+    Response response = restService.getMachineNames(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Map<String, Object>> machines = (List<Map<String, Object>>) response.getEntity();
@@ -166,15 +166,15 @@ public class RestServiceTest {
 
   @Test
   public void testGetMachineNamesSqlException() throws SQLException {
-    when(machineHandler.getMachines()).thenThrow(SQLException.class);
-    Response response = restService.getMachineNames();
+    when(machineHandler.getMachines(BRANCH)).thenThrow(SQLException.class);
+    Response response = restService.getMachineNames(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
 
   @Test
   public void testGetCustomer() {
-    Response response = restService.getCustomers();
+    Response response = restService.getCustomers(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Customer> customerList = (List<Customer>) response.getEntity();
@@ -186,8 +186,8 @@ public class RestServiceTest {
 
   @Test
   public void testGetCustomerSqlException() throws Exception {
-    when(customerHandler.getCustomers()).thenThrow(SQLException.class);
-    Response response = restService.getCustomers();
+    when(customerHandler.getCustomers(BRANCH)).thenThrow(SQLException.class);
+    Response response = restService.getCustomers(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -245,7 +245,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetMachine() {
-    Response response = restService.getMachines();
+    Response response = restService.getMachines(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Machine> machineList = (List<Machine>) response.getEntity();
@@ -257,8 +257,8 @@ public class RestServiceTest {
 
   @Test
   public void testGetMachineSqlException() throws Exception {
-    when(machineHandler.getMachines()).thenThrow(SQLException.class);
-    Response response = restService.getMachines();
+    when(machineHandler.getMachines(BRANCH)).thenThrow(SQLException.class);
+    Response response = restService.getMachines(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -309,7 +309,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetTrainer() {
-    Response response = restService.getTrainers();
+    Response response = restService.getTrainers(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Trainer> trainerList = (List<Trainer>) response.getEntity();
@@ -321,8 +321,8 @@ public class RestServiceTest {
 
   @Test
   public void testGetTrainerSqlException() throws Exception {
-    when(trainerHandler.getTrainers()).thenThrow(SQLException.class);
-    Response response = restService.getTrainers();
+    when(trainerHandler.getTrainers(BRANCH)).thenThrow(SQLException.class);
+    Response response = restService.getTrainers(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -372,7 +372,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetExercise() {
-    Response response = restService.getExercises();
+    Response response = restService.getExercises(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<Exercise> exerciseList = (List<Exercise>) response.getEntity();
@@ -384,8 +384,8 @@ public class RestServiceTest {
 
   @Test
   public void testGetExerciseSqlException() throws Exception {
-    when(exerciseHandler.getExercises()).thenThrow(SQLException.class);
-    Response response = restService.getExercises();
+    when(exerciseHandler.getExercises(anyString())).thenThrow(SQLException.class);
+    Response response = restService.getExercises(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -436,7 +436,7 @@ public class RestServiceTest {
 
   @Test
   public void testGetWorkoutRoutine() {
-    Response response = restService.getWorkoutRoutines();
+    Response response = restService.getWorkoutRoutines(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(200));
     List<WorkoutRoutine> workoutRoutineList = (List<WorkoutRoutine>) response.getEntity();
@@ -447,8 +447,8 @@ public class RestServiceTest {
 
   @Test
   public void testGetWorkoutRoutineSqlException() throws Exception {
-    when(workoutRoutineHandler.getWorkoutRoutines()).thenThrow(SQLException.class);
-    Response response = restService.getWorkoutRoutines();
+    when(workoutRoutineHandler.getWorkoutRoutines(BRANCH)).thenThrow(SQLException.class);
+    Response response = restService.getWorkoutRoutines(BRANCH);
     assertThat(response, notNullValue());
     assertThat(response.getStatus(), is(500));
   }
@@ -508,12 +508,16 @@ public class RestServiceTest {
     workoutRoutineHandler = mock(WorkoutRoutineHandler.class);
     machineHandler = mock(MachineHandler.class);
     branchHandler = mock(BranchHandler.class);
-    when(customerHandler.getCustomers()).thenReturn(Collections.singletonList(generateCustomer()));
-    when(trainerHandler.getTrainers()).thenReturn(Collections.singletonList(generateTrainer()));
-    when(machineHandler.getMachines()).thenReturn(Collections.singletonList(generateMachine()));
-    when(workoutRoutineHandler.getWorkoutRoutines())
+    when(customerHandler.getCustomers(anyString()))
+        .thenReturn(Collections.singletonList(generateCustomer()));
+    when(trainerHandler.getTrainers(BRANCH))
+        .thenReturn(Collections.singletonList(generateTrainer()));
+    when(machineHandler.getMachines(BRANCH))
+        .thenReturn(Collections.singletonList(generateMachine()));
+    when(workoutRoutineHandler.getWorkoutRoutines(BRANCH))
         .thenReturn(Collections.singletonList(generateWorkoutRoutine()));
-    when(exerciseHandler.getExercises()).thenReturn(Collections.singletonList(generateExercise()));
+    when(exerciseHandler.getExercises(BRANCH))
+        .thenReturn(Collections.singletonList(generateExercise()));
     when(branchHandler.getBranches()).thenReturn(Collections.singletonList(BRANCH));
 
     when(customerHandler.removeCustomer(anyString())).thenReturn(true);
@@ -532,7 +536,7 @@ public class RestServiceTest {
   }
 
   private Machine generateMachine() {
-    return new MachineImpl(UUID.randomUUID().toString(), MACHINE_NAME, "1234", QUANTITY);
+    return new MachineImpl(UUID.randomUUID().toString(), MACHINE_NAME, "1234", QUANTITY, BRANCH);
   }
 
   private Customer generateCustomer() {
@@ -565,11 +569,11 @@ public class RestServiceTest {
   }
 
   private WorkoutRoutine generateWorkoutRoutine() {
-    return new WorkoutRoutineImpl(UUID.randomUUID().toString(), ROUTINE_NAME, ID_LIST);
+    return new WorkoutRoutineImpl(UUID.randomUUID().toString(), ROUTINE_NAME, ID_LIST, BRANCH);
   }
 
   private Exercise generateExercise() {
     return new ExerciseImpl(
-        UUID.randomUUID().toString(), EXERCISE_NAME, UUID.randomUUID().toString(), 12, 12);
+        UUID.randomUUID().toString(), EXERCISE_NAME, UUID.randomUUID().toString(), 12, 12, BRANCH);
   }
 }

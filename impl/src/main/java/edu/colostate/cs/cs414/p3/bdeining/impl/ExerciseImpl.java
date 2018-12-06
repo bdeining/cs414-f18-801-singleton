@@ -15,13 +15,16 @@ public class ExerciseImpl implements Exercise {
 
   private int durationPerSet;
 
+  private String branch;
+
   public ExerciseImpl(
-      String id, String commonName, String machineId, int sets, int durationPerSet) {
+      String id, String commonName, String machineId, int sets, int durationPerSet, String branch) {
     this.commonName = commonName;
     this.machineId = machineId;
     this.sets = sets;
     this.id = id;
     this.durationPerSet = durationPerSet;
+    this.branch = branch;
   }
 
   /** {@inheritDoc} */
@@ -111,5 +114,15 @@ public class ExerciseImpl implements Exercise {
     hash = 31 * hash + sets;
     hash = 31 * hash + durationPerSet;
     return hash;
+  }
+
+  @Override
+  public String getBranch() {
+    return branch;
+  }
+
+  @Override
+  public void setBranch(String branch) {
+    this.branch = branch;
   }
 }

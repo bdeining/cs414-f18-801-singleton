@@ -27,8 +27,9 @@ public interface ExerciseHandler {
   /**
    * Gets a list of a all {@link Exercise}s in the data store
    *
+   * @param branch the branch to get exercise from
    * @return a list of exercises
    * @throws SQLException when a database error occurs
    */
-  List<Exercise> getExercises() throws SQLException;
+  List<Exercise> getExercises(String branch) throws SQLException;
 }

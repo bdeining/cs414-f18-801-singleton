@@ -75,6 +75,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
     String name = workoutRoutine.getName();
     String id = workoutRoutine.getId();
     List<String> workoutRoutineExerciseIds = workoutRoutine.getExerciseIds();
+    String branch = workoutRoutine.getBranch();
 
     WorkoutRoutine existingCustomer = getWorkoutRoutineById(id);
     if (existingCustomer != null) {
@@ -84,10 +85,12 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
         LOGGER.trace("Adding exercise : {}", existingCustomer);
 
         PreparedStatement update =
-            con.prepareStatement("update " + WORKOUT_ROUTINE_TABLE_NAME + " SET name=? WHERE id=?");
+            con.prepareStatement(
+                "update " + WORKOUT_ROUTINE_TABLE_NAME + " SET name=?, branch=? WHERE id=?");
 
         update.setString(1, name);
-        update.setString(2, id);
+        update.setString(2, branch);
+        update.setString(3, id);
         update.execute();
         update.close();
 
@@ -115,9 +118,10 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
 
         PreparedStatement insert =
             con.prepareStatement(
-                "INSERT INTO " + WORKOUT_ROUTINE_TABLE_NAME + " (name, id) VALUES (?,?)");
+                "INSERT INTO " + WORKOUT_ROUTINE_TABLE_NAME + " (name, id, branch) VALUES (?,?,?)");
         insert.setString(1, name);
         insert.setString(2, id);
+        insert.setString(3, branch);
         insert.execute();
         insert.close();
 
@@ -140,11 +144,12 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
 
   /** {@inheritDoc} */
   @Override
-  public List<WorkoutRoutine> getWorkoutRoutines() throws SQLException {
+  public List<WorkoutRoutine> getWorkoutRoutines(String branch) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
 
       PreparedStatement preparedStatement =
-          con.prepareStatement("SELECT * FROM " + WORKOUT_ROUTINE_TABLE_NAME);
+          con.prepareStatement("SELECT * FROM " + WORKOUT_ROUTINE_TABLE_NAME + " where branch=?");
+      preparedStatement.setString(1, branch);
       ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {
@@ -168,6 +173,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
     try (Connection con = dataSource.getConnection()) {
       String id = resultSet.getString("id");
       String name = resultSet.getString("name");
+      String branch = resultSet.getString("branch");
 
       PreparedStatement preparedStatement =
           con.prepareStatement(
@@ -189,7 +195,7 @@ public class WorkoutRoutineHandlerImpl implements WorkoutRoutineHandler {
       }
 
       preparedStatement.close();
-      return new WorkoutRoutineImpl(id, name, exerciseIds);
+      return new WorkoutRoutineImpl(id, name, exerciseIds, branch);
     } catch (SQLException e) {
       LOGGER.debug("Could not get routine", e);
       return null;

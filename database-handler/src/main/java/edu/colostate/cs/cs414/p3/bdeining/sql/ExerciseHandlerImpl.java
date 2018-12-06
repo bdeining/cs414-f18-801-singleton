@@ -70,6 +70,7 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
     int duration = exercise.getDurationPerSet();
     int sets = exercise.getSets();
     String machineId = exercise.getMachineId();
+    String branch = exercise.getBranch();
 
     Exercise existingCustomer = getExerciseById(id);
     if (existingCustomer != null) {
@@ -82,13 +83,14 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
             con.prepareStatement(
                 "update "
                     + EXERCISE_TABLE_NAME
-                    + " SET name=?, duration=?, sets=?, machineId=? WHERE id=?");
+                    + " SET name=?, duration=?, sets=?, machineId=?, branch=? WHERE id=?");
 
         update.setString(1, name);
         update.setInt(2, duration);
         update.setInt(3, sets);
         update.setString(4, machineId);
-        update.setString(5, id);
+        update.setString(5, branch);
+        update.setString(6, id);
         update.execute();
         update.close();
       }
@@ -101,12 +103,13 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
             con.prepareStatement(
                 "INSERT INTO "
                     + EXERCISE_TABLE_NAME
-                    + " (name, id, machineId, sets, duration) VALUES (?,?,?,?,?)");
+                    + " (name, id, machineId, sets, duration, branch) VALUES (?,?,?,?,?,?)");
         insert.setString(1, name);
         insert.setString(2, id);
         insert.setString(3, machineId);
         insert.setInt(4, sets);
         insert.setInt(5, duration);
+        insert.setString(6, branch);
         insert.execute();
         insert.close();
       }
@@ -116,12 +119,13 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
 
   /** {@inheritDoc} */
   @Override
-  public List<Exercise> getExercises() throws SQLException {
+  public List<Exercise> getExercises(String branch) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
 
       PreparedStatement preparedStatement =
-          con.prepareStatement("SELECT * FROM " + EXERCISE_TABLE_NAME);
+          con.prepareStatement("SELECT * FROM " + EXERCISE_TABLE_NAME + " where branch=?");
 
+      preparedStatement.setString(1, branch);
       ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {
@@ -188,10 +192,11 @@ public class ExerciseHandlerImpl implements ExerciseHandler {
       String id = resultSet.getString("id");
       String name = resultSet.getString("name");
       String machineId = resultSet.getString("machineId");
+      String branch = resultSet.getString("branch");
       int sets = resultSet.getInt("sets");
       int duration = resultSet.getInt("duration");
 
-      return new ExerciseImpl(id, name, machineId, sets, duration);
+      return new ExerciseImpl(id, name, machineId, sets, duration, branch);
     } catch (SQLException e) {
       LOGGER.error("No data", e);
       return null;

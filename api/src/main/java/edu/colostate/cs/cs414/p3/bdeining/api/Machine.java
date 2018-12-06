@@ -50,4 +50,18 @@ public interface Machine {
    * @param quantity integer amount of machines
    */
   void setQuantity(int quantity);
+
+  /**
+   * Sets the Branch
+   *
+   * @param branch
+   */
+  void setBranch(String branch);
+
+  /**
+   * Gets the Branch
+   *
+   * @return
+   */
+  String getBranch();
 }

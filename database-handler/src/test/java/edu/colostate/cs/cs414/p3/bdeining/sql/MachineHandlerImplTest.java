@@ -26,6 +26,8 @@ import org.junit.Test;
 
 public class MachineHandlerImplTest {
 
+  private static final String BRANCH = "branch";
+
   private MachineHandlerImpl machineHandler;
 
   private DataSource dataSource;
@@ -114,13 +116,15 @@ public class MachineHandlerImplTest {
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("name")).thenReturn("aName");
     when(tableResultSet.getString("picture")).thenReturn("picture");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
     when(tableResultSet.getInt("quantity")).thenReturn(12);
 
-    List<Machine> machineList = machineHandler.getMachines();
+    List<Machine> machineList = machineHandler.getMachines(BRANCH);
     assertThat(machineList, hasSize(1));
     assertThat(machineList.get(0).getId(), is("anId"));
     assertThat(machineList.get(0).getName(), is("aName"));
     assertThat(machineList.get(0).getPicture(), is("picture"));
+    assertThat(machineList.get(0).getBranch(), is("branch"));
     assertThat(machineList.get(0).getQuantity(), is(12));
   }
 
@@ -131,7 +135,7 @@ public class MachineHandlerImplTest {
     when(tableResultSet.next()).thenReturn(true, false);
     when(tableResultSet.getString(anyString())).thenThrow(SQLException.class);
 
-    List<Machine> machineList = machineHandler.getMachines();
+    List<Machine> machineList = machineHandler.getMachines(BRANCH);
     assertThat(machineList, hasSize(0));
   }
 
@@ -151,6 +155,6 @@ public class MachineHandlerImplTest {
   }
 
   private Machine getMockMachine() {
-    return new MachineImpl(UUID.randomUUID().toString(), "aMachine", "12345", 2);
+    return new MachineImpl(UUID.randomUUID().toString(), "aMachine", "12345", 2, "branch");
   }
 }

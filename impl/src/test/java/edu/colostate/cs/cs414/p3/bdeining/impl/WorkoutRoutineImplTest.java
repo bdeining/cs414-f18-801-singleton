@@ -22,9 +22,11 @@ public class WorkoutRoutineImplTest {
 
   private static final List<String> EXERCISE_LIST = Arrays.asList("ex1", "ex2");
 
+  private static final String BRANCH = "branch";
+
   @Before
   public void setUp() {
-    workoutRoutine = new WorkoutRoutineImpl(ID, NAME, EXERCISE_LIST);
+    workoutRoutine = new WorkoutRoutineImpl(ID, NAME, EXERCISE_LIST, BRANCH);
   }
 
   @Test
@@ -34,15 +36,16 @@ public class WorkoutRoutineImplTest {
 
   @Test
   public void testSetters() {
-    workoutRoutine = new WorkoutRoutineImpl(null, null, null);
+    workoutRoutine = new WorkoutRoutineImpl(null, null, null, null);
     workoutRoutine.setName(NAME);
     workoutRoutine.setExcerciseIds(EXERCISE_LIST);
+    workoutRoutine.setBranch(BRANCH);
     assertFields(null);
   }
 
   @Test
   public void testNullId() {
-    workoutRoutine = new WorkoutRoutineImpl(null, NAME, EXERCISE_LIST);
+    workoutRoutine = new WorkoutRoutineImpl(null, NAME, EXERCISE_LIST, BRANCH);
     assertThat(workoutRoutine.getId(), notNullValue());
   }
 
@@ -70,6 +73,7 @@ public class WorkoutRoutineImplTest {
     }
     assertThat(workoutRoutine.getExerciseIds(), is(EXERCISE_LIST));
     assertThat(workoutRoutine.getName(), is(NAME));
+    assertThat(workoutRoutine.getBranch(), is(BRANCH));
   }
 
   @Test

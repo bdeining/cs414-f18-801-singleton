@@ -25,6 +25,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ExerciseHandlerImplTest {
+  private static final String BRANCH = "branch";
+
   private ExerciseHandlerImpl exerciseHandler;
 
   private DataSource dataSource;
@@ -106,16 +108,18 @@ public class ExerciseHandlerImplTest {
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("name")).thenReturn("aName");
     when(tableResultSet.getString("machineId")).thenReturn("machineId");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
     when(tableResultSet.getInt("duration")).thenReturn(2);
     when(tableResultSet.getInt("sets")).thenReturn(3);
 
-    List<Exercise> exerciseList = exerciseHandler.getExercises();
+    List<Exercise> exerciseList = exerciseHandler.getExercises(BRANCH);
     assertThat(exerciseList, hasSize(1));
     assertThat(exerciseList.get(0).getId(), is("anId"));
     assertThat(exerciseList.get(0).getCommonName(), is("aName"));
     assertThat(exerciseList.get(0).getDurationPerSet(), is(2));
     assertThat(exerciseList.get(0).getSets(), is(3));
     assertThat(exerciseList.get(0).getMachineId(), is("machineId"));
+    assertThat(exerciseList.get(0).getBranch(), is("branch"));
   }
 
   @Test
@@ -125,7 +129,7 @@ public class ExerciseHandlerImplTest {
     when(tableResultSet.next()).thenReturn(true).thenReturn(false);
     when(tableResultSet.getString(anyString())).thenThrow(SQLException.class);
 
-    List<Exercise> exerciseList = exerciseHandler.getExercises();
+    List<Exercise> exerciseList = exerciseHandler.getExercises(BRANCH);
     assertThat(exerciseList, hasSize(0));
   }
 
@@ -153,6 +157,6 @@ public class ExerciseHandlerImplTest {
   }
 
   private Exercise getMockExercise() {
-    return new ExerciseImpl(UUID.randomUUID().toString(), "aMachine", "12345", 2, 3);
+    return new ExerciseImpl(UUID.randomUUID().toString(), "aMachine", "12345", 2, 3, "branch");
   }
 }

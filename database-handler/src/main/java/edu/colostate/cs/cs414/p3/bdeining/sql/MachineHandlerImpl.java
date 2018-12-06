@@ -70,6 +70,7 @@ public class MachineHandlerImpl implements MachineHandler {
     String name = machine.getName();
     String picture = machine.getPicture();
     int quantity = machine.getQuantity();
+    String branch = machine.getBranch();
 
     Machine existingCustomer = getMachineById(id);
     if (existingCustomer != null) {
@@ -80,12 +81,15 @@ public class MachineHandlerImpl implements MachineHandler {
 
         PreparedStatement update =
             con.prepareStatement(
-                "update " + MACHINE_TABLE_NAME + " SET name=?, picture=?, quantity=? WHERE id=?");
+                "update "
+                    + MACHINE_TABLE_NAME
+                    + " SET name=?, picture=?, quantity=?, branch=? WHERE id=?");
 
         update.setString(1, name);
         update.setString(2, picture);
         update.setInt(3, quantity);
-        update.setString(4, id);
+        update.setString(4, branch);
+        update.setString(5, id);
         update.execute();
         update.close();
       }
@@ -99,11 +103,12 @@ public class MachineHandlerImpl implements MachineHandler {
             con.prepareStatement(
                 "INSERT INTO "
                     + MACHINE_TABLE_NAME
-                    + " (name, id, picture, quantity) VALUES (?,?,?,?)");
+                    + " (name, id, picture, quantity, branch) VALUES (?,?,?,?,?)");
         insert.setString(1, name);
         insert.setString(2, id);
         insert.setString(3, picture);
         insert.setInt(4, quantity);
+        insert.setString(5, branch);
         insert.execute();
         insert.close();
       }
@@ -114,12 +119,13 @@ public class MachineHandlerImpl implements MachineHandler {
 
   /** {@inheritDoc} */
   @Override
-  public List<Machine> getMachines() throws SQLException {
+  public List<Machine> getMachines(String branch) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
 
       PreparedStatement preparedStatement =
-          con.prepareStatement("SELECT * FROM " + MACHINE_TABLE_NAME);
+          con.prepareStatement("SELECT * FROM " + MACHINE_TABLE_NAME + " where branch=?");
 
+      preparedStatement.setString(1, branch);
       ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {
@@ -158,8 +164,9 @@ public class MachineHandlerImpl implements MachineHandler {
       String name = resultSet.getString("name");
       String picture = resultSet.getString("picture");
       int quantity = resultSet.getInt("quantity");
+      String branch = resultSet.getString("branch");
 
-      Machine machine = new MachineImpl(id, name, picture, quantity);
+      Machine machine = new MachineImpl(id, name, picture, quantity, branch);
       LOGGER.trace("Got machine {}", machine);
       return machine;
     } catch (SQLException e) {

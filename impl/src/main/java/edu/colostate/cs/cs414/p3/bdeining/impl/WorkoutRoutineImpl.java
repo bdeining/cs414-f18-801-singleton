@@ -12,10 +12,13 @@ public class WorkoutRoutineImpl implements WorkoutRoutine {
 
   private List<String> exerciseIds;
 
-  public WorkoutRoutineImpl(String id, String name, List<String> exerciseIds) {
+  private String branch;
+
+  public WorkoutRoutineImpl(String id, String name, List<String> exerciseIds, String branch) {
     this.id = id;
     this.name = name;
     this.exerciseIds = exerciseIds;
+    this.branch = branch;
   }
 
   /** {@inheritDoc} */
@@ -77,5 +80,15 @@ public class WorkoutRoutineImpl implements WorkoutRoutine {
     hash = 31 * hash + name.hashCode();
     hash = 31 * hash + exerciseIds.hashCode();
     return hash;
+  }
+
+  @Override
+  public String getBranch() {
+    return branch;
+  }
+
+  @Override
+  public void setBranch(String branch) {
+    this.branch = branch;
   }
 }

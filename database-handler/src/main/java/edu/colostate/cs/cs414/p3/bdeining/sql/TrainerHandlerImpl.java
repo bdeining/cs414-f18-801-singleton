@@ -169,12 +169,13 @@ public class TrainerHandlerImpl implements TrainerHandler {
 
   /** {@inheritDoc} */
   @Override
-  public List<Trainer> getTrainers() throws SQLException {
+  public List<Trainer> getTrainers(String branch) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
 
       PreparedStatement preparedStatement =
-          con.prepareStatement("SELECT * FROM " + TRAINER_TABLE_NAME);
+          con.prepareStatement("SELECT * FROM " + TRAINER_TABLE_NAME + " where branch=?");
 
+      preparedStatement.setString(1, branch);
       ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {

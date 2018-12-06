@@ -27,8 +27,9 @@ public interface WorkoutRoutineHandler {
   /**
    * Gets a list of a all {@link WorkoutRoutine}s in the data store
    *
+   * @param branch the branch to get routine from
    * @return a list of workout routines
    * @throws SQLException when a database error occurs
    */
-  List<WorkoutRoutine> getWorkoutRoutines() throws SQLException;
+  List<WorkoutRoutine> getWorkoutRoutines(String branch) throws SQLException;
 }

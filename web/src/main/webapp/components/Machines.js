@@ -14,6 +14,7 @@ class Machine extends React.Component {
       id: "",
       selected: null,
       add: false,
+      branch: localStorage.getItem("branch"),
       selectedFile: ""
     };
   }
@@ -72,6 +73,7 @@ class Machine extends React.Component {
             data: {
               name: that.state.name,
               picture: reader.result,
+              branch: that.state.branch,
               quantity: that.state.quantity,
               id: that.state.id
             }
@@ -88,6 +90,7 @@ class Machine extends React.Component {
             name: that.state.name,
             picture: "",
             quantity: that.state.quantity,
+            branch: that.state.branch,
             id: that.state.id
           }
         }).then(res => {
@@ -96,6 +99,7 @@ class Machine extends React.Component {
         });
       }
     } else {
+    if (this.state.selectedFile) {
       var reader = new FileReader();
       reader.readAsDataURL(this.state.selectedFile);
       reader.onload = function() {
@@ -105,18 +109,38 @@ class Machine extends React.Component {
           data: {
             name: that.state.name,
             picture: reader.result,
-            quantity: that.state.quantity
+            quantity: that.state.quantity,
+            branch: that.state.branch
           }
         }).then(res => {
           that.getMachineData();
           that.clearMachineState();
         });
       };
-    }
-  };
+
+
+  } else {
+
+            axios({
+              method: "put",
+              url: "/services/rest/machine",
+              data: {
+                name: that.state.name,
+                picture: "",
+                quantity: that.state.quantity,
+                branch: that.state.branch
+              }
+            }).then(res => {
+              that.getMachineData();
+              that.clearMachineState();
+            });
+
+        }
+        }
+  }
 
   getMachineData() {
-    axios.get("/services/rest/machine").then(res => {
+    axios.get("/services/rest/machine?branch=" + this.state.branch).then(res => {
       this.setState({
         data: [...this.state.data]
       });

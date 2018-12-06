@@ -85,14 +85,16 @@ public class RestService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/login")
   public Response login(
-      @QueryParam("email") String email, @QueryParam("password") String password) {
+      @QueryParam("email") String email,
+      @QueryParam("password") String password,
+      @QueryParam("branch") String branch) {
 
     if (email.equals(MANAGER_USER) && password.equals(MANAGER_PASSWORD)) {
       return Response.ok().build();
     }
 
     try {
-      for (Trainer trainer : trainerHandler.getTrainers()) {
+      for (Trainer trainer : trainerHandler.getTrainers(branch)) {
         if (email.equals(trainer.getEmail()) && password.equals(trainer.getPassword())) {
           return Response.ok().build();
         }
@@ -108,9 +110,9 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/routinenames")
-  public Response getWorkoutRoutineNames() {
+  public Response getWorkoutRoutineNames(@QueryParam("branch") String branch) {
     try {
-      List<WorkoutRoutine> trainerList = workoutRoutineHandler.getWorkoutRoutines();
+      List<WorkoutRoutine> trainerList = workoutRoutineHandler.getWorkoutRoutines(branch);
       List<Map<String, Object>> machineNames =
           trainerList
               .stream()
@@ -133,9 +135,9 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/exercisenames")
-  public Response getExerciseNames() {
+  public Response getExerciseNames(@QueryParam("branch") String branch) {
     try {
-      List<Exercise> trainerList = exerciseHandler.getExercises();
+      List<Exercise> trainerList = exerciseHandler.getExercises(branch);
       List<Map<String, Object>> machineNames =
           trainerList
               .stream()
@@ -158,9 +160,9 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/machinenames")
-  public Response getMachineNames() {
+  public Response getMachineNames(@QueryParam("branch") String branch) {
     try {
-      List<Machine> trainerList = machineHandler.getMachines();
+      List<Machine> trainerList = machineHandler.getMachines(branch);
       List<Map<String, Object>> machineNames =
           trainerList
               .stream()
@@ -185,8 +187,20 @@ public class RestService {
   @Path("/branch")
   public Response getBranch() {
     try {
+
       List<String> branches = branchHandler.getBranches();
-      return Response.ok().entity(branches).build();
+      List<Map<String, Object>> branchNames =
+          branches
+              .stream()
+              .map(
+                  branch -> {
+                    Map<String, Object> objectMap = new HashMap<>();
+                    objectMap.put(LABEL_KEY, branch);
+                    objectMap.put(VALUE_KEY, branch);
+                    return objectMap;
+                  })
+              .collect(Collectors.toList());
+      return Response.ok().entity(branchNames).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get branch list", e);
       return Response.serverError().build();
@@ -197,9 +211,9 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/trainer")
-  public Response getTrainers() {
+  public Response getTrainers(@QueryParam("branch") String branch) {
     try {
-      List<Trainer> trainerList = trainerHandler.getTrainers();
+      List<Trainer> trainerList = trainerHandler.getTrainers(branch);
       return Response.ok().entity(trainerList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get trainer list", e);
@@ -247,12 +261,12 @@ public class RestService {
   @DELETE
   @Path("/trainer")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response deleteBranch(@QueryParam("branch") String branchH) {
+  public Response deleteBranch(@QueryParam("branch") String branch) {
     try {
-      branchHandler.removeBranch(branchH);
+      branchHandler.removeBranch(branch);
       return Response.ok().build();
     } catch (SQLException e) {
-      LOGGER.warn("Could not delete branch {}", branchH, e);
+      LOGGER.warn("Could not delete branch {}", branch, e);
       return Response.serverError().build();
     }
   }
@@ -275,9 +289,9 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/machine")
-  public Response getMachines() {
+  public Response getMachines(@QueryParam("branch") String branch) {
     try {
-      List<Machine> machineList = machineHandler.getMachines();
+      List<Machine> machineList = machineHandler.getMachines(branch);
       return Response.ok().entity(machineList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get machine list", e);
@@ -321,9 +335,9 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/exercise")
-  public Response getExercises() {
+  public Response getExercises(@QueryParam("branch") String branch) {
     try {
-      List<Exercise> exerciseList = exerciseHandler.getExercises();
+      List<Exercise> exerciseList = exerciseHandler.getExercises(branch);
       return Response.ok().entity(exerciseList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get exercise list", e);
@@ -367,9 +381,9 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/routine")
-  public Response getWorkoutRoutines() {
+  public Response getWorkoutRoutines(@QueryParam("branch") String branch) {
     try {
-      List<WorkoutRoutine> routineList = workoutRoutineHandler.getWorkoutRoutines();
+      List<WorkoutRoutine> routineList = workoutRoutineHandler.getWorkoutRoutines(branch);
       return Response.ok().entity(routineList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get workout routine list", e);
@@ -414,9 +428,9 @@ public class RestService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/customer")
-  public Response getCustomers() {
+  public Response getCustomers(@QueryParam("branch") String branch) {
     try {
-      List<Customer> customerList = customerHandler.getCustomers();
+      List<Customer> customerList = customerHandler.getCustomers(branch);
       return Response.ok().entity(customerList).build();
     } catch (SQLException e) {
       LOGGER.warn("Could not get customer list", e);

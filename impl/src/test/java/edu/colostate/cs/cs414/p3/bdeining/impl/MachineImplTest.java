@@ -22,9 +22,11 @@ public class MachineImplTest {
 
   private static final int QUANTITY = 12;
 
+  private static final String BRANCH = "branch";
+
   @Before
   public void setUp() {
-    machine = new MachineImpl(ID, NAME, PICTURE, QUANTITY);
+    machine = new MachineImpl(ID, NAME, PICTURE, QUANTITY, BRANCH);
   }
 
   @Test
@@ -34,16 +36,17 @@ public class MachineImplTest {
 
   @Test
   public void testSetters() {
-    machine = new MachineImpl(null, null, null, 0);
+    machine = new MachineImpl(null, null, null, 0, null);
     machine.setName(NAME);
     machine.setPicture(PICTURE);
     machine.setQuantity(QUANTITY);
+    machine.setBranch(BRANCH);
     assertFields(null);
   }
 
   @Test
   public void testNullId() {
-    machine = new MachineImpl(null, NAME, PICTURE, QUANTITY);
+    machine = new MachineImpl(null, NAME, PICTURE, QUANTITY, BRANCH);
     assertThat(machine.getId(), notNullValue());
   }
 
@@ -71,6 +74,7 @@ public class MachineImplTest {
     }
     assertThat(machine.getPicture(), is(PICTURE));
     assertThat(machine.getQuantity(), is(QUANTITY));
+    assertThat(machine.getBranch(), is(BRANCH));
     assertThat(machine.getName(), is(NAME));
   }
 

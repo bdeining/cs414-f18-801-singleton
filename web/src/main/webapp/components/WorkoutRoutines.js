@@ -16,13 +16,14 @@ class WorkoutRoutine extends React.Component {
       show: false,
       add: false,
       id: "",
-      isManager : (localStorage.getItem("user") === 'manager'),
+      isManager: localStorage.getItem("user") === "manager",
+      branch: localStorage.getItem("branch"),
       selected: null
     };
 
     axios({
       method: "get",
-      url: "/services/rest/exercisenames"
+      url: "/services/rest/exercisenames?branch=" + this.state.branch
     }).then(res => {
       this.setState({
         exerciseNames: res.data
@@ -50,7 +51,7 @@ class WorkoutRoutine extends React.Component {
   showModal = () => {
     axios({
       method: "get",
-      url: "/services/rest/exercisenames"
+      url: "/services/rest/exercisenames?branch=" + this.state.branch
     }).then(res => {
       this.setState({
         show: true,
@@ -85,6 +86,7 @@ class WorkoutRoutine extends React.Component {
         data: {
           name: this.state.name,
           id: this.state.id,
+          branch: this.state.branch,
           exerciseIds: exerciseIdList
         }
       }).then(res => {
@@ -96,6 +98,7 @@ class WorkoutRoutine extends React.Component {
         url: "/services/rest/routine",
         data: {
           name: this.state.name,
+          branch: this.state.branch,
           exerciseIds: exerciseIdList
         }
       }).then(res => {
@@ -107,7 +110,7 @@ class WorkoutRoutine extends React.Component {
   };
 
   getWorkoutRoutineData() {
-    axios.get("/services/rest/routine").then(res => {
+    axios.get("/services/rest/routine?branch=" + this.state.branch).then(res => {
       this.setState({
         data: [...this.state.data]
       });
@@ -174,7 +177,11 @@ class WorkoutRoutine extends React.Component {
             <input name="id" value={this.state.id} readOnly />
           </div>
         </Modal>
-        <button type="button" onClick={this.showAddModal} disabled={this.state.isManager}>
+        <button
+          type="button"
+          onClick={this.showAddModal}
+          disabled={this.state.isManager}
+        >
           Add
         </button>
         <ReactTable

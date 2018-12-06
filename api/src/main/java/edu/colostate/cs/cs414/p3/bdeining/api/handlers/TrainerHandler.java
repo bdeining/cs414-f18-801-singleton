@@ -27,8 +27,9 @@ public interface TrainerHandler {
   /**
    * Gets a list of a all {@link Trainer}s in the data store
    *
+   * @param branch the branch to get trainer from
    * @return a list of trainers
    * @throws SQLException when a database error occurs
    */
-  List<Trainer> getTrainers() throws SQLException;
+  List<Trainer> getTrainers(String branch) throws SQLException;
 }

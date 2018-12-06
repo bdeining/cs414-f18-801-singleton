@@ -12,8 +12,9 @@ class Trainer extends React.Component {
       data: [],
       show: false,
       qualifications: [],
-      isManager : (localStorage.getItem("user") === 'manager'),
+      isManager: localStorage.getItem("user") === "manager",
       id: "",
+      branch: localStorage.getItem("branch"),
       selected: null
     };
   }
@@ -63,9 +64,6 @@ class Trainer extends React.Component {
   };
 
   saveModal = () => {
-  
-
-
     var qualifications = this.state.qualifications.map(function(item) {
       return item["name"];
     });
@@ -83,6 +81,7 @@ class Trainer extends React.Component {
           healthInsuranceProvider: this.state.healthInsuranceProvider,
           workHours: this.state.workHours,
           id: this.state.id,
+          branch: this.state.branch,
           password: this.state.password,
           qualifications: qualifications
         }
@@ -102,6 +101,7 @@ class Trainer extends React.Component {
           healthInsuranceProvider: this.state.healthInsuranceProvider,
           workHours: this.state.workHours,
           password: this.state.password,
+          branch: this.state.branch,
           qualifications: qualifications
         }
       }).then(res => {
@@ -113,7 +113,7 @@ class Trainer extends React.Component {
   };
 
   getTrainerData() {
-    axios.get("/services/rest/trainer").then(res => {
+    axios.get("/services/rest/trainer?branch=" + this.state.branch).then(res => {
       this.setState({
         data: [...this.state.data]
       });
@@ -276,7 +276,11 @@ class Trainer extends React.Component {
             <input name="id" value={this.state.id} readOnly />
           </div>
         </Modal>
-        <button type="button" onClick={this.showAddModal} disabled={!this.state.isManager}>
+        <button
+          type="button"
+          onClick={this.showAddModal}
+          disabled={!this.state.isManager}
+        >
           Add
         </button>
         <ReactTable

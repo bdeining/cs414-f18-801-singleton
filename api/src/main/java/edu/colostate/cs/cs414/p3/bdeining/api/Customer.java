@@ -12,9 +12,9 @@ public interface Customer extends Person {
   List<String> getWorkoutRoutineIds();
 
   /**
-   * Get the activity status of the customer
+   * Get the {@link Activity} status of the customer
    *
-   * @return
+   * @return activity
    */
   Activity getActivity();
 

@@ -18,7 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
@@ -26,6 +26,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class WorkoutRoutineHandlerImplTest {
+
+  private static final String BRANCH = "branch";
 
   private WorkoutRoutineHandlerImpl workoutRoutineHandler;
 
@@ -107,13 +109,15 @@ public class WorkoutRoutineHandlerImplTest {
     when(tableResultSet.next()).thenReturn(true, true, false);
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("name")).thenReturn("aName");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
     when(tableResultSet.getString("exerciseId")).thenReturn("exerciseId");
 
-    List<WorkoutRoutine> workoutRoutineList = workoutRoutineHandler.getWorkoutRoutines();
+    List<WorkoutRoutine> workoutRoutineList = workoutRoutineHandler.getWorkoutRoutines(BRANCH);
     assertThat(workoutRoutineList, hasSize(1));
     assertThat(workoutRoutineList.get(0).getId(), is("anId"));
     assertThat(workoutRoutineList.get(0).getName(), is("aName"));
     assertThat(workoutRoutineList.get(0).getExerciseIds(), hasSize(1));
+    assertThat(workoutRoutineList.get(0).getBranch(), is("branch"));
     assertThat(workoutRoutineList.get(0).getExerciseIds().get(0), is("exerciseId"));
   }
 
@@ -124,9 +128,10 @@ public class WorkoutRoutineHandlerImplTest {
     when(tableResultSet.next()).thenReturn(true).thenThrow(SQLException.class).thenReturn(false);
     when(tableResultSet.getString("id")).thenReturn("anId");
     when(tableResultSet.getString("name")).thenReturn("aName");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
     when(tableResultSet.getString("exerciseId")).thenReturn("exerciseId");
 
-    List<WorkoutRoutine> workoutRoutineList = workoutRoutineHandler.getWorkoutRoutines();
+    List<WorkoutRoutine> workoutRoutineList = workoutRoutineHandler.getWorkoutRoutines(BRANCH);
     assertThat(workoutRoutineList, hasSize(0));
   }
 
@@ -155,6 +160,9 @@ public class WorkoutRoutineHandlerImplTest {
 
   private WorkoutRoutine getMockWorkoutRoutine() {
     return new WorkoutRoutineImpl(
-        UUID.randomUUID().toString(), "aName", Arrays.asList(UUID.randomUUID().toString()));
+        UUID.randomUUID().toString(),
+        "aName",
+        Collections.singletonList(UUID.randomUUID().toString()),
+        "branch");
   }
 }

@@ -24,9 +24,11 @@ public class ExerciseImplTest {
 
   private static final int DURATION = 2;
 
+  private static final String BRANCH = "branch";
+
   @Before
   public void setUp() {
-    exercise = new ExerciseImpl(ID, COMMON_NAME, MACHINE_ID, SET, DURATION);
+    exercise = new ExerciseImpl(ID, COMMON_NAME, MACHINE_ID, SET, DURATION, BRANCH);
   }
 
   @Test
@@ -36,17 +38,18 @@ public class ExerciseImplTest {
 
   @Test
   public void testSetters() {
-    exercise = new ExerciseImpl(null, null, null, 0, 0);
+    exercise = new ExerciseImpl(null, null, null, 0, 0, BRANCH);
     exercise.setCommonName(COMMON_NAME);
     exercise.setMachineId(MACHINE_ID);
     exercise.setSets(SET);
     exercise.setDurationPerSet(DURATION);
+    exercise.setBranch(BRANCH);
     assertFields(null);
   }
 
   @Test
   public void testNullId() {
-    exercise = new ExerciseImpl(null, COMMON_NAME, MACHINE_ID, SET, DURATION);
+    exercise = new ExerciseImpl(null, COMMON_NAME, MACHINE_ID, SET, DURATION, BRANCH);
     assertThat(exercise.getId(), notNullValue());
   }
 
@@ -78,6 +81,7 @@ public class ExerciseImplTest {
     assertThat(exercise.getCommonName(), is(COMMON_NAME));
     assertThat(exercise.getDurationPerSet(), is(DURATION));
     assertThat(exercise.getSets(), is(SET));
+    assertThat(exercise.getBranch(), is(BRANCH));
     assertThat(exercise.getMachineId(), is(MACHINE_ID));
   }
 

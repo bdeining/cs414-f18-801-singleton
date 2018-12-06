@@ -27,8 +27,9 @@ public interface CustomerHandler {
   /**
    * Gets a list of all {@link Customer}s that are in the data store
    *
+   * @param branch the branch to get customer from
    * @return a list of customers
    * @throws SQLException when a database error occurs
    */
-  List<Customer> getCustomers() throws SQLException;
+  List<Customer> getCustomers(String branch) throws SQLException;
 }

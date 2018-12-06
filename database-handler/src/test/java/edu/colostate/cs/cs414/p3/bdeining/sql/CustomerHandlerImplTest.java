@@ -20,7 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
@@ -28,6 +28,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CustomerHandlerImplTest {
+
+  private static final String BRANCH = "branch";
 
   private CustomerHandlerImpl customerHandler;
 
@@ -122,13 +124,14 @@ public class CustomerHandlerImplTest {
     when(tableResultSet.getString("last_name")).thenReturn("deininger");
     when(tableResultSet.getString("phone")).thenReturn("123-4567");
     when(tableResultSet.getString("email")).thenReturn("ben@example.com");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
     when(tableResultSet.getString("health_insurance_provider")).thenReturn("kaiser");
     when(tableResultSet.getString("activity")).thenReturn(Activity.ACTIVE.toString());
     when(tableResultSet.getString("WORKOUTROUTINEID")).thenReturn("WORKOUTROUTINEID");
 
     when(callableStatement.executeQuery()).thenReturn(tableResultSet);
 
-    List<Customer> customerList = customerHandler.getCustomers();
+    List<Customer> customerList = customerHandler.getCustomers(BRANCH);
     assertThat(customerList, hasSize(1));
     assertThat(customerList.get(0).getId(), is("anId"));
     assertThat(customerList.get(0).getAddress(), is("address"));
@@ -137,6 +140,7 @@ public class CustomerHandlerImplTest {
     assertThat(customerList.get(0).getPhone(), is("123-4567"));
     assertThat(customerList.get(0).getEmail(), is("ben@example.com"));
     assertThat(customerList.get(0).getHealthInsuranceProvider(), is("kaiser"));
+    assertThat(customerList.get(0).getBranch(), is("branch"));
     assertThat(customerList.get(0).getActivity(), is(Activity.ACTIVE));
     assertThat(customerList.get(0).getWorkoutRoutineIds(), hasSize(1));
     assertThat(customerList.get(0).getWorkoutRoutineIds().get(0), is("WORKOUTROUTINEID"));
@@ -151,7 +155,7 @@ public class CustomerHandlerImplTest {
 
     when(callableStatement.executeQuery()).thenReturn(tableResultSet);
 
-    List<Customer> customerList = customerHandler.getCustomers();
+    List<Customer> customerList = customerHandler.getCustomers(BRANCH);
     assertThat(customerList, hasSize(0));
   }
 
@@ -182,7 +186,7 @@ public class CustomerHandlerImplTest {
         "ben@example.com",
         "kaiser",
         "branch",
-        Arrays.asList(UUID.randomUUID().toString()),
+        Collections.singletonList(UUID.randomUUID().toString()),
         Activity.ACTIVE);
   }
 }

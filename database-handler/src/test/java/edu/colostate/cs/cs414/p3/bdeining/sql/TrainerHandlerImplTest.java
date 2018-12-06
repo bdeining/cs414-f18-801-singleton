@@ -28,6 +28,8 @@ import org.junit.Test;
 
 public class TrainerHandlerImplTest {
 
+  private static final String BRANCH = "branch";
+
   private TrainerHandlerImpl trainerHandler;
 
   private DataSource dataSource;
@@ -123,13 +125,14 @@ public class TrainerHandlerImplTest {
     when(tableResultSet.getString("phone")).thenReturn("123-4567");
     when(tableResultSet.getString("email")).thenReturn("ben@example.com");
     when(tableResultSet.getString("health_insurance_provider")).thenReturn("kaiser");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
     when(tableResultSet.getInt("work_hours")).thenReturn(12);
     when(tableResultSet.getString("qualification")).thenReturn("qualification");
     when(tableResultSet.getString("password")).thenReturn("password");
 
     when(callableStatement.executeQuery()).thenReturn(tableResultSet);
 
-    List<Trainer> trainerList = trainerHandler.getTrainers();
+    List<Trainer> trainerList = trainerHandler.getTrainers(BRANCH);
     assertThat(trainerList, hasSize(1));
     assertThat(trainerList.get(0).getId(), is("anId"));
     assertThat(trainerList.get(0).getAddress(), is("address"));
@@ -138,6 +141,7 @@ public class TrainerHandlerImplTest {
     assertThat(trainerList.get(0).getPhone(), is("123-4567"));
     assertThat(trainerList.get(0).getEmail(), is("ben@example.com"));
     assertThat(trainerList.get(0).getHealthInsuranceProvider(), is("kaiser"));
+    assertThat(trainerList.get(0).getBranch(), is("branch"));
     assertThat(trainerList.get(0).getWorkHours(), is(12));
     assertThat(trainerList.get(0).getQualifications(), hasSize(1));
     assertThat(trainerList.get(0).getQualifications().get(0), is("qualification"));
@@ -153,7 +157,7 @@ public class TrainerHandlerImplTest {
 
     when(callableStatement.executeQuery()).thenReturn(tableResultSet);
 
-    List<Trainer> trainerList = trainerHandler.getTrainers();
+    List<Trainer> trainerList = trainerHandler.getTrainers(BRANCH);
     assertThat(trainerList, hasSize(0));
   }
 
@@ -168,12 +172,13 @@ public class TrainerHandlerImplTest {
     when(tableResultSet.getString("last_name")).thenReturn("deininger");
     when(tableResultSet.getString("phone")).thenReturn("123-4567");
     when(tableResultSet.getString("email")).thenReturn("ben@example.com");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
     when(tableResultSet.getString("health_insurance_provider")).thenReturn("kaiser");
     when(tableResultSet.getInt("work_hours")).thenReturn(12);
     when(tableResultSet.getString("qualification")).thenReturn("qualification");
     when(tableResultSet.getString("password")).thenReturn("password");
 
-    List<Trainer> trainerList = trainerHandler.getTrainers();
+    List<Trainer> trainerList = trainerHandler.getTrainers(BRANCH);
     assertThat(trainerList, hasSize(1));
     assertThat(trainerList.get(0).getId(), is("anId"));
     assertThat(trainerList.get(0).getAddress(), is("address"));
@@ -181,6 +186,7 @@ public class TrainerHandlerImplTest {
     assertThat(trainerList.get(0).getLastName(), is("deininger"));
     assertThat(trainerList.get(0).getPhone(), is("123-4567"));
     assertThat(trainerList.get(0).getEmail(), is("ben@example.com"));
+    assertThat(trainerList.get(0).getBranch(), is("branch"));
     assertThat(trainerList.get(0).getHealthInsuranceProvider(), is("kaiser"));
     assertThat(trainerList.get(0).getWorkHours(), is(12));
     assertThat(trainerList.get(0).getQualifications(), hasSize(0));

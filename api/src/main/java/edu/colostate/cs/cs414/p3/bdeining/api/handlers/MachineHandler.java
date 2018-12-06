@@ -27,8 +27,9 @@ public interface MachineHandler {
   /**
    * Gets a list of a all {@link Machine}s in the data store
    *
+   * @param branch the branch to get machine from
    * @return a list of machines
    * @throws SQLException when a database error occurs
    */
-  List<Machine> getMachines() throws SQLException;
+  List<Machine> getMachines(String branch) throws SQLException;
 }

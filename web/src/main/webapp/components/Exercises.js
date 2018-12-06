@@ -13,13 +13,14 @@ class Exercise extends React.Component {
       data: [],
       machineNames: [],
       show: false,
-      isManager : (localStorage.getItem("user") === 'manager'),
+      isManager: localStorage.getItem("user") === "manager",
       id: "",
+      branch: localStorage.getItem("branch"),
       selected: null
     };
     axios({
       method: "get",
-      url: "/services/rest/machinenames"
+      url: "/services/rest/machinenames?branch=" + this.state.branch
     }).then(res => {
       this.setState({
         machineNames: res.data
@@ -49,7 +50,7 @@ class Exercise extends React.Component {
   showModal = () => {
     axios({
       method: "get",
-      url: "/services/rest/machinenames"
+      url: "/services/rest/machinenames?branch=" + this.state.branch
     }).then(res => {
       this.setState({
         show: true,
@@ -82,6 +83,7 @@ class Exercise extends React.Component {
           id: this.state.id,
           machineId: this.state.machineId ? this.state.machineId.value : null,
           sets: this.state.sets,
+          branch: this.state.branch,
           durationPerSet: this.state.durationPerSet
         }
       }).then(res => {
@@ -95,6 +97,7 @@ class Exercise extends React.Component {
           commonName: this.state.commonName,
           machineId: this.state.machineId ? this.state.machineId.value : null,
           sets: this.state.sets,
+          branch: this.state.branch,
           durationPerSet: this.state.durationPerSet
         }
       }).then(res => {
@@ -106,7 +109,7 @@ class Exercise extends React.Component {
   };
 
   getExerciseData() {
-    axios.get("/services/rest/exercise").then(res => {
+    axios.get("/services/rest/exercise?branch=" + this.state.branch).then(res => {
       this.setState({
         data: [...this.state.data]
       });
@@ -188,7 +191,11 @@ class Exercise extends React.Component {
             <input name="id" value={this.state.id} readOnly />
           </div>
         </Modal>
-        <button type="button" onClick={this.showAddModal} disabled={this.state.isManager}>
+        <button
+          type="button"
+          onClick={this.showAddModal}
+          disabled={this.state.isManager}
+        >
           Add
         </button>
         <ReactTable

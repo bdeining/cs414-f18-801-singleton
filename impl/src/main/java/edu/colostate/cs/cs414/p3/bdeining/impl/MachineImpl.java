@@ -13,11 +13,14 @@ public class MachineImpl implements Machine {
 
   private int quantity;
 
-  public MachineImpl(String id, String name, String picture, int quantity) {
+  private String branch;
+
+  public MachineImpl(String id, String name, String picture, int quantity, String branch) {
     this.id = id;
     this.name = name;
     this.picture = picture;
     this.quantity = quantity;
+    this.branch = branch;
   }
 
   /** {@inheritDoc} */
@@ -93,5 +96,15 @@ public class MachineImpl implements Machine {
     hash = 31 * hash + picture.hashCode();
     hash = 31 * hash + quantity;
     return hash;
+  }
+
+  @Override
+  public String getBranch() {
+    return branch;
+  }
+
+  @Override
+  public void setBranch(String branch) {
+    this.branch = branch;
   }
 }

@@ -34,4 +34,18 @@ public interface WorkoutRoutine {
 
   /** Gets a list of UUIDs for exercises that are performed in this workout routine */
   List<String> getExerciseIds();
+
+  /**
+   * Sets the Branch
+   *
+   * @param branch
+   */
+  void setBranch(String branch);
+
+  /**
+   * Gets the Branch
+   *
+   * @return
+   */
+  String getBranch();
 }

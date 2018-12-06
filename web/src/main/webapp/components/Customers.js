@@ -11,7 +11,7 @@ const activityOptions = [
   { value: "INACTIVE", label: "INACTIVE" }
 ];
 
-class Home extends React.Component {
+class Customer extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -21,11 +21,12 @@ class Home extends React.Component {
       show: false,
       id: "",
       add: false,
+      branch: localStorage.getItem("branch"),
       selected: null
     };
     axios({
       method: "get",
-      url: "/services/rest/routinenames"
+      url: "/services/rest/routinenames?branch=" + this.state.branch
     }).then(res => {
       this.setState({
         routineNames: res.data
@@ -59,7 +60,7 @@ class Home extends React.Component {
   showModal = () => {
     axios({
       method: "get",
-      url: "/services/rest/routinenames"
+      url: "/services/rest/routinenames?branch=" + this.state.branch
     }).then(res => {
       this.setState({
         show: true,
@@ -83,9 +84,14 @@ class Home extends React.Component {
   };
 
   saveModal = () => {
-    var routineIds = this.state.workoutRoutineIds.map(function(item) {
-      return item["value"];
-    });
+
+    var routineIds = [];
+
+    if (this.state.workoutRoutineIds) {
+        routineIds = this.state.workoutRoutineIds.map(function(item) {
+                           return item["value"];
+                         });
+    }
 
     if (this.state.id) {
       axios({
@@ -99,6 +105,7 @@ class Home extends React.Component {
           email: this.state.email,
           healthInsuranceProvider: this.state.healthInsuranceProvider,
           activity: this.state.activity.value,
+          branch: this.state.branch,
           id: this.state.id,
           workoutRoutineIds: routineIds
         }
@@ -117,6 +124,7 @@ class Home extends React.Component {
           email: this.state.email,
           healthInsuranceProvider: this.state.healthInsuranceProvider,
           activity: this.state.activity.value,
+          branch: this.state.branch,
           workoutRoutineIds: routineIds
         }
       }).then(res => {
@@ -128,17 +136,19 @@ class Home extends React.Component {
   };
 
   getCustomerData() {
-    axios.get("/services/rest/customer").then(res => {
-      this.setState({
-        data: [...this.state.data]
-      });
+    axios
+      .get("/services/rest/customer?branch=" + this.state.branch)
+      .then(res => {
+        this.setState({
+          data: [...this.state.data]
+        });
 
-      this.setState({
-        data: res.data,
-        id: "",
-        show: this.state.show
+        this.setState({
+          data: res.data,
+          id: "",
+          show: this.state.show
+        });
       });
-    });
   }
 
   componentDidMount() {
@@ -348,4 +358,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default Customer;

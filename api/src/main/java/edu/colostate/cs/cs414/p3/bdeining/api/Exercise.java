@@ -64,4 +64,18 @@ public interface Exercise {
    * @param durationPerSet integer duration in minutes
    */
   void setDurationPerSet(int durationPerSet);
+
+  /**
+   * Sets the Branch
+   *
+   * @param branch
+   */
+  void setBranch(String branch);
+
+  /**
+   * Gets the Branch
+   *
+   * @return
+   */
+  String getBranch();
 }

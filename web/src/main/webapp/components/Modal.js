@@ -17,10 +17,15 @@ const Modal = ({
       <section className="modal-main">
         {children}
         <button onClick={handleClose}>Close</button>
-        <button onClick={handleDelete} disabled={manipulated || showDeleteButton}>
+        <button
+          onClick={handleDelete}
+          disabled={manipulated || showDeleteButton}
+        >
           Delete
         </button>
-        <button onClick={handleSave} disabled={manipulated}>Save</button>
+        <button onClick={handleSave} disabled={manipulated}>
+          Save
+        </button>
       </section>
     </div>
   );

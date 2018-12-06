@@ -96,7 +96,7 @@ public class CustomerHandlerImpl implements CustomerHandler {
             con.prepareStatement(
                 "update "
                     + CUSTOMER_TABLE_NAME
-                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, activity=? branch=? WHERE id=?");
+                    + " SET first_name=?, last_name=?, address=?, phone=?, email=?, health_insurance_provider=?, activity=?, branch=? WHERE id=?");
 
         update.setString(1, firstName);
         update.setString(2, lastName);
@@ -183,12 +183,13 @@ public class CustomerHandlerImpl implements CustomerHandler {
 
   /** {@inheritDoc} */
   @Override
-  public List<Customer> getCustomers() throws SQLException {
+  public List<Customer> getCustomers(String branch) throws SQLException {
     try (Connection con = dataSource.getConnection()) {
 
       PreparedStatement preparedStatement =
-          con.prepareStatement("SELECT * FROM " + CUSTOMER_TABLE_NAME);
+          con.prepareStatement("SELECT * FROM " + CUSTOMER_TABLE_NAME + " where branch=?");
 
+      preparedStatement.setString(1, branch);
       ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet == null) {
