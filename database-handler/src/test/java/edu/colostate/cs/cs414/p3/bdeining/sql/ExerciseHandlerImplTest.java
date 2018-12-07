@@ -101,6 +101,25 @@ public class ExerciseHandlerImplTest {
   }
 
   @Test
+  public void testUpdateExercise() throws Exception {
+    ResultSet tableResultSet = mock(ResultSet.class);
+
+    when(tableResultSet.getString("id")).thenReturn("anId");
+    when(tableResultSet.getString("name")).thenReturn("name");
+    when(tableResultSet.getString("machineId")).thenReturn("123");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
+    when(tableResultSet.getInt("sets")).thenReturn(2);
+    when(tableResultSet.getInt("duration")).thenReturn(12);
+
+    when(tableResultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
+
+    boolean result = exerciseHandler.addExercise(getMockExercise());
+    verify(preparedStatement, times(1)).execute();
+    assertThat(result, is(true));
+  }
+
+  @Test
   public void testGetExercises() throws Exception {
     ResultSet tableResultSet = mock(ResultSet.class);
     when(preparedStatement.executeQuery()).thenReturn(tableResultSet);

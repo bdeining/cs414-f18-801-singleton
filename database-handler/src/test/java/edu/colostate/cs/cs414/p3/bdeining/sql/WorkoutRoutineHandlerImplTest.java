@@ -103,6 +103,24 @@ public class WorkoutRoutineHandlerImplTest {
   }
 
   @Test
+  public void testUpdateWorkoutRoutine() throws Exception {
+    ResultSet tableResultSet = mock(ResultSet.class);
+
+    when(tableResultSet.next()).thenReturn(true, false);
+    when(tableResultSet.getString("id")).thenReturn("anId");
+    when(tableResultSet.getString("name")).thenReturn("name");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
+    when(tableResultSet.getString("exerciseId")).thenReturn("1");
+
+    when(tableResultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
+
+    boolean result = workoutRoutineHandler.addWorkoutRoutine(getMockWorkoutRoutine());
+    verify(preparedStatement, times(2)).execute();
+    assertThat(result, is(true));
+  }
+
+  @Test
   public void testGetWorkoutRoutine() throws Exception {
     ResultSet tableResultSet = mock(ResultSet.class);
     when(preparedStatement.executeQuery()).thenReturn(tableResultSet);

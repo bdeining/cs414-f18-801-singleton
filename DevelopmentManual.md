@@ -88,5 +88,4 @@ Iteration 1 : https://youtu.be/-kWzcN7gv0I
 
 TODOs
 ----------
-Finish coverage
 CSS styles on tables

@@ -1,6 +1,7 @@
 package edu.colostate.cs.cs414.p3.bdeining.sql;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -14,6 +15,7 @@ import edu.colostate.cs.cs414.p3.bdeining.api.Customer;
 import edu.colostate.cs.cs414.p3.bdeining.api.Exercise;
 import edu.colostate.cs.cs414.p3.bdeining.api.Machine;
 import edu.colostate.cs.cs414.p3.bdeining.api.Trainer;
+import edu.colostate.cs.cs414.p3.bdeining.api.WorkoutRoutine;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -42,6 +44,58 @@ public class FactoryTest {
   @Before
   public void setUp() throws Exception {
     setUpMocks();
+  }
+
+  @Test
+  public void testCreateWorkoutRoutine() throws Exception {
+    ResultSet tableResultSet = mock(ResultSet.class);
+
+    when(tableResultSet.next()).thenReturn(true, false);
+    when(tableResultSet.getString("id")).thenReturn("anId");
+    when(tableResultSet.getString("name")).thenReturn("name");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
+    when(tableResultSet.getString("exerciseId")).thenReturn("1");
+
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
+
+    WorkoutRoutine workoutRoutine = Factory.createWorkoutRoutine(dataSource, tableResultSet);
+
+    assertThat(workoutRoutine.getId(), is("anId"));
+    assertThat(workoutRoutine.getName(), is("name"));
+    assertThat(workoutRoutine.getBranch(), is("branch"));
+    assertThat(workoutRoutine.getExerciseIds(), hasItem("1"));
+  }
+
+  @Test
+  public void testCreateWorkoutRoutineNullResultSet() throws Exception {
+    ResultSet tableResultSet = mock(ResultSet.class);
+
+    when(tableResultSet.next()).thenReturn(true, false);
+    when(tableResultSet.getString("id")).thenReturn("anId");
+    when(tableResultSet.getString("name")).thenReturn("name");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
+    when(tableResultSet.getString("exerciseId")).thenReturn("1");
+
+    when(preparedStatement.executeQuery()).thenReturn(null);
+
+    WorkoutRoutine workoutRoutine = Factory.createWorkoutRoutine(dataSource, tableResultSet);
+    assertThat(workoutRoutine, nullValue());
+  }
+
+  @Test
+  public void testCreateWorkoutRoutineSqlException() throws Exception {
+    ResultSet tableResultSet = mock(ResultSet.class);
+
+    when(tableResultSet.next()).thenReturn(true, false);
+    when(tableResultSet.getString("id")).thenReturn("anId");
+    when(tableResultSet.getString("name")).thenReturn("name");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
+    when(tableResultSet.getString("exerciseId")).thenReturn("1");
+
+    when(preparedStatement.executeQuery()).thenThrow(SQLException.class);
+
+    WorkoutRoutine workoutRoutine = Factory.createWorkoutRoutine(dataSource, tableResultSet);
+    assertThat(workoutRoutine, nullValue());
   }
 
   @Test

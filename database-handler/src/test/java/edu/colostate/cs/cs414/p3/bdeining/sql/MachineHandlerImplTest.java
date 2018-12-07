@@ -102,6 +102,24 @@ public class MachineHandlerImplTest {
   }
 
   @Test
+  public void testUpdateMachine() throws Exception {
+    ResultSet tableResultSet = mock(ResultSet.class);
+
+    when(tableResultSet.getString("id")).thenReturn("anId");
+    when(tableResultSet.getString("name")).thenReturn("name");
+    when(tableResultSet.getString("picture")).thenReturn("123");
+    when(tableResultSet.getInt("quantity")).thenReturn(2);
+    when(tableResultSet.getString("branch")).thenReturn("branch");
+
+    when(tableResultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
+
+    boolean result = machineHandler.addMachine(getMockMachine());
+    verify(preparedStatement, times(1)).execute();
+    assertThat(result, is(true));
+  }
+
+  @Test
   public void testRemoveMachine() throws Exception {
     boolean result = machineHandler.removeMachine("anId");
     assertThat(result, is(true));

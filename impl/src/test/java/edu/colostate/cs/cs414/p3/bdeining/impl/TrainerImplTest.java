@@ -72,6 +72,7 @@ public class TrainerImplTest {
     trainer.setWorkHours(WORK_HOURS);
     trainer.setBranch(BRANCH);
     trainer.setQualifications(QUALIFICATIONS);
+    trainer.setPassword(PASSWORD);
     assertFields(null);
   }
 
@@ -125,6 +126,7 @@ public class TrainerImplTest {
     assertThat(trainer.getHealthInsuranceProvider(), is(HEALTH_INSURANCE_PROVIDER));
     assertThat(trainer.getQualifications(), is(QUALIFICATIONS));
     assertThat(trainer.getWorkHours(), is(WORK_HOURS));
+    assertThat(trainer.getPassword(), is(PASSWORD));
   }
 
   @Test

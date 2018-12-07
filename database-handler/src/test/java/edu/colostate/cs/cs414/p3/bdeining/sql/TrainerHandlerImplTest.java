@@ -107,6 +107,30 @@ public class TrainerHandlerImplTest {
   }
 
   @Test
+  public void testUpdateTrainer() throws Exception {
+    ResultSet tableResultSet = mock(ResultSet.class);
+
+    when(tableResultSet.next()).thenReturn(true, false);
+    when(tableResultSet.getString("id")).thenReturn("anId");
+    when(tableResultSet.getString("address")).thenReturn("address");
+    when(tableResultSet.getString("first_name")).thenReturn("ben");
+    when(tableResultSet.getString("last_name")).thenReturn("deininger");
+    when(tableResultSet.getString("phone")).thenReturn("123-4567");
+    when(tableResultSet.getString("email")).thenReturn("ben@example.com");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
+    when(tableResultSet.getString("health_insurance_provider")).thenReturn("kaiser");
+    when(tableResultSet.getString("qualification")).thenReturn("qual1");
+    when(tableResultSet.getInt("work_hours")).thenReturn(12);
+
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
+
+    boolean result = trainerHandler.addTrainer(getMockTrainer());
+    verify(statement, times(3)).execute(anyString());
+    verify(preparedStatement, times(2)).execute();
+    assertThat(result, is(true));
+  }
+
+  @Test
   public void testRemoveTrainer() throws Exception {
     boolean result = trainerHandler.removeTrainer("anId");
     assertThat(result, is(true));

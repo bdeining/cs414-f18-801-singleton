@@ -45,9 +45,9 @@ public class RestService {
 
   public static final String VALUE_KEY = "value";
 
-  private static final String MANAGER_USER = "manager";
+  public static final String MANAGER_USER = "manager";
 
-  private static final String MANAGER_PASSWORD = "manager";
+  public static final String MANAGER_PASSWORD = "manager";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RestService.class);
 

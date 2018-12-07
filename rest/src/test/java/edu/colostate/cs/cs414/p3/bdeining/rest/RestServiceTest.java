@@ -28,6 +28,7 @@ import edu.colostate.cs.cs414.p3.bdeining.impl.ExerciseImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.MachineImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.TrainerImpl;
 import edu.colostate.cs.cs414.p3.bdeining.impl.WorkoutRoutineImpl;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -110,6 +111,89 @@ public class RestServiceTest {
             workoutRoutineHandler,
             machineHandler,
             branchHandler);
+  }
+
+  @Test
+  public void testLoginManager() {
+    Response response =
+        restService.login(RestService.MANAGER_USER, RestService.MANAGER_PASSWORD, "branch");
+    assertThat(response.getStatus(), is(200));
+  }
+
+  @Test
+  public void testLoginManagerBadPassword() {
+    Response response = restService.login(RestService.MANAGER_USER, "bad", "branch");
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testLoginTrainer() {
+    Response response = restService.login(EMAIL, PASSWORD, "branch");
+    assertThat(response.getStatus(), is(200));
+  }
+
+  @Test
+  public void testLoginTrainerBadPassword() {
+    Response response = restService.login(EMAIL, "bad", "branch");
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testLoginSqlException() throws Exception {
+    when(trainerHandler.getTrainers(anyString())).thenThrow(SQLException.class);
+    Response response = restService.login(EMAIL, "bad", "branch");
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testGetBranch() {
+    Response response = restService.getBranch();
+    assertThat(response.getStatus(), is(200));
+    List<Map<String, Object>> branches = (List<Map<String, Object>>) response.getEntity();
+    assertThat(branches, hasSize(1));
+    Map<String, Object> workoutRoutine = branches.get(0);
+    assertThat(workoutRoutine.get(RestService.LABEL_KEY), is(BRANCH));
+    assertThat(workoutRoutine.get(RestService.VALUE_KEY), is(BRANCH));
+  }
+
+  @Test
+  public void testGetBranchSqlException() throws SQLException {
+    when(branchHandler.getBranches()).thenThrow(SQLException.class);
+    Response response = restService.getBranch();
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testCreateBranch() {
+    Response response = restService.createBranch(new ByteArrayInputStream(BRANCH.getBytes()));
+    assertThat(response.getStatus(), is(200));
+  }
+
+  @Test
+  public void testCreateBranchBadJson() {
+    Response response =
+        restService.createBranch(new ByteArrayInputStream(("{" + BRANCH).getBytes()));
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testCreateBranchSqlException() throws Exception {
+    when(branchHandler.addBranch(anyString())).thenThrow(SQLException.class);
+    Response response = restService.createBranch(new ByteArrayInputStream(BRANCH.getBytes()));
+    assertThat(response.getStatus(), is(500));
+  }
+
+  @Test
+  public void testDeleteBranch() {
+    Response response = restService.deleteBranch(BRANCH);
+    assertThat(response.getStatus(), is(200));
+  }
+
+  @Test
+  public void testDeleteBranchSqlException() throws Exception {
+    when(branchHandler.removeBranch(anyString())).thenThrow(SQLException.class);
+    Response response = restService.deleteBranch(BRANCH);
+    assertThat(response.getStatus(), is(500));
   }
 
   @Test
@@ -520,6 +604,7 @@ public class RestServiceTest {
         .thenReturn(Collections.singletonList(generateExercise()));
     when(branchHandler.getBranches()).thenReturn(Collections.singletonList(BRANCH));
 
+    when(branchHandler.addBranch(anyString())).thenReturn(true);
     when(customerHandler.removeCustomer(anyString())).thenReturn(true);
     when(machineHandler.removeMachine(anyString())).thenReturn(true);
     when(trainerHandler.removeTrainer(anyString())).thenReturn(true);

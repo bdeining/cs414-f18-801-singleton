@@ -107,6 +107,30 @@ public class CustomerHandlerImplTest {
   }
 
   @Test
+  public void testUpdateCustomer() throws Exception {
+    ResultSet tableResultSet = mock(ResultSet.class);
+
+    when(tableResultSet.next()).thenReturn(true, true, false);
+    when(tableResultSet.getString("id")).thenReturn("anId");
+    when(tableResultSet.getString("address")).thenReturn("address");
+    when(tableResultSet.getString("first_name")).thenReturn("ben");
+    when(tableResultSet.getString("last_name")).thenReturn("deininger");
+    when(tableResultSet.getString("phone")).thenReturn("123-4567");
+    when(tableResultSet.getString("email")).thenReturn("ben@example.com");
+    when(tableResultSet.getString("branch")).thenReturn("branch");
+    when(tableResultSet.getString("health_insurance_provider")).thenReturn("kaiser");
+    when(tableResultSet.getString("activity")).thenReturn(Activity.ACTIVE.toString());
+    when(tableResultSet.getString("WORKOUTROUTINEID")).thenReturn("WORKOUTROUTINEID");
+
+    when(preparedStatement.executeQuery()).thenReturn(tableResultSet);
+    when(callableStatement.executeQuery()).thenReturn(tableResultSet);
+
+    boolean result = customerHandler.addCustomer(getMockCustomer());
+    verify(preparedStatement, times(2)).execute();
+    assertThat(result, is(true));
+  }
+
+  @Test
   public void testRemoveCustomer() throws Exception {
     boolean result = customerHandler.removeCustomer("anId");
     assertThat(result, is(true));
