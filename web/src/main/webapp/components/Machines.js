@@ -227,7 +227,7 @@ class Machine extends React.Component {
             <input name="id" value={this.state.id} readOnly />
           </div>
         </Modal>
-        <button type="button" onClick={this.showAddModal}>
+        <button type="button" className="add" onClick={this.showAddModal}>
           Add
         </button>
         <ReactTable
@@ -251,7 +251,8 @@ class Machine extends React.Component {
               accessor: "id"
             }
           ]}
-          defaultPageSize={10}
+          defaultPageSize={50}
+          showPaginationBottom={false}
           className="-striped -highlight"
           getTrProps={(state, rowInfo) => {
             if (rowInfo && rowInfo.row) {

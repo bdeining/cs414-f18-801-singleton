@@ -44,6 +44,14 @@ input.error {
    margin: 5px;
 }
 
+.add {
+   margin: 5px;
+}
+
+.login {
+   width: 50%;
+}
+
 .modal-main > div > input, form > div > input {
     width: 30%;
 }

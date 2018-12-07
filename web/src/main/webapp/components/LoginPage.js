@@ -54,7 +54,7 @@ class LoginPage extends React.Component {
     return (
       <div>
         {!isLoggedIn ? (
-          <div>
+          <div className="login">
             <h2>Login</h2>
             <form name="form" onSubmit={this.handleSubmit}>
               <div>

@@ -85,7 +85,3 @@ Pax JDBC 1.3.1
 Demo Video
 ----------
 Iteration 1 : https://youtu.be/-kWzcN7gv0I
-
-TODOs
-----------
-CSS styles on tables

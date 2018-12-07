@@ -224,6 +224,7 @@ class Exercise extends React.Component {
           </div>
         </Modal>
         <button
+          className="add"
           type="button"
           onClick={this.showAddModal}
           disabled={this.state.isManager}
@@ -254,7 +255,8 @@ class Exercise extends React.Component {
               accessor: "id"
             }
           ]}
-          defaultPageSize={10}
+          defaultPageSize={50}
+          showPaginationBottom={false}
           className="-striped -highlight"
           getTrProps={(state, rowInfo) => {
             if (rowInfo && rowInfo.row) {

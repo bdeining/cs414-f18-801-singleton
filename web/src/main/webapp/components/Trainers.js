@@ -318,6 +318,7 @@ class Trainer extends React.Component {
           </div>
         </Modal>
         <button
+          className="add"
           type="button"
           onClick={this.showAddModal}
           disabled={!this.state.isManager}
@@ -368,7 +369,8 @@ class Trainer extends React.Component {
               accessor: "id"
             }
           ]}
-          defaultPageSize={10}
+          defaultPageSize={50}
+          showPaginationBottom={false}
           className="-striped -highlight"
           getTrProps={(state, rowInfo) => {
             if (rowInfo && rowInfo.row) {
