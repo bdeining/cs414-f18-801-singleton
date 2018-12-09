@@ -28,6 +28,100 @@
 					"raw": ""
 				},
 				"url": {
+					"raw": "http://localhost:8181/services/rest/trainer?branch=branch2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"trainer"
+					],
+					"query": [
+						{
+							"key": "branch",
+							"value": "branch2"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get branch",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/branch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"branch"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
 					"raw": "http://localhost:8181/services/rest/trainer",
 					"protocol": "http",
 					"host": [
@@ -66,7 +160,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8181/services/rest/machine",
+					"raw": "http://localhost:8181/services/rest/machine?branch=branch",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -78,6 +172,10 @@
 						"machine"
 					],
 					"query": [
+						{
+							"key": "branch",
+							"value": "branch"
+						},
 						{
 							"key": "Content-Type",
 							"value": "application",
@@ -104,7 +202,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8181/services/rest/machine",
+					"raw": "http://localhost:8181/services/rest/machine?branch=branch",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -116,6 +214,10 @@
 						"machine"
 					],
 					"query": [
+						{
+							"key": "branch",
+							"value": "branch"
+						},
 						{
 							"key": "Content-Type",
 							"value": "application",
@@ -142,7 +244,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8181/services/rest/exercisenames",
+					"raw": "http://localhost:8181/services/rest/exercisenames?branch=branch",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,6 +256,10 @@
 						"exercisenames"
 					],
 					"query": [
+						{
+							"key": "branch",
+							"value": "branch"
+						},
 						{
 							"key": "Content-Type",
 							"value": "application",
@@ -180,7 +286,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8181/services/rest/exercise",
+					"raw": "http://localhost:8181/services/rest/exercise?branch=branch",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -192,6 +298,10 @@
 						"exercise"
 					],
 					"query": [
+						{
+							"key": "branch",
+							"value": "branch"
+						},
 						{
 							"key": "Content-Type",
 							"value": "application",
@@ -218,7 +328,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8181/services/rest/routine",
+					"raw": "http://localhost:8181/services/rest/routine?branch=branch",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -230,6 +340,52 @@
 						"routine"
 					],
 					"query": [
+						{
+							"key": "branch",
+							"value": "branch"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get workout routine names",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/routinenames?branch=branch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"routinenames"
+					],
+					"query": [
+						{
+							"key": "branch",
+							"value": "branch"
+						},
 						{
 							"key": "Content-Type",
 							"value": "application",
@@ -256,7 +412,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8181/services/rest/customer",
+					"raw": "http://localhost:8181/services/rest/customer?branch=branch",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -268,6 +424,10 @@
 						"customer"
 					],
 					"query": [
+						{
+							"key": "branch",
+							"value": "branch"
+						},
 						{
 							"key": "Content-Type",
 							"value": "application",
@@ -291,7 +451,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n    \t\"branch\": \"branch2\",\n    \t\"password\": \"password\",\n        \"qualifications\" : [\"one\", \"two\"]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/trainer",
@@ -317,6 +477,44 @@
 			"response": []
 		},
 		{
+			"name": "put branch",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"branch1\""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/branch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"branch"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "update trainer",
 			"request": {
 				"method": "PUT",
@@ -329,7 +527,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Whine\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\", \"three\"],\n        \"password\": \"password\",\n        \"id\" : \"cbd6861e-2c3f-4e11-8a1a-abc8fa4b83ae\",\n        \"branch\": \"someotherbranch\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/trainer",
@@ -367,7 +565,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n    \t\"branch\": \"branch\",\n        \"qualifications\" : [\"one\", \"two\"]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/customer",
@@ -405,7 +603,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"id\" : \"21cd8020-cee4-4571-b610-b6580c661845\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"id\" : \"21cd8020-cee4-4571-b610-b6580c661845\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n    \t\"branch\": \"branch\",    \t\n        \"qualifications\" : [\"one\", \"two\"]\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/customer",
@@ -443,7 +641,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"picture\" : \"123123\",\n    \t\"quantity\" : 2\n}"
+					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"picture\" : \"123123\",\n    \t\"quantity\" : 2,\n    \t\"branch\": \"branch\"    \t\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/machine",
@@ -481,7 +679,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"picture\" : \"123123\",\n    \t\"quantity\" : 2,\n    \t\"id\" : \"\"\n}"
+					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"picture\" : \"123123\",\n    \t\"quantity\" : 2,\n    \t\"id\" : \"\",\n    \t\"branch\": \"branch\"    \t\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/machine",
@@ -519,7 +717,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"commonName\" : \"Leg Row\",\n    \t\"durationPerSet\" : \"2\",\n    \t\"sets\" : 2\n}"
+					"raw": "{\n\t\t\"commonName\" : \"Leg Row\",\n    \t\"durationPerSet\" : \"2\",\n    \t\"sets\" : 2,\n    \t\"branch\": \"branch\"    \t\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/exercise",
@@ -557,7 +755,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"commonName\" : \"Leg Row\",\n    \t\"durationPerSet\" : \"2\",\n    \t\"sets\" : 2\n}"
+					"raw": "{\n        \"commonName\": \"Leg Row2\",\n        \"id\": \"5c075614-327f-4c0b-aa5d-e7a0f55a094f\",\n        \"machineId\": null,\n        \"sets\": 2,\n        \"durationPerSet\": 2,\n        \"branch\": \"branch\" \t\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/exercise",
@@ -595,7 +793,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"exerciseIds\": [\"dd863f12-a283-4bbe-9afa-41103615d61a\", \"e188d22b-40f3-4f61-ab1b-680da3cba778\"]\n}"
+					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"exerciseIds\": [\"dd863f12-a283-4bbe-9afa-41103615d61a\", \"e188d22b-40f3-4f61-ab1b-680da3cba778\"],\n    \t\"branch\": \"branch\"    \t\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/routine",
@@ -633,7 +831,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"exerciseIds\": [\"dd863f12-a283-4bbe-9afa-41103615d61a\", \"e188d22b-40f3-4f61-ab1b-680da3cba778\"]\n}"
+					"raw": "{\n\t\t\"name\" : \"Leg Row\",\n    \t\"exerciseIds\": [\"dd863f12-a283-4bbe-9afa-41103615d61a\", \"e188d22b-40f3-4f61-ab1b-680da3cba778\"],\n    \t\"branch\": \"branch\"    \t\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/routine",
@@ -671,7 +869,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/trainer?id=46bc08fb-5298-431f-b982-013033f28d76",
@@ -701,6 +899,48 @@
 			"response": []
 		},
 		{
+			"name": "delete branch",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8181/services/rest/trainer?branch=branch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8181",
+					"path": [
+						"services",
+						"rest",
+						"trainer"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application",
+							"disabled": true
+						},
+						{
+							"key": "branch",
+							"value": "branch"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "delete machine",
 			"request": {
 				"method": "DELETE",
@@ -713,7 +953,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/machine?id=46bc08fb-5298-431f-b982-013033f28d76",
@@ -755,7 +995,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/customer?id=46bc08fb-5298-431f-b982-013033f28d76",
@@ -797,7 +1037,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/exercise?id=46bc08fb-5298-431f-b982-013033f28d76",
@@ -839,7 +1079,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\t\"address\" : \"2516 S Scap\",\n    \t\"firstName\" : \"Ben\",\n    \t\"lastName\" : \"Deininger\",\n    \t\"phone\" : \"520-123-1234\",\n    \t\"email\" : \"test@example.com\",\n    \t\"healthInsuranceProvider\" : \"health insurance\",\n    \t\"workHours\" : 2,\n        \"qualifications\" : [\"one\", \"two\"]\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "http://localhost:8181/services/rest/routine?id=46bc08fb-5298-431f-b982-013033f28d76",
